@@ -13,6 +13,7 @@
 
 | 要找什么 | 去哪里 |
 |----------|--------|
+| **当前系统状态 + 行为边界** | [docs/arch/README.md](docs/arch/README.md)（首先读取！） |
 | 项目目标、架构约束、硬性规则 | [docs/arch/vision.md](docs/arch/vision.md) |
 | 功能规格、接口、数据模型、AC 验收标准 | [docs/arch/design/](docs/arch/design/)（找 active 版本） |
 | 技术选型理由、架构决策 | [docs/arch/adr/](docs/arch/adr/) |
@@ -51,6 +52,7 @@
 ## 四、执行流程
 
 ```
+0. 读取 docs/arch/README.md → 确认当前系统状态，明确当前阶段能做什么/不能做什么
 1. 读取本文档 → 了解项目全局
 2. 读取 docs/arch/vision.md → 确认顶层约束
 3. 读取 docs/arch/design/README.md → 确认当前生效 Design Spec
@@ -64,6 +66,8 @@
 11. 更新状态
 12. 更新 [CHANGELOG.md](CHANGELOG.md)（Unreleased 段）
 ```
+
+> **重要：** 步骤 0 决定的「当前阶段行为边界」覆盖后续所有步骤。例如：若当前阶段为 `DESIGN`，则步骤 8 不可执行（禁止在 DESIGN 阶段编写代码）。
 
 ---
 
