@@ -6,15 +6,13 @@
 
 - 你可以变更 Plan 和 Report 的 `status` 字段
 - 你可以追加 CHANGELOG 的 `[Unreleased]` 段
-- 你可以读取 Vision/Design/ADR，但不可修改其内容或 status
+- 你可以读取 Vision/Design/ADR，但**不可修改其内容或 status**
 - 发现权威文档需修改时，在 Report 的「对权威文档的改动建议」中记录，由 Designer 决策
 - 你可以是另一个 Agent，不一定是人
 
 ## 核心约束
 
-**验证先于实现。** 测试基础设施（轨道 C）必须在编码开始前完成。AC 应尽可能可量化，但不强制机器可验证。低层（单元/接口）机器化，高层（E2E 语义）可由 Agent 判定。
-
-**状态变更 = 原子承诺。** 每个 Plan 至少在一个独立 Git branch 中执行。branch 是底线。worktree 是并行优化手段（可选）。
+**验证先于实现。** 测试基础设施（轨道 C）必须在编码开始前完成。低层测试（单元/接口）机器化，高层（E2E 语义）可由 Agent 判定。
 
 **异常处理：**
 
@@ -25,20 +23,11 @@
 | 架构不可行 | 停止 DEVELOP，退回 DESIGN |
 | 局部 bug | DEVELOP ↔ INTEGRATE 修复循环 |
 
-**可追溯性（语义链）。** 正文中引用 AC 编号和 commit hash，不依赖 frontmatter 字段：
-
-```
-AC-003 → Plan: "实现 AC-003" → Commit: "feat: AC-003" → Report: "AC-003 ✅, commit abc123"
-```
-
-**自描述入口。** 入口路径: `AGENTS.md → docs/README.md（当前状态）→ 各级 README → 具体文档`。Agent 零上下文启动仅凭文件系统即可理解项目全貌。
-
-**Plan/Report 状态规则：**
-
-| 文档 | 状态流转 | 谁可变更 |
-|------|---------|----------|
-| Plan | `pending → in_progress → done`（可 blocked→in_progress） | Executor |
-| Report | `draft → complete` | Executor |
+**绝对禁止：**
+- 修改 Vision、Design Spec、ADR 的内容或 status
+- 修改全局契约
+- 在没有 Plan 的情况下直接写代码
+- 将文档修改与代码修改混入同一 commit
 
 ---
 
@@ -88,20 +77,13 @@ AC-003 → Plan: "实现 AC-003" → Commit: "feat: AC-003" → Report: "AC-003 
 4. 独立 commit
 ```
 
-### 绝对禁止
-
-- 修改 Vision、Design Spec、ADR 的内容或 status
-- 修改全局契约
-- 在没有 Plan 的情况下直接写代码
-- 将文档修改与代码修改混入同一 commit
-
 ---
 
 ## 当前阶段 = INTEGRATE
 
 ### 这是唯一串行关口
 
-必须等所有轨道 Plan done 才能进入。这是整个流程中唯一的强制串行点。
+必须等所有轨道 Plan done 才能进入。
 
 ```
 1. 确认所有轨道 Plan 已 done
@@ -130,7 +112,7 @@ AC-003 → Plan: "实现 AC-003" → Commit: "feat: AC-003" → Report: "AC-003 
 
 ## 输出规范
 
-**测试摘要格式**（不要输出完整日志）:
+**测试摘要**（不要输出完整日志）:
 
 ```markdown
 ## 测试摘要
@@ -141,7 +123,7 @@ AC-003 → Plan: "实现 AC-003" → Commit: "feat: AC-003" → Report: "AC-003 
 | E2E | 2/3 | AC-007 (选择器超时, 截图: tests/screenshots/AC-007-fail.png) |
 ```
 
-**验收结果格式**:
+**验收结果**:
 
 ```markdown
 ## 验收结果
