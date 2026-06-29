@@ -1,77 +1,117 @@
 ---
 name: agent-testing
-description: 可伸缩的多层测试体系。当 Agent 需要搭建测试基础设施、编写测试用例、执行分层测试、或绑定 AC 到测试用例时使用。独立于 agent-docs 系统，可单独安装。
+description: 可伸缩的多层测试体系。当 Agent 需要搭建测试基础设施、编写测试用例、执行分层测试、或绑定 AC 到测试用例时使用。独立于 agent-docs，可单独安装。
 ---
 
 # Agent Testing System
 
-## When To Use
+## 你的身份
 
-- 搭建测试基础设施（测试框架、环境、数据、脚本）
-- 根据项目类型确定需要的测试层级
-- 将 Design Spec 的 AC 转化为可执行的测试用例
-- 执行分层测试并生成摘要报告
-- 判断测试结果是否满足合并闸门条件
+你是 Executor。你的任务是确保代码在合并前通过所有必需的测试。如果你被分配的是 DEVELOP 轨道 C（测试基础设施），你的任务优先级最高——必须在其他轨道开始编码前完成。
 
-## Workflow
+## 第一步：确定你要做什么
 
-### 确定测试层级
+### 如果你是轨道 C（测试基础设施）
+
+你必须在轨道 A/B 开始编码前完成。你的产出是**测试武器**，不是业务代码。
 
 ```
-1. 识别项目类型: CLI工具 / 后端API / 全栈Web / 前端组件库
-2. 对照 references/test-layers.md 确定需要的测试层
-3. 从最内层（单元测试）开始，向外逐层搭建
-4. 每层完成后才能进入下一层
+1. 读取 active Design Spec，提取所有 AC
+2. 对照 references/test-layers.md，确定项目类型需要的测试层级
+3. 搭建测试骨架：
+   mkdir -p tests/unit tests/integration tests/e2e
+   npm install -D vitest playwright  # 根据项目类型选择
+4. 配置 package.json 测试脚本（每个测试层一个命令）
+5. 准备测试数据、测试账号、环境变量
+6. 为每条机器可验证的 AC 编写测试用例骨架（命名: AC-00X-xxx.test.ts）
+7. 对机器不可验证的 AC，在测试清单中标注"Agent 判定"
+8. 确认所有脚本可运行: npm run test:unit
+9. 独立 commit: test(infra): 搭建测试基础设施
 ```
 
-### 搭建测试基础设施（DEVELOP 轨道 C，必须先于编码完成）
+### 如果你是轨道 A/B（后端/前端）
+
+你写代码时，测试基础设施应该已经就位。你的自测流程：
 
 ```
-1. 创建测试目录结构: tests/unit/, tests/integration/, tests/e2e/
-2. 安装测试框架: npm install -D vitest playwright (根据项目类型选)
-3. 配置测试脚本到 package.json
-4. 准备测试账号、测试数据、环境变量
-5. 编写测试脚手架（setup/teardown 脚本）
+1. 完成一个功能点后，立即运行对应测试层
+2. 单元测试不通过 → 不提交
+3. 在 Report 的「测试摘要」段记录各层结果
 ```
 
-### 编写测试用例
+### 如果你在 INTEGRATE 阶段
 
 ```
-1. 读取 active Design Spec 的 AC 段
-2. 对每条 AC:
-   - 机器可验证的 → 编写单元测试/接口测试
-   - 机器不可验证的 → 标记为 Agent 化测试，在 Report 中给出判定
-3. 测试用例命名: AC-00X-简短描述.test.ts
-4. 见 references/ac-binding.md
+1. 确认所有轨道 Plan 已 done
+2. 按层级顺序执行全量测试（不可跳过）:
+   npm run test:unit
+   npm run test:integration
+   npm run test:contract     # 如果有
+   npm run test:orchestration # 如果有
+   npm run test:e2e          # 如果有
+   npm run test:visual       # 如果有
+3. 每层失败 → 停止，退回 DEVELOP 修复，修复后重新从该层开始
+4. 全部通过 → 在 Report 中记录，报告给 Designer 推进到 PRE_RELEASE
 ```
 
-### 执行测试
+## 写测试用例
+
+### 机器可验证的 AC
+
+打开 `references/ac-binding.md` 看命名约定和模板。
+
+简短版：
+```
+1. 找到 Design Spec 中一条 AC，例如 AC-003
+2. 创建 tests/unit/AC-003-xxx.test.ts
+3. 测试用例必须覆盖 AC 的前置条件、操作步骤、预期结果
+4. 写好一个，跑一个: npx vitest run tests/unit/AC-003-xxx.test.ts
+```
+
+### 机器不可验证的 AC
+
+例如"页面加载流畅"、"交互体验良好"——这些你无法自动化判定。
 
 ```
-1. 按层执行: 单元 → 集成 → 接口契约 → 接口编排 → E2E → 视觉回归
-2. 每层通过后才执行下一层
-3. 生成摘要（不输出完整日志）:
-   - 通过/失败数
-   - 失败用例名
-   - 失败断言
-   - 截图路径（E2E 失败时）
-4. 全部通过 → 满足合并闸门条件
+1. 在测试清单中标注"Agent 判定"
+2. 功能实现后，执行 E2E 测试获取 trace/截图
+3. 基于 trace 数据给出判定
+4. 在 Report 中记录:
+   AC-005 ✅ Agent 判定: Playwright trace 显示首次渲染 1.2s, 帧率 55fps
 ```
 
-## Rules
+## 输出测试结果
 
-- **低层机器化，高层智能化。** 单元测试和接口契约测试必须机器可执行；E2E 语义验证可由 Agent 判断
-- **测试基础设施先于编码完成。** 测试武器必须在 Executor 开始写代码前就位
-- **AC 绑定测试用例。** 每条 AC 必须有对应的测试用例。见 references/ac-binding.md
-- **测试输出摘要化。** 只返回通过/失败数、失败用例名、失败断言，不输出完整日志
-- **每层都是闸门。** 不可跳过任何一层，从内向外逐层执行
-- **测试层级按项目类型伸缩。** 不是所有项目都需要全部 6 层。见 references/test-layers.md
-- **Agent 化测试判定。** 机器不可验证的 AC 由 Agent 在 Report 中给出判定结论，需注明判定依据
+**不要输出完整日志。** 上下文是有限的。只输出摘要：
 
-## Output
+```markdown
+## 测试摘要
 
-- 测试基础设施就绪（目录结构、框架、脚本、数据）
-- 测试用例文件（命名: AC-00X-xxx.test.ts）
-- 测试执行摘要（通过/失败数、失败用例、失败断言）
-- 在 Report 的「测试摘要」段记录各层测试结果
-- 在 Report 的「验收结果」段逐条 AC 标注 ✅/❌
+| 测试层 | 通过/总数 | 失败用例 |
+|--------|----------|----------|
+| 单元测试 | 12/12 | — |
+| 集成测试 | 5/5 | — |
+| E2E | 2/3 | AC-007-订单取消 (选择器超时, 截图: tests/screenshots/AC-007-fail.png) |
+
+## 验收结果
+
+| AC 编号 | 状态 | 说明 |
+|---------|------|------|
+| AC-001 | ✅ | 单元测试通过 |
+| AC-002 | ✅ | 接口测试通过 |
+| AC-007 | ❌ | 选择器超时，需修复 |
+| AC-010 | ✅ | Agent 判定: 渲染时间 1.2s |
+```
+
+## 关键规则
+
+1. **测试基础设施先于编码完成。** 轨道 C 的 Executor 优先执行
+2. **每层都是闸门。** 从内向外逐层执行，不可跳过。上一层不通过，不进入下一层
+3. **低层机器化，高层智能化。** 单元/接口测试必须机器可执行；E2E 语义验证可由 Agent 判定
+4. **AC 必须绑定测试用例。** 命名: AC-00X-xxx.test.ts
+5. **输出摘要化。** 不输出完整日志，只输出通过/失败数、失败用例名、失败断言
+6. **测试层级按项目类型伸缩。** 打开 `references/test-layers.md` 确定你的项目需要哪些层
+
+需要详细定义时，打开：
+- `references/test-layers.md` — 各层测试对象、校验目标、执行方式
+- `references/ac-binding.md` — AC 命名约定、测试用例模板、Agent 判定示例
