@@ -4,7 +4,14 @@
 
 ## 1. 确定测试层级
 
-读取 active Design Spec，提取所有 AC。然后打开 [test-layers.md](test-layers.md)，确定项目类型需要的测试层级。
+根据项目类型确定需要的测试层。从最内层向外逐层搭建，不可跳过。
+
+| 项目类型 | 需要的测试层 |
+|----------|-------------|
+| 纯 CLI / 脚本 | ① 单元 → ② 集成（集成测试用退出码/stdout/文件断言） |
+| 后端 API | ① 单元 → ② 集成 → ③ 接口契约 → ④ 接口编排 |
+| 全栈 Web | ① 单元 → ② 集成 → ③ 接口契约 → ④ 接口编排 → ⑤ E2E → ⑥ 视觉回归 |
+| 前端组件库 | ① 单元 → ② 组件测试 → ③ 视觉回归 |
 
 ## 2. 搭建骨架
 
@@ -14,12 +21,9 @@ mkdir -p tests/unit tests/integration tests/e2e
 
 ## 3. 安装框架
 
-根据项目类型选择：
-
 | 项目类型 | 安装命令 |
 |----------|----------|
 | 任何项目 | `npm install -D vitest` |
-| API 项目 | `npm install -D vitest` |
 | 前端/全栈 | `npm install -D vitest @playwright/test` |
 
 ## 4. 配置测试脚本
@@ -42,16 +46,14 @@ mkdir -p tests/unit tests/integration tests/e2e
 
 ## 5. 准备测试资源
 
-```
 - 测试账号和权限
 - 测试数据（seed 脚本）
-- 环境变量（.env.test）
+- 环境变量（`.env.test`）
 - Mock 服务配置（如果需要）
-```
 
 ## 6. 编写测试用例骨架
 
-对每条机器可验证的 AC，创建骨架文件：
+读取 active Design Spec，对每条机器可验证的 AC 创建骨架文件。命名规则: `AC-00X-简短描述.test.ts`。
 
 ```
 tests/unit/AC-001-xxx.test.ts
@@ -59,9 +61,7 @@ tests/integration/AC-005-xxx.test.ts
 tests/e2e/AC-010-xxx.spec.js
 ```
 
-命名规则见 [ac-binding.md](ac-binding.md)。
-
-对机器不可验证的 AC，在测试清单中标注"Agent 判定"。
+对机器不可验证的 AC（如"页面加载流畅"），在测试清单中标注"Agent 判定"——在 INTEGRATE 阶段由 Agent 基于 trace/截图给出判定。
 
 ## 7. 验证
 
@@ -80,7 +80,7 @@ git commit -m "test(infra): 搭建测试基础设施"
 
 ## 输出
 
-- 测试目录结构
+- 测试目录结构就绪
 - 测试框架已安装
 - package.json 测试脚本已配置
 - 测试用例骨架文件

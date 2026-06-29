@@ -1,6 +1,46 @@
 # Executor 操作流程
 
-你是 Executor。你负责执行任务、编码、测试、写 Report。你无权修改 Vision/Design/ADR 的内容或 status。
+你是 Executor。你负责执行任务、编码、测试、写 Report。
+
+## 你的权责
+
+- 你可以变更 Plan 和 Report 的 `status` 字段
+- 你可以追加 CHANGELOG 的 `[Unreleased]` 段
+- 你可以读取 Vision/Design/ADR，但不可修改其内容或 status
+- 发现权威文档需修改时，在 Report 的「对权威文档的改动建议」中记录，由 Designer 决策
+- 你可以是另一个 Agent，不一定是人
+
+## 核心约束
+
+**验证先于实现。** 测试基础设施（轨道 C）必须在编码开始前完成。AC 应尽可能可量化，但不强制机器可验证。低层（单元/接口）机器化，高层（E2E 语义）可由 Agent 判定。
+
+**状态变更 = 原子承诺。** 每个 Plan 至少在一个独立 Git branch 中执行。branch 是底线。worktree 是并行优化手段（可选）。
+
+**异常处理：**
+
+| 异常 | 处理 |
+|------|------|
+| Agent 崩溃 | 丢弃 branch/worktree，任务重置为 pending |
+| 步骤失败 | branch 内回退至步骤快照，内部重试 |
+| 架构不可行 | 停止 DEVELOP，退回 DESIGN |
+| 局部 bug | DEVELOP ↔ INTEGRATE 修复循环 |
+
+**可追溯性（语义链）。** 正文中引用 AC 编号和 commit hash，不依赖 frontmatter 字段：
+
+```
+AC-003 → Plan: "实现 AC-003" → Commit: "feat: AC-003" → Report: "AC-003 ✅, commit abc123"
+```
+
+**自描述入口。** 入口路径: `AGENTS.md → docs/README.md（当前状态）→ 各级 README → 具体文档`。Agent 零上下文启动仅凭文件系统即可理解项目全貌。
+
+**Plan/Report 状态规则：**
+
+| 文档 | 状态流转 | 谁可变更 |
+|------|---------|----------|
+| Plan | `pending → in_progress → done`（可 blocked→in_progress） | Executor |
+| Report | `draft → complete` | Executor |
+
+---
 
 ## 当前阶段 = DEVELOP
 
@@ -8,24 +48,11 @@
 
 打开 `docs/plans/README.md`，找到你被分配的 Plan 文件夹。
 
-**轨道 C 的 Executor 优先执行。** 测试基础设施必须在 A/B 开始编码前完成。
+**轨道 C（测试基础设施）必须最先完成。** A/B 开始编码前，测试武器必须就位。
 
 ### 轨道 C：测试基础设施
 
-你的产出是测试武器，不是业务代码。参考 [testing/testing-infra.md](testing/testing-infra.md)。
-
-```
-1. 读取 active Design Spec，提取所有 AC
-2. 确定项目类型需要的测试层级
-3. 搭建测试骨架:
-   mkdir -p tests/unit tests/integration tests/e2e
-   npm install -D vitest playwright
-4. 配置 package.json 测试脚本
-5. 准备测试数据、测试账号、环境变量
-6. 为每条机器可验证的 AC 编写测试用例骨架
-7. 确认所有脚本可运行
-8. 独立 commit: test(infra): 搭建测试基础设施
-```
+见 [testing/testing-infra.md](testing/testing-infra.md)。
 
 ### 轨道 A/B：后端/前端开发
 
@@ -68,14 +95,13 @@
 - 在没有 Plan 的情况下直接写代码
 - 将文档修改与代码修改混入同一 commit
 
-### 发现 Design/ADR 有问题
-
-- 不要自己修改
-- 在 Report 的「对权威文档的改动建议」中记录
-- 标记 Plan 为 blocked
-- 等待 Designer 决策
+---
 
 ## 当前阶段 = INTEGRATE
+
+### 这是唯一串行关口
+
+必须等所有轨道 Plan done 才能进入。这是整个流程中唯一的强制串行点。
 
 ```
 1. 确认所有轨道 Plan 已 done
@@ -99,6 +125,8 @@
   更新 docs/README.md 当前阶段为 DESIGN
   commit: docs(state): INTEGRATE → DESIGN (设计缺陷)
   ```
+
+---
 
 ## 输出规范
 

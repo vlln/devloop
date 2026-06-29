@@ -15,16 +15,23 @@
 
 ## 写测试用例
 
-打开 [ac-binding.md](ac-binding.md) 看命名约定和模板。
+找到 Design Spec 中的 AC，按以下约定创建测试文件：
 
-简短版：
+**命名:** `AC-00X-简短描述.test.ts`
+
+```typescript
+// tests/unit/AC-001-用户注册校验.test.ts
+import { describe, it, expect } from 'vitest'
+
+describe('AC-001: 用户注册校验', () => {
+  it('空用户名应返回错误', () => {
+    const result = validateRegistration({ username: '', password: '123456' })
+    expect(result.error).toBe('用户名不能为空')
+  })
+})
 ```
-1. 找到 Design Spec 中一条 AC
-2. 创建 tests/unit/AC-00X-xxx.test.ts
-3. 测试必须覆盖 AC 的前置条件、操作步骤、预期结果
-4. 写好一个，跑一个:
-   npx vitest run tests/unit/AC-003-xxx.test.ts
-```
+
+测试必须覆盖 AC 的前置条件、操作步骤、预期结果。写好一个，跑一个：`npx vitest run tests/unit/AC-003-xxx.test.ts`
 
 ## 机器不可验证的 AC
 
