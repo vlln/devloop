@@ -1,5 +1,4 @@
-
-> Agent 启动前必须完整读取。本文档是项目的**入口地图**，读完你应该知道：这是什么项目、文档在哪、我能做什么、该按什么流程工作。
+> Agent 启动前必须完整读取。本文档是项目的**入口地图**，读完你应该知道：这是什么项目、文档在哪、系统规则、我能做什么、该按什么流程工作。
 
 ---
 
@@ -9,7 +8,52 @@
 
 ---
 
-## 二、文档导航
+## 二、文档体系
+
+### 文档类型
+
+| 文档 | 用途 | 谁维护 |
+|------|------|--------|
+| 本文档（AGENTS.md） | 项目入口地图 | Designer |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 编码/Commit/文档/测试规范 | Designer |
+| [CHANGELOG.md](CHANGELOG.md) | 版本变更记录（Keep a Changelog） | Executor 追加 Unreleased，Designer 整理发布 |
+| [docs/arch/vision.md](docs/arch/vision.md) | 全局顶层愿景：业务目标、用户范围、顶层约束 | Designer |
+| [docs/arch/design/](docs/arch/design/) | Design Spec：固化方案 + AC。唯一业务事实源 | Designer |
+| [docs/arch/adr/](docs/arch/adr/) | 架构决策记录：技术选型、方案对比、取舍 | Designer |
+| [docs/arch/plans/](docs/arch/plans/) | 单次执行容器：Plan + Report 成对 | Executor |
+| [docs/arch/README.md](docs/arch/README.md) | 子目录索引 + **当前系统状态** | Designer（状态更新） |
+| 各级 README.md | 该目录的索引和状态说明 | Designer |
+
+### 目录结构
+
+```
+项目根目录
+├── AGENTS.md
+├── CONTRIBUTING.md
+├── CHANGELOG.md
+├── docs/arch/
+│   ├── README.md          # 索引 + 当前系统状态
+│   ├── vision.md
+│   ├── design/
+│   │   ├── README.md
+│   │   └── 001-spec.md
+│   ├── adr/
+│   │   ├── README.md
+│   │   └── 0001-xxx.md
+│   └── plans/
+│       ├── README.md
+│       └── 0001-任务名/
+│           ├── README.md
+│           ├── 01-plan-xxx.md
+│           ├── 01-report-xxx.md
+│           └── artifacts/
+├── src/
+└── .github/workflows/
+```
+
+---
+
+## 三、文档导航
 
 | 要找什么 | 去哪里 |
 |----------|--------|
@@ -24,7 +68,22 @@
 
 ---
 
-## 三、角色与权限
+## 四、系统边界
+
+项目遵循 6 条不可违反的边界：
+
+| 边界 | 约束 |
+|------|------|
+| 契约与执行分离 | 四类契约（业务/接口/质量/架构）冻结后，才能进入 DEVELOP 写代码 |
+| 验证先于实现 | 测试基础设施先于编码完成。低层机器化，高层可由 Agent 判定 |
+| 状态变更=原子承诺 | 每个 Plan 在独立 Git branch 中执行。状态流转不可跳跃或回跳 |
+| 可追溯性 | AC 编号 → Plan 引用 → Commit → Report 记录。文档/代码 commit 分离 |
+| 自描述入口 | 本文档 → docs/arch/README.md → 各级 README → 具体文档。Agent 零上下文启动即可理解项目 |
+| 设计者意图为根 | 顶层目标来自 Designer。Executor 不可创造新目标 |
+
+---
+
+## 五、角色与权限
 
 本项目采用 Designer/Executor 角色模型。你是 **Executor**（执行者），负责执行任务。
 
@@ -49,7 +108,7 @@
 
 ---
 
-## 四、执行流程
+## 六、执行流程
 
 ```
 0. 读取 docs/arch/README.md → 确认当前系统状态，明确当前阶段能做什么/不能做什么
@@ -71,7 +130,7 @@
 
 ---
 
-## 五、故障处理
+## 七、故障处理
 
 ### 编码自检失败
 

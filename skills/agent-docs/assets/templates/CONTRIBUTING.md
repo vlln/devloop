@@ -97,7 +97,17 @@ npm run dev
 
 ### 文档体系
 
-项目文档遵循 [agent-coding-spec.md](agent-coding-spec.md) 定义的结构。新增或修改文档前，先阅读该规范。
+项目文档遵循 AGENTS.md 中定义的结构。新增或修改文档前，先阅读 AGENTS.md。
+
+### 文档命名规范
+
+| 文档 | 格式 | 示例 |
+|------|------|------|
+| Design Spec | `00x-xxxx.md` | `001-spec.md` |
+| ADR | `000x-xxxx.md` | `0001-db-choice.md` |
+| Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
+| Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
+| Report | `0x-report-xxx.md` | `01-report-order-api.md` |
 
 ### Frontmatter 规范
 
@@ -105,12 +115,24 @@ npm run dev
 
 | 文档类型 | 必填字段 |
 |----------|----------|
-| Design Spec | `title`, `description`, `type`, `status`, `version`, `created` |
-| ADR | `title`, `description`, `type`, `status`, `created` |
-| Plan | `title`, `description`, `type`, `status`, `created` |
-| Report | `title`, `description`, `type`, `status`, `created` |
+| Design Spec | `title`, `description`, `type: design`, `status`, `version`, `created` |
+| ADR | `title`, `description`, `type: adr`, `status`, `created` |
+| Plan | `title`, `description`, `type: plan`, `status`, `created` |
+| Report | `title`, `description`, `type: report`, `status`, `created` |
 
-`status` 字段的有效值由文档类型决定，详见 [agent-coding-spec.md](agent-coding-spec.md) 第四节「文档状态定义」。
+**字段说明：** `title` 文档标题 / `description` 一句话摘要 / `type` 固定值 / `created` ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`) / `version` 仅 Design Spec，整数递增。
+
+**status 有效值：**
+
+| 文档类型 | 状态值 | 流转 |
+|----------|--------|------|
+| Vision | `draft` / `active` / `archived` | draft→active→archived |
+| Design Spec | `draft` / `active` / `archived` | draft→active→archived（同时只有一个 active） |
+| ADR | `draft` / `accepted` / `superseded` / `deprecated` | draft→accepted→superseded/deprecated |
+| Plan | `pending` / `in_progress` / `blocked` / `done` | pending→in_progress→done (可 blocked→in_progress) |
+| Report | `draft` / `complete` | draft→complete |
+
+**冻结定义：** status 从 `draft` 变为 `active`（或 `accepted`），伴随独立 commit。冻结后不可原地修改——要改必须退回 DESIGN、新建版本、旧版本归档。
 
 以下文件**不使用** frontmatter：
 - AGENTS.md、CONTRIBUTING.md、CHANGELOG.md（标准文件）
@@ -120,9 +142,9 @@ npm run dev
 ```yaml
 ---
 title: 文档标题
-description: 一句话摘要，Agent 无需读正文即可了解文档用途
+description: 一句话摘要
 type: design | adr | plan | report
-status: 见 agent-coding-spec.md 第四节
+status: draft | active | accepted | ...
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
 ```
@@ -131,11 +153,13 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 - 所有跨文档引用使用相对路径 Markdown 链接：`[text](relative/path.md)`
 - 禁止使用反引号包裹的纯文本路径
+- 关联用语义链（正文中引用 AC 编号和文件路径），不依赖 frontmatter 的 related 字段
 
 ### 文档 Commit
 
 - 文档修改必须独立 Commit，不与代码混合
 - 格式：`docs(<scope>): <简述>`
+- 状态变更伴随独立 commit：`docs(state): DESIGN → DEVELOP`
 
 ---
 
