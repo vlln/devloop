@@ -31,6 +31,14 @@ description: 项目文档体系与生命周期管理。当 Agent 需要理解自
 | Designer | INIT / DESIGN / PRE_RELEASE / RELEASE | [references/designer-workflow.md](references/designer-workflow.md) |
 | Executor | DEVELOP / INTEGRATE | [references/executor-workflow.md](references/executor-workflow.md) |
 
+### Executor 的测试任务
+
+| 你的任务 | 去读 |
+|----------|------|
+| 搭建测试基础设施（DEVELOP 轨道 C） | [references/testing/testing-infra.md](references/testing/testing-infra.md) |
+| 编码 + 自测（DEVELOP 轨道 A/B） | [references/testing/testing-dev.md](references/testing/testing-dev.md) |
+| 全量集成测试（INTEGRATE 阶段） | [references/testing/testing-integrate.md](references/testing/testing-integrate.md) |
+
 ## 第三步：需要详细规则时
 
 | 问题 | 去读 |
@@ -39,6 +47,8 @@ description: 项目文档体系与生命周期管理。当 Agent 需要理解自
 | 不确定状态流转 | [references/state-machine.md](references/state-machine.md) |
 | 不确定谁有权做什么 | [references/roles.md](references/roles.md) |
 | 不确定文档状态怎么改 | [references/document-status.md](references/document-status.md) |
+| 需要哪些测试层 | [references/testing/test-layers.md](references/testing/test-layers.md) |
+| 如何把 AC 变为测试用例 | [references/testing/ac-binding.md](references/testing/ac-binding.md) |
 
 ## 硬性规则（永远记住）
 

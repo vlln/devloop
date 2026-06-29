@@ -12,7 +12,7 @@
 
 ### 轨道 C：测试基础设施
 
-你的产出是测试武器，不是业务代码。参考 agent-testing skill。
+你的产出是测试武器，不是业务代码。参考 [testing/testing-infra.md](testing/testing-infra.md)。
 
 ```
 1. 读取 active Design Spec，提取所有 AC
