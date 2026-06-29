@@ -5,6 +5,44 @@ description: 项目文档体系与生命周期管理。当 Agent 需要理解自
 
 # Agent Docs System
 
+## 系统全貌
+
+项目开发遵循 6 阶段状态机：
+
+```
+INIT → DESIGN → DEVELOP → INTEGRATE → PRE_RELEASE → RELEASE
+         ↑         │  ↑                    │
+         │         │  └────────────────────┘
+         │         │      (修复循环)
+         └─────────┘
+      (架构变更回退)
+
+RELEASE → DESIGN  (新一轮迭代)
+```
+
+**6 阶段概要：**
+
+| 阶段 | 谁 | 做什么 |
+|------|-----|--------|
+| INIT | Designer | 搭建项目骨架（目录、标准文件、Git） |
+| DESIGN | Designer | 冻结四类契约（业务/接口/质量/架构），拆解 Plan |
+| DEVELOP | Executor | 4 条轨道并行：后端/前端/测试基建/数据库部署 |
+| INTEGRATE | Executor | 全量测试。唯一串行关口——必须等所有轨道完成 |
+| PRE_RELEASE | Designer | 预发布环境验证、版本号确认 |
+| RELEASE | Designer | 版本归档、CHANGELOG 整理、迭代复盘 |
+
+**DEVELOP 内部 4 条并行轨道：**
+
+```
+契约冻结后全部并行:
+  ├─ 轨道 A: 后端开发     (独立 branch)
+  ├─ 轨道 B: 前端开发     (独立 branch)
+  ├─ 轨道 C: 测试基础设施  (独立 branch, 必须最先完成)
+  └─ 轨道 D: 数据库/部署  (独立 branch)
+```
+
+**2 个角色：** Designer（设计决策、状态推进）与 Executor（执行实现）。你不固定属于哪一方。
+
 ## 第一步：确认当前状态
 
 打开 `docs/README.md`，读「当前系统状态」段。那里告诉你当前阶段和允许/禁止的行为边界。
