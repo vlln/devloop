@@ -35,6 +35,34 @@ RELEASE → DESIGN  (新一轮迭代)
 
 ---
 
+## 迭代模式
+
+同一状态机骨架，三种迭代模式。Agent 进入 DESIGN 时根据已有文档状态自动判断：
+
+### 首次设计（INIT → DESIGN）
+
+所有文档全新创建。走完所有子阶段，不加跳过。
+
+### 增量迭代（RELEASE → DESIGN）
+
+已有文档已冻结。进入 DESIGN 后：
+- vision.md 已 active → 跳过，不重写
+- Design Spec 已 active → 在现有文档上追加，不重写
+- 已有 ADR 已 accepted → 不修改，仅新增 ADR
+- 已有 Plan 已 done → 新建 Plan，不重建
+
+### 设计变更（DEVELOP → DESIGN，架构颠覆退回）
+
+从 DEVELOP 因架构颠覆退回。进入 DESIGN 后走「设计变更」子阶段：
+1. 定级：确认为架构颠覆（非轻微约束）
+2. ADR 修订：旧 ADR 追加修订记录，或标记 superseded + 新建 ADR
+3. 传导下游：同步更新受影响的 Design Spec、通知受影响轨道、更新 Plan
+4. 恢复编码：以新 ADR 为依据重新推进到 DEVELOP
+
+**注意：** 轻微约束（依赖能用但方式与预期不一致）在 DEVELOP 内解决，不退回 DESIGN。
+
+---
+
 ## 安装系统
 
 如果是全新项目，初始化项目骨架：
