@@ -15,48 +15,36 @@
 | 全栈 Web | 单元 → 集成 → 接口契约 → 接口编排 → E2E → 视觉回归 |
 | 前端组件库 | 单元 → 组件测试 → 视觉回归 |
 
-### 2. 搭建骨架
+### 2. 搭建测试目录结构
 
-```bash
-mkdir -p tests/unit tests/integration tests/e2e
-```
+例如: `tests/unit/`, `tests/integration/`, `tests/e2e/`
 
-### 3. 安装框架
+### 3. 安装测试框架
 
-| 项目类型 | 安装命令 |
-|----------|----------|
-| 任何项目 | `npm install -D vitest` |
-| 前端/全栈 | `npm install -D vitest @playwright/test` |
+根据项目语言和类型选择。例如: vitest (JS/TS), pytest (Python), JUnit (Java)。具体框架和安装方式见 CONTRIBUTING.md。
 
 ### 4. 配置测试脚本
 
-```json
-{
-  "scripts": {
-    "test:unit": "vitest run tests/unit",
-    "test:integration": "vitest run tests/integration",
-    "test:e2e": "playwright test"
-  }
-}
-```
+为每个测试层配置可独立运行的脚本入口。例如:
+- 单元测试: `test:unit`
+- 集成测试: `test:integration`
+- E2E: `test:e2e`
 
 ### 5. 准备测试资源
 
 - 测试账号和权限
 - 测试数据（seed 脚本）
-- 环境变量（`.env.test`）
+- 环境变量
 
 ### 6. 编写测试用例骨架
 
-读取 active Design Spec，对每条机器可验证的 AC 创建骨架文件。命名: `AC-00X-简短描述.test.ts`。
+读取 active Design Spec，对每条机器可验证的 AC 创建骨架文件。命名约定见 CONTRIBUTING.md。
 
 对机器不可验证的 AC，在测试清单中标注"Agent 判定"。
 
 ### 7. 验证
 
-```bash
-npm run test:unit
-```
+确认所有测试脚本可运行（即使测试用例为空，框架能正常启动即可）。
 
 ## Plan 的「执行边界」应包含
 
@@ -65,7 +53,7 @@ npm run test:unit
 
 **你必须做：**
 - 搭建测试目录结构，安装测试框架
-- 配置 package.json 测试脚本
+- 配置测试脚本（每个测试层一个入口）
 - 为每条机器可验证的 AC 创建测试用例骨架
 - 确认所有脚本可运行
 

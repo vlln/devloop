@@ -6,15 +6,15 @@
 
 ## 执行全量测试
 
-按层级顺序执行，不可跳过：
+按层级顺序执行，不可跳过。具体命令见 CONTRIBUTING.md 或项目测试脚本配置：
 
 ```
-1. npm run test:unit
-2. npm run test:integration
-3. npm run test:contract        # 如果有 API
-4. npm run test:orchestration   # 如果有多接口联动
-5. npm run test:e2e             # 如果有 UI
-6. npm run test:visual          # 如果是前端
+1. 单元测试
+2. 集成测试
+3. 接口契约测试（如果有）
+4. 接口编排测试（如果有）
+5. E2E 测试（如果有 UI）
+6. 视觉回归测试（如果是前端）
 ```
 
 每层通过后才进入下一层。

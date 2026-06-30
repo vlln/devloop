@@ -28,7 +28,7 @@
 **你必须做：**
 - 实现 POST /api/orders 接口，按 Design Spec 001 第四节定义
 - 编写单元测试覆盖 AC-001 到 AC-005
-- 运行 npm run test:unit 直到全部通过
+- 运行单元测试直到全部通过（具体命令见 CONTRIBUTING.md）
 - 完成后更新 Plan status 为 done，写入 Report
 
 **你必须不做：**

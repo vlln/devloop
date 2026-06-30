@@ -4,15 +4,15 @@
 
 ## Plan 的「分步计划」应包含
 
-按层级顺序执行，不可跳过：
+按层级顺序执行，不可跳过。具体命令见 CONTRIBUTING.md 或项目测试脚本配置：
 
 ```
-1. npm run test:unit
-2. npm run test:integration
-3. npm run test:contract
-4. npm run test:orchestration
-5. npm run test:e2e
-6. npm run test:visual
+1. 单元测试
+2. 集成测试
+3. 接口契约测试（如果有）
+4. 接口编排测试（如果有）
+5. E2E 测试（如果有 UI）
+6. 视觉回归测试（如果是前端）
 ```
 
 每层失败时停止，退回 DEVELOP 对应轨道修复。修复后重新从失败的那层开始。

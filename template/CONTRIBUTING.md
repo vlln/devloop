@@ -79,7 +79,15 @@ npm run dev
 
 ### 4. Test
 
-测试体系按项目类型可伸缩，详见 [agent-coding-spec.md](agent-coding-spec.md) 第八节。提交前必须通过对应项目类型所要求的测试层。
+测试体系按项目类型可伸缩。提交前必须通过对应项目类型所要求的测试层。
+
+**测试命令：**（根据项目实际配置修改）
+
+| 命令 | 用途 |
+|------|------|
+| `npm run test:unit` | 单元测试 |
+| `npm run test:integration` | 集成测试 |
+| `npm run test:e2e` | E2E 测试 |
 
 **检查清单：**
 - [ ] 类型检查通过（`tsc --noEmit`）

@@ -8,7 +8,7 @@
 
 ```
 1. 完成一个功能点
-2. 运行对应测试层: npm run test:unit
+2. 运行对应测试层（具体命令见 CONTRIBUTING.md）
 3. 不通过 → 修复 → 重新运行，直到通过
 4. 通过 → 提交代码
 5. 在 Report 中记录测试结果
@@ -16,25 +16,15 @@
 
 ### 测试用例命名
 
-`AC-00X-简短描述.test.ts`
+命名约定见 CONTRIBUTING.md。示例: `AC-00X-简短描述.test.ts`。
 
-```typescript
-// tests/unit/AC-001-用户注册校验.test.ts
-import { describe, it, expect } from 'vitest'
-
-describe('AC-001: 用户注册校验', () => {
-  it('空用户名应返回错误', () => {
-    const result = validateRegistration({ username: '', password: '123456' })
-    expect(result.error).toBe('用户名不能为空')
-  })
-})
-```
+测试必须覆盖 AC 的前置条件、操作步骤、预期结果。
 
 ### 机器不可验证的 AC
 
-在 Plan 中标注哪些 AC 需要 Agent 判定。执行者完成功能后，基于 trace/截图给出判定，在 Report 中记录：
+在 Plan 中标注哪些 AC 需要 Agent 判定。执行者完成功能后，基于 trace/截图给出判定，在 Report 中记录。例如:
 ```
-AC-005 ✅ Agent 判定: Playwright trace 显示首次渲染 1.2s, 帧率 55fps
+AC-005 ✅ Agent 判定: 渲染时间 1.2s, 帧率 55fps
 ```
 
 ## Plan 的「执行边界」应包含
@@ -44,7 +34,7 @@ AC-005 ✅ Agent 判定: Playwright trace 显示首次渲染 1.2s, 帧率 55fps
 
 **你必须做：**
 - 实现 [具体模块] 的接口和逻辑，按 Design Spec 00x 第 x 节定义
-- 编写单元测试覆盖 AC-00x 到 AC-00x
+- 编写测试覆盖 AC-00x 到 AC-00x
 - 运行测试直到全部通过
 - 完成后写入 Report，关联 commit hash
 
