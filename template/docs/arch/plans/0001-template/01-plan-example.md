@@ -21,7 +21,7 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 | 文档 | 路径 | 说明 |
 |------|------|------|
-| Design Spec | [../design/001-spec.md](../design/001-spec.md) | 业务需求和 AC |
+| Design Spec | [../design/001-template.md](../design/001-template.md) | 业务需求和 AC |
 | ADR | [../adr/0001-xxx.md](../adr/0001-xxx.md) | 相关架构决策 |
 
 ---
