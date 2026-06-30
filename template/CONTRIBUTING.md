@@ -123,6 +123,7 @@ npm run dev
 
 | 文档类型 | 必填字段 |
 |----------|----------|
+| Vision | `title`, `description`, `type: vision`, `status`, `created` |
 | Design Spec | `title`, `description`, `type: design`, `status`, `version`, `created` |
 | ADR | `title`, `description`, `type: adr`, `status`, `created` |
 | Plan | `title`, `description`, `type: plan`, `status`, `created` |
@@ -145,7 +146,6 @@ npm run dev
 以下文件**不使用** frontmatter：
 - AGENTS.md、CONTRIBUTING.md、CHANGELOG.md（标准文件）
 - 所有 README.md（目录索引）
-- vision.md（全局愿景）
 
 ```yaml
 ---

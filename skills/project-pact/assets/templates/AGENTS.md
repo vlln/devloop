@@ -17,7 +17,7 @@
 | 本文档（AGENTS.md） | 项目入口地图 |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 编码/Commit/文档/测试规范 |
 | [CHANGELOG.md](CHANGELOG.md) | 版本变更记录（Keep a Changelog） |
-| [docs/arch/vision.md](docs/arch/vision.md) | 全局顶层愿景：业务目标、用户范围、顶层约束 |
+| [docs/arch/vision.md](docs/arch/vision.md) | 全局顶层愿景：业务目标、用户范围、顶层约束（有 frontmatter） |
 | [docs/arch/design/](docs/arch/design/) | Design Spec：固化方案 + AC。唯一业务事实源 |
 | [docs/arch/adr/](docs/arch/adr/) | 架构决策记录：技术选型、方案对比、取舍 |
 | [docs/arch/plans/](docs/arch/plans/) | 单次执行容器：Plan + Report 成对 |
