@@ -59,18 +59,11 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 
 ### 测试基础设施（适用：需要自动化测试的项目）
 
-测试基础设施必须在其他轨道开始编码前完成。参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)。
+测试基础设施必须在其他轨道开始编码前完成。职责是搭建框架和 E2E 脚手架，不编写具体测试用例。参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)。
 
 ## 推进到 INTEGRATE
 
-全部轨道 Plan done 后，检查：
-
-- [ ] 所有 AC 有对应的可执行测试层（单元/集成/E2E），不是全部标"手动"
-- [ ] 测试基础设施覆盖了项目类型所需的所有测试层
-
-全部满足后：更新 `docs/README.md` 当前阶段为 INTEGRATE，追加最近事件，提交。约定前缀 `docs(state):`。
-
-不满足则留在 DEVELOP，补充测试基础设施或测试用例。
+全部轨道 Plan done 后：更新 `docs/README.md` 当前阶段为 INTEGRATE，追加最近事件，提交。约定前缀 `docs(state):`。
 
 ## 异常处理
 
