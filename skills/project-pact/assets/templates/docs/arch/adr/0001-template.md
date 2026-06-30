@@ -1,6 +1,6 @@
 ---
 title: ADR-0001
-description: 架构决策记录模板，记录技术选型、方案对比、选择理由和影响范围。
+description: 一句话说明本决策的内容和选择。
 type: adr
 # status: draft | accepted | superseded | deprecated
 #   draft      → 提案中，尚未采纳（Designer 变更）

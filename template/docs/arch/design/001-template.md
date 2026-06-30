@@ -1,6 +1,6 @@
 ---
 title: Design Template 001
-description: 项目的固化落地方案，定义业务需求、接口、数据模型、UI 约束和 AC 验收标准，是唯一业务事实源。
+description: 一句话说明本设计文档覆盖的产品或功能模块。
 type: design
 # status: draft | active | archived
 #   draft    → 编写中，尚未冻结（Designer 变更）

@@ -1,6 +1,6 @@
 ---
 title: Vision — 项目顶层愿景
-description: 全局唯一的顶层愿景文档，定义业务目标、架构约束、非功能指标和硬性规则。
+description: 全局顶层愿景，一句话说明项目的核心目标和约束。
 type: vision
 ---
 
