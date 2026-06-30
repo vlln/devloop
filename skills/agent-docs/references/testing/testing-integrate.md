@@ -1,81 +1,47 @@
-# 全量集成测试（INTEGRATE 阶段）
+# 全量集成测试 Plan（INTEGRATE 阶段）
 
-所有轨道 Plan 已 done。你现在执行全量测试，这是合并前的最后一道闸门。
+当你在 DEVELOP 阶段为 INTEGRATE 创建全量测试的 Plan 时，参考以下内容。
 
-## 前置条件
+## Plan 的「分步计划」应包含
 
-- 所有轨道 Plan status = done
-- 代码已部署到测试环境
-- 所有测试依赖就绪
-
-## 执行流程
-
-按层级顺序执行。每层通过后才进入下一层。不可跳过。
+按层级顺序执行，不可跳过：
 
 ```
-1. npm run test:unit          ← 第一道闸门
-2. npm run test:integration   ← 第二道闸门
-3. npm run test:contract      ← 如果有 API
-4. npm run test:orchestration ← 如果有多接口联动
-5. npm run test:e2e           ← 如果有 UI
-6. npm run test:visual        ← 如果是前端
+1. npm run test:unit
+2. npm run test:integration
+3. npm run test:contract
+4. npm run test:orchestration
+5. npm run test:e2e
+6. npm run test:visual
 ```
 
-## 每层失败时
+每层失败时停止，退回 DEVELOP 对应轨道修复。修复后重新从失败的那层开始。
 
+## Plan 的「执行边界」应包含
+
+```markdown
+## 执行边界
+
+**你必须做：**
+- 确认所有轨道 Plan 已 done
+- 按层级顺序执行全量测试，每层通过后才进入下一层
+- 失败时提取失败用例名、失败断言、截图路径
+- 全部通过后生成测试报告，推进到 PRE_RELEASE
+
+**你必须不做：**
+- 不新增功能代码
+- 不修改 Design Spec 或 ADR
+- 如果发现设计缺陷，退回 DESIGN（不自行修复）
 ```
-1. 停止，不继续下一层
-2. 提取失败信息: 失败用例名、失败断言、截图路径
-3. 退回 DEVELOP，通知对应轨道 Executor 修复
-4. 修复完成后，重新从失败的那层开始执行
-```
-
-## 全部通过时
-
-```
-1. 生成测试报告
-2. 在 Report 中记录:
-   - 各层通过/总数
-   - 执行耗时
-3. 报告给 Designer: 可以推进到 PRE_RELEASE
-```
-
-## 修复循环规则
-
-- 只修 bug，不新增功能
-- 不要修改 Design/ADR
-- 如果发现设计缺陷（不是 bug，是契约本身有问题）:
-  ```
-  更新 docs/README.md 当前阶段为 DESIGN
-  commit: docs(state): INTEGRATE → DESIGN (设计缺陷)
-  ```
-  然后等待 Designer 处理
 
 ## 输出格式
 
 ```markdown
-## 测试摘要
-
 | 测试层 | 通过/总数 | 失败用例 | 耗时 |
 |--------|----------|----------|------|
 | 单元测试 | 12/12 | — | 2.3s |
 | 集成测试 | 5/5 | — | 4.1s |
-| 接口契约 | 8/8 | — | 1.2s |
-| E2E | 2/3 | AC-007-订单取消 (选择器超时) | 15.8s |
+| E2E | 2/3 | AC-007 (选择器超时) | 15.8s |
 
-**结论: ❌ 未通过。E2E 层存在 1 个失败用例，需退回 DEVELOP 修复。**
-```
-
-或全部通过时：
-
-```markdown
-## 测试摘要
-
-| 测试层 | 通过/总数 | 失败用例 | 耗时 |
-|--------|----------|----------|------|
-| 单元测试 | 12/12 | — | 2.3s |
-| 集成测试 | 5/5 | — | 4.1s |
-| E2E | 3/3 | — | 15.8s |
-
-**结论: ✅ 全部通过。可推进到 PRE_RELEASE。**
+结论: ❌ 未通过 / ✅ 全部通过
 ```

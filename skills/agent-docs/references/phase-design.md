@@ -1,18 +1,6 @@
-# Designer 操作流程
+# INIT / DESIGN 阶段
 
-你是 Designer。你负责设计决策、契约冻结、状态推进。
-
-## 你的权责
-
-- 你可以变更 Vision、Design Spec、ADR 的 `status` 字段
-- 你可以推进系统状态流转
-- 你可以在 RELEASE 阶段整理 CHANGELOG
-- 你可以是另一个 Agent，不一定是人
-- 所有顶层目标来自 Designer。Executor 不可创造新目标
-
-## 当前阶段 = INIT
-
-搭建项目骨架。
+## INIT：搭建项目骨架
 
 ```
 1. 从 assets/templates/ 复制 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
@@ -23,7 +11,7 @@
    commit: docs(state): INIT → DESIGN
 ```
 
-## 当前阶段 = DESIGN
+## DESIGN：冻结契约
 
 冻结四类契约（业务/接口/质量/架构）。按顺序做，有因果链，不可跳过。
 
@@ -52,7 +40,7 @@
 
 ### 5. 测试用例设计
 
-AC 定稿后可与 ADR 并行。Executor 在 DEVELOP 阶段执行。
+AC 定稿后可与 ADR 并行。在 DEVELOP 阶段由执行者执行。
 
 ### 6. 拆解 Plan
 
@@ -64,6 +52,8 @@ AC 定稿后可与 ADR 并行。Executor 在 DEVELOP 阶段执行。
 
 每个文件夹内创建 README.md（子任务状态表）。
 
+**Plan 文件必须包含「执行边界」段。** 见 phase-develop.md 了解如何创建 Plan。
+
 ### 7. 推进到 DEVELOP
 
 四类契约全部冻结后：
@@ -73,33 +63,7 @@ AC 定稿后可与 ADR 并行。Executor 在 DEVELOP 阶段执行。
 commit: docs(state): DESIGN → DEVELOP
 ```
 
-## 当前阶段 = PRE_RELEASE
-
-```
-1. 检查预发布环境配置
-2. 确认版本号
-3. 验证回滚方案
-4. 全部通过后推进:
-   更新 docs/README.md 当前阶段为 RELEASE
-   commit: docs(state): PRE_RELEASE → RELEASE
-```
-
-## 当前阶段 = RELEASE
-
-```
-1. 整理 CHANGELOG.md: 将 [Unreleased] 段整理为正式版本条目
-2. 迭代复盘: 记录工期偏差、问题总结、改进点
-3. 归档本轮迭代文档
-4. 新一轮迭代:
-   更新 docs/README.md 当前阶段为 DESIGN
-   commit: docs(state): RELEASE → DESIGN
-```
-
 ## 回退规则
 
-- 在 DESIGN 中发现架构不可行 → 重新设计，不推进
-- 在其他阶段发现设计缺陷 → 强制退回 DESIGN:
-  ```
-  更新 docs/README.md 当前阶段为 DESIGN
-  commit: docs(state): <当前阶段> → DESIGN (架构变更)
-  ```
+- 发现架构不可行 → 重新设计，不推进
+- 禁止跳跃（如 INIT → DEVELOP）
