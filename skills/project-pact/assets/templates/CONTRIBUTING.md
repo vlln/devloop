@@ -111,7 +111,7 @@ npm run dev
 
 | 文档 | 格式 | 示例 |
 |------|------|------|
-| Design Spec | `00x-xxxx.md` | `001-spec.md` |
+| Design Spec | `00x-xxxx.md` | `001-vagent.md` |
 | ADR | `000x-xxxx.md` | `0001-db-choice.md` |
 | Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
 | Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |

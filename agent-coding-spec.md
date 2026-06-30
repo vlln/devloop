@@ -47,7 +47,7 @@ template/              ← 交付物：安装到项目中的文档模板
 skills/project-pact/SKILL.md（bootloader：状态机 + 路由）
   └── AGENTS.md（项目入口地图：文档类型、目录结构、系统边界、阶段行为）
         └── docs/README.md（当前状态 + 最近事件 + 设计评估）
-              ├── design/README.md（Spec 版本索引）→ 001-spec.md
+              ├── design/README.md（Spec 版本索引）→ 001-template.md
               ├── adr/README.md（决策索引）→ 0001-xxx.md
               └── plans/README.md（任务列表）→ 0001-xxx/README.md
 ```
@@ -639,7 +639,7 @@ draft ──→ complete
 | 文档 | 命名 | 示例 |
 |------|------|------|
 | Vision | `vision.md` | `vision.md` |
-| Design Spec | `00x-xxxx.md` | `001-spec.md` |
+| Design Spec | `00x-xxxx.md` | `001-vagent.md` |
 | ADR | `000x-xxxx.md` | `0001-db-choice.md` |
 | Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
 | Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
@@ -659,7 +659,7 @@ draft ──→ complete
 │   ├── vision.md
 │   ├── design/
 │   │   ├── README.md
-│   │   └── 001-spec.md
+│   │   └── 001-template.md
 │   ├── adr/
 │   │   ├── README.md
 │   │   └── 0001-xxx.md
