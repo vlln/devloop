@@ -21,6 +21,8 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 ## 关联 Commit
 
+<!-- 记录 branch 中的 commit hash。合并后由协调者补充最终 hash。 -->
+
 | Commit Hash | 说明 |
 |-------------|------|
 | | |
