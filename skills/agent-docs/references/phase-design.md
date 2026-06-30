@@ -6,9 +6,8 @@
 1. 从 assets/templates/ 复制 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
 2. 从 assets/templates/docs/ 复制全部内容到项目 docs/ 目录
 3. 在 docs/README.md 中设置当前阶段为 INIT
-4. 独立 commit: docs(init): 初始化项目文档骨架
-5. 推进: 更新 docs/README.md 当前阶段为 DESIGN
-   commit: docs(state): INIT → DESIGN
+4. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
+5. 推进: 更新 docs/README.md 当前阶段为 DESIGN，提交。约定 commit 前缀: `docs(state):`
 ```
 
 ## DESIGN：冻结契约
@@ -18,7 +17,7 @@
 ### 1. 编写 vision.md
 
 业务目标、用户范围、顶层架构约束。一次性定稿。
-冻结: status 改为 active，commit: `docs(vision): 定稿`
+冻结: status 改为 active，提交（commit message 描述变更内容）
 
 ### 2. 编写 Design Spec（001-spec.md）
 
@@ -26,13 +25,13 @@
 填写: 项目概述 → 用户故事 → 模块划分 → 接口定义 → 数据模型 → 业务规则 → AC → 非功能约束 → 依赖项 → 术语表。
 
 **AC 要求：** 尽可能可量化。机器不可验证的 AC 标注"校验方式: 手动/Agent"。
-冻结: status 改为 active，commit: `docs(design): 冻结 001-spec`
+冻结: status 改为 active，提交
 
 ### 3. 编写 ADR
 
 每个技术决策一个文件，从 `assets/templates/docs/adr/0001-template.md` 复制。
 填写: 背景 → 决策内容 → 备选方案 → 选择理由 → 后果 → 影响范围。
-采纳: status 改为 accepted，commit: `docs(adr): 采纳 0001-xxx`
+采纳: status 改为 accepted，提交
 
 ### 4. 定义 API 契约
 
@@ -66,7 +65,7 @@ AC 定稿后可与 ADR 并行。在 DEVELOP 阶段由执行者执行。
 ```
 更新 docs/README.md 当前阶段为 DEVELOP
 更新行为边界（允许: 编码/测试，禁止: 修改 Design/ADR）
-commit: docs(state): DESIGN → DEVELOP
+commit: 更新 docs/README.md 当前阶段为 DEVELOP，约定前缀 `docs(state):`
 ```
 
 ## 回退规则

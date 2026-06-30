@@ -67,9 +67,7 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 
 全部轨道 Plan done 后：
 ```
-更新 docs/README.md 当前阶段为 INTEGRATE
-更新行为边界（允许: 全量测试，禁止: 新增功能代码）
-commit: docs(state): DEVELOP → INTEGRATE
+更新 docs/README.md 当前阶段为 INTEGRATE，提交。约定前缀: `docs(state):`
 ```
 
 ## 异常处理

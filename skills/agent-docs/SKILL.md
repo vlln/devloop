@@ -43,9 +43,8 @@ RELEASE → DESIGN  (新一轮迭代)
 1. 复制 assets/templates/ 下的 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
 2. 复制 assets/templates/docs/ 下全部内容到项目 docs/ 目录
 3. 在 docs/README.md 中设置当前阶段为 INIT
-4. 独立 commit: docs(init): 初始化项目文档骨架
-5. 推进: 更新 docs/README.md 当前阶段为 DESIGN
-   commit: docs(state): INIT → DESIGN
+4. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
+5. 推进: 更新 docs/README.md 当前阶段为 DESIGN，提交。约定 commit 前缀: `docs(state):`
 ```
 
 系统已安装后，直接进入下一步。

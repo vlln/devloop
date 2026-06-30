@@ -34,8 +34,7 @@
 1. 生成测试报告
 2. 在 Report 中记录各层通过/总数和耗时
 3. 推进到 PRE_RELEASE:
-   更新 docs/README.md 当前阶段为 PRE_RELEASE
-   commit: docs(state): INTEGRATE → PRE_RELEASE
+   更新 docs/README.md 当前阶段为 PRE_RELEASE，提交。约定前缀: `docs(state):`
 ```
 
 ## 修复循环规则
@@ -45,7 +44,7 @@
 - 如果发现设计缺陷（不是 bug，是契约本身有问题）→ 退回 DESIGN:
   ```
   更新 docs/README.md 当前阶段为 DESIGN
-  commit: docs(state): INTEGRATE → DESIGN (设计缺陷)
+  更新 docs/README.md 当前阶段为 DESIGN，提交。约定前缀: `docs(state):`
   ```
 
 ## 输出格式
