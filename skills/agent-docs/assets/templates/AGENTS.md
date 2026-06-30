@@ -100,7 +100,7 @@
 
 ### DEVELOP
 
-- **允许**: 创建 Plan、执行 Plan（编码/测试）、更新 Plan/Report 状态、追加 CHANGELOG [Unreleased]
+- **允许**: 创建 Plan、执行 Plan（编码/测试）、更新 Plan/Report 状态
 - **禁止**: 修改 Vision/Design/ADR 的内容或 status、在没有 Plan 的情况下直接写代码
 - **Plan 必须包含「执行边界」段**，明确指定执行者必须做和必须不做的事
 
