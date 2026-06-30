@@ -1,10 +1,10 @@
 ---
 title: 01-report-example
-description: 子任务执行报告模板，记录执行摘要、关联 commit、产物清单、验收结果、测试摘要和权威文档改动建议。
+description: 子任务执行报告模板，记录执行摘要、关联 commit、产物清单、验收结果、测试摘要、变更摘要和权威文档改动建议。
 type: report
 # status: draft | complete
-#   draft    → 编写中，伴随 Plan 执行同步更新（Executor 变更）
-#   complete → 已提交，内容不再修改（Executor 变更）
+#   draft    → 编写中，伴随 Plan 执行同步更新
+#   complete → 已提交，内容不再修改
 status: template
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
@@ -55,6 +55,12 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 ---
 
+## 变更摘要
+
+<!-- 本次执行中值得记录到 CHANGELOG 的变更。协调者将据此更新 CHANGELOG [Unreleased] 段。 -->
+
+---
+
 ## 遗留问题
 
 <!-- 若有未解决的问题，记录在此，供后续 Plan 处理 -->
@@ -63,4 +69,4 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 ## 对权威文档的改动建议
 
-<!-- 若发现 Vision/Design/ADR 需修改，在此记录建议，由 Designer 决策 -->
+<!-- 若发现 Vision/Design/ADR 需修改，在此记录建议，由协调者评估后决策 -->

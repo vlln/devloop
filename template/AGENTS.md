@@ -142,9 +142,8 @@
 3. 读取 active Design Spec → 获取完整规格 + AC
 4. 读取 docs/arch/adr/README.md → 了解相关技术决策
 5. 按 Plan 执行（编码/测试）
-6. 写入 Report，关联 commit
+6. 写入 Report，关联 commit。在「变更摘要」段记录本次变更
 7. 更新 Plan status
-8. 追加 CHANGELOG.md [Unreleased] 段
 ```
 
 ### 如果当前阶段是 INTEGRATE / PRE_RELEASE / RELEASE
