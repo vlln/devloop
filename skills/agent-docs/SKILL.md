@@ -82,6 +82,6 @@ RELEASE → DESIGN  (新一轮迭代)
 
 | 当需要创建 Plan 描述以下任务时 | 去读 |
 |----------|------|
-| 测试基础设施（轨道 C） | [references/testing/testing-infra.md](references/testing/testing-infra.md) |
-| 编码自测（轨道 A/B） | [references/testing/testing-dev.md](references/testing/testing-dev.md) |
-| 全量集成测试（轨道 D） | [references/testing/testing-integrate.md](references/testing/testing-integrate.md) |
+| 测试基础设施 | [references/testing/ref-testing-infra.md](references/testing/ref-testing-infra.md) |
+| 编码自测 | [references/testing/ref-testing-dev.md](references/testing/ref-testing-dev.md) |
+| 全量集成测试 | [references/testing/ref-testing-integrate.md](references/testing/ref-testing-integrate.md) |

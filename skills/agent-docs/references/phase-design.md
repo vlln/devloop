@@ -1,74 +1,95 @@
-# INIT / DESIGN 阶段
+# DESIGN 阶段
 
-## INIT：搭建项目骨架
+## 固定阶段
 
-```
-1. 从 assets/templates/ 复制 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
-2. 从 assets/templates/docs/ 复制全部内容到项目 docs/ 目录
-3. 在 docs/README.md 中设置当前阶段为 INIT
-4. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
-5. 推进: 更新 docs/README.md 当前阶段为 DESIGN，提交。约定 commit 前缀: `docs(state):`
-```
+DESIGN 是需求分析、架构设计、契约定义的阶段。**主体串行，有因果链，不可跳过。** 禁止编写业务代码。四类契约（业务/接口/质量/架构）冻结后推进到 DEVELOP。
 
-## DESIGN：冻结契约
+## 子阶段
 
-冻结四类契约（业务/接口/质量/架构）。按顺序做，有因果链，不可跳过。
+### 业务契约（必选，所有项目）
 
-### 1. 编写 vision.md
+**产出：** vision.md + Design Spec（含 AC）
 
-业务目标、用户范围、顶层架构约束。一次性定稿。
-冻结: status 改为 active，提交（commit message 描述变更内容）
+1. 编写 vision.md：业务目标、用户范围、顶层架构约束。一次性定稿。
+2. 编写 Design Spec（从模板复制 `assets/templates/docs/design/001-spec.md`）：项目概述 → 用户故事 → 模块划分 → 接口定义 → 数据模型 → 业务规则 → AC → 非功能约束 → 依赖项 → 术语表。
+3. AC 要求：尽可能可量化。机器不可验证的 AC 标注"校验方式: 手动/Agent"。
 
-### 2. 编写 Design Spec（001-spec.md）
+**退出条件：** vision.md status=active，Design Spec status=active。冻结后不可原地修改。
 
-从模板复制 `assets/templates/docs/design/001-spec.md`。
-填写: 项目概述 → 用户故事 → 模块划分 → 接口定义 → 数据模型 → 业务规则 → AC → 非功能约束 → 依赖项 → 术语表。
+### 架构契约（必选，所有项目）
 
-**AC 要求：** 尽可能可量化。机器不可验证的 AC 标注"校验方式: 手动/Agent"。
-冻结: status 改为 active，提交
+**产出：** ADR
 
-### 3. 编写 ADR
+每个技术决策一个文件（从模板复制 `assets/templates/docs/adr/0001-template.md`）。填写：背景 → 决策内容 → 备选方案 → 选择理由 → 后果 → 影响范围。
 
-每个技术决策一个文件，从 `assets/templates/docs/adr/0001-template.md` 复制。
-填写: 背景 → 决策内容 → 备选方案 → 选择理由 → 后果 → 影响范围。
-采纳: status 改为 accepted，提交
+**退出条件：** 所有核心 ADR status=accepted。
 
-### 4. 定义 API 契约
+### 接口契约（适用：有 API 的项目）
 
-接口详细定义（OpenAPI 或内嵌在 Design Spec 中）。覆盖: 入参、出参、错误码。
+**产出：** API 契约定义
 
-### 5. 测试用例设计
+接口详细定义（OpenAPI 或内嵌在 Design Spec 中）。覆盖：入参、出参、错误码。
 
-AC 定稿后可与 ADR 并行。在 DEVELOP 阶段由执行者执行。
+**退出条件：** API 契约已定义，所有接口有明确的入参/出参/错误码。
 
-### 6. 拆解 Plan
+### 测试用例设计（适用：所有项目）
 
-在 `docs/plans/` 下为每个并行轨道创建文件夹。轨道数量取决于项目类型。
+**产出：** 测试用例清单
 
-例如全栈项目:
-- `0001-后端开发`（依赖: 接口契约 + 数据模型）
-- `0002-前端开发`（依赖: API Mock + UI 约束）
-- `0003-测试基础设施`（依赖: AC + 架构契约，必须最先完成）
-- `0004-数据库部署`（依赖: 数据模型 + 架构契约）
+AC 定稿后可与架构契约并行。对每条 AC 标注：机器可验证（自动化）或 Agent 判定。测试基础设施在 DEVELOP 阶段搭建。
 
-例如 CLI 工具:
-- `0001-核心功能`
-- `0002-测试基础设施`
+**退出条件：** 每条 AC 有对应的测试方式标注。
 
-每个文件夹内创建 README.md（子任务状态表）。
+### Plan 拆解（必选，所有项目）
 
-**Plan 文件必须包含「执行边界」段。** 见 phase-develop.md 了解如何创建 Plan。
+**产出：** Plan 文件夹
 
-### 7. 推进到 DEVELOP
+在 `docs/plans/` 下为每个并行轨道创建文件夹。轨道数量取决于项目类型。每个文件夹内创建 README.md（子任务状态表）。Plan 文件必须包含「执行边界」段（见 phase-develop.md）。
 
-四类契约全部冻结后：
-```
-更新 docs/README.md 当前阶段为 DEVELOP
-更新行为边界（允许: 编码/测试，禁止: 修改 Design/ADR）
-commit: 更新 docs/README.md 当前阶段为 DEVELOP，约定前缀 `docs(state):`
-```
+**退出条件：** 所有轨道 Plan 文件夹已创建，每个包含 README.md。
+
+## 设计完成检查
+
+推进到 DEVELOP 前，确认：
+
+- [ ] vision.md status=active
+- [ ] Design Spec status=active（四类契约已覆盖）
+- [ ] 核心 ADR status=accepted
+- [ ] 如有 API：接口契约已定义
+- [ ] 每条 AC 有测试方式标注
+- [ ] Plan 已拆解，执行边界已填写
+
+全部满足后：更新 `docs/README.md` 当前阶段为 DEVELOP，提交。约定前缀 `docs(state):`。
 
 ## 回退规则
 
 - 发现架构不可行 → 重新设计，不推进
-- 禁止跳跃（如 INIT → DEVELOP）
+- 在其他阶段发现设计缺陷 → 更新 `docs/README.md` 当前阶段为 DESIGN，提交
+
+## 参考实现
+
+### 全栈 Web 项目
+
+子阶段组合：业务契约 → 架构契约 → 接口契约 → 测试用例设计 → Plan 拆解
+
+Plan 拆解为 4 条轨道：
+- `0001-后端开发`（依赖：接口契约 + 数据模型）
+- `0002-前端开发`（依赖：API Mock + UI 约束）
+- `0003-测试基础设施`（依赖：AC + 架构契约，必须最先完成）
+- `0004-数据库部署`（依赖：数据模型 + 架构契约）
+
+### CLI 工具项目
+
+子阶段组合：业务契约 → 架构契约 → Plan 拆解
+
+Plan 拆解为 2 条轨道：
+- `0001-核心功能`
+- `0002-测试基础设施`
+
+### 前端组件库项目
+
+子阶段组合：业务契约 → 架构契约 → Plan 拆解
+
+Plan 拆解为 2 条轨道：
+- `0001-组件开发`
+- `0002-测试基础设施`
