@@ -1,9 +1,9 @@
 ---
-name: agent-docs
-description: 项目文档体系与生命周期管理。当 Agent 需要理解当前阶段能做什么、如何推进状态、如何创建和管理文档时使用。
+name: project-pact
+description: 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。
 ---
 
-# Agent Docs System
+# Project Pact
 
 ## 系统全貌
 

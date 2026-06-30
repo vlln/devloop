@@ -8,7 +8,7 @@ created: 2026-06-26T00:00:00Z
 ---
 
 > 本文档是规范本身的 Design Spec，描述文档体系的设计决策、约束和完整规则。
-> 执行层实现见 [skills/agent-docs/](skills/agent-docs/)，模板见 [template/](template/)。
+> 执行层实现见 [skills/project-pact/](skills/project-pact/)，模板见 [template/](template/)。
 
 ---
 
@@ -31,7 +31,7 @@ created: 2026-06-26T00:00:00Z
 
 ```
 agent-coding-spec.md  ← 元设计（本文档）：描述"为什么这样设计"
-skills/agent-docs/     ← 执行层（bootloader）：Agent 加载后知道如何操作系统
+skills/project-pact/     ← 执行层（bootloader）：Agent 加载后知道如何操作系统
 template/              ← 交付物：安装到项目中的文档模板
 ```
 
@@ -44,7 +44,7 @@ template/              ← 交付物：安装到项目中的文档模板
 每层只描述**下一级**的内容，不越级展开细节。
 
 ```
-skills/agent-docs/SKILL.md（bootloader：状态机 + 路由）
+skills/project-pact/SKILL.md（bootloader：状态机 + 路由）
   └── AGENTS.md（项目入口地图：文档类型、目录结构、系统边界、阶段行为）
         └── docs/README.md（当前状态 + 最近事件 + 设计评估）
               ├── design/README.md（Spec 版本索引）→ 001-spec.md
@@ -746,7 +746,7 @@ draft ──→ complete
 
 ### 11.1 Skills 层（bootloader）
 
-`skills/agent-docs/` 是执行层入口。Agent 加载 skill 后获得：
+`skills/project-pact/` 是执行层入口。Agent 加载 skill 后获得：
 - 状态机全貌和路由
 - 系统安装指令
 - 按阶段的操作流程（references/）
