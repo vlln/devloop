@@ -71,7 +71,8 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 |------|------|
 | 执行者崩溃 | 丢弃 branch/worktree，任务重置为 pending |
 | 步骤失败 | branch 内回退至步骤快照，内部重试 |
-| 架构不可行 | 停止 DEVELOP，更新 `docs/README.md` 当前阶段为 DESIGN，提交 |
+| 架构不可行 — 轻微约束 | 依赖能用但方式与预期不一致。更新 ADR 追加修订记录，在 DEVELOP 内调整，不退回 DESIGN |
+| 架构不可行 — 架构颠覆 | 技术路线走不通，必须更换方案。停止 DEVELOP，退回 DESIGN 执行正式变更流程（见 phase-design.md「设计变更」子阶段） |
 | 局部 bug | 在 DEVELOP ↔ INTEGRATE 修复循环内解决 |
 
 ## 参考实现
