@@ -1,6 +1,7 @@
 ---
 title: 01-plan-example
-description: 子任务执行计划模板，定义目标、关联文档、前置条件、分步计划、执行边界、当前进度和阻塞点。
+description: 子任务执行计划，一句话说明本 Plan 要达成什么。
+# 保持简短：Agent 扫描时通过 description 判断是否相关，不需要列出具体步骤。
 type: plan
 # status: pending | in_progress | blocked | done
 #   pending     → 已创建，等待执行

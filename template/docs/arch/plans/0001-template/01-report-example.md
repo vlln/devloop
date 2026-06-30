@@ -1,6 +1,6 @@
 ---
 title: 01-report-example
-description: 子任务执行报告模板，记录执行摘要、关联 commit、产物清单、验收结果、测试摘要、变更摘要和权威文档改动建议。
+description: 子任务执行报告，一句话说明执行结果（成功/失败/部分完成）。
 type: report
 # status: draft | complete
 #   draft    → 编写中，伴随 Plan 执行同步更新
