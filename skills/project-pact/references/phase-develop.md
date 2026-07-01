@@ -63,7 +63,9 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 
 ## 推进到 INTEGRATE
 
-全部轨道 Plan done 后：更新 `docs/README.md` 当前阶段为 INTEGRATE，追加最近事件，提交。约定前缀 `docs(state):`。
+全部轨道 Plan done 后，进入 INTEGRATE 阶段——不是结束。DEVELOP 的测试通过不等于可以跳过 INTEGRATE。
+
+更新 `docs/README.md` 当前阶段为 INTEGRATE，追加最近事件，提交。约定前缀 `docs(state):`。
 
 ## 异常处理
 
