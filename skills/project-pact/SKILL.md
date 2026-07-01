@@ -91,12 +91,75 @@ RELEASE → DESIGN  (新一轮迭代)
 ```
 1. AGENTS.md           → 项目入口地图：文档类型、目录结构、系统边界、阶段行为
 2. docs/README.md      → 当前系统状态 + 行为边界（首先读取！）
-3. CONTRIBUTING.md     → 编码/Commit/文档/测试规范
+3. CONTRIBUTING.md     → 编码/测试/PR 规范（项目自定义）
 4. 各级 README.md      → 子目录索引和状态
 5. 具体文档             → Vision / Design Spec / ADR / Plan / Report
 ```
 
 **系统规则和约定（文档类型、命名规范、frontmatter、Git 规则）在 AGENTS.md 和 CONTRIBUTING.md 中。** 本 skill 不重复这些内容。
+
+---
+
+## 系统规则
+
+### 文档命名
+
+| 文档 | 格式 | 示例 |
+|------|------|------|
+| Vision | `vision.md` | `vision.md` |
+| Design Spec | `00x-xxxx.md` | `001-vagent.md` |
+| ADR | `000x-xxxx.md` | `0001-db-choice.md` |
+| Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
+| Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
+| Report | `0x-report-xxx.md` | `01-report-order-api.md` |
+
+### Frontmatter
+
+以下文档类型使用 YAML frontmatter（`---` 包裹），位于文件最顶部：
+
+| 文档类型 | 必填字段 |
+|----------|----------|
+| Vision | `title`, `description`, `type: vision`, `status`, `created` |
+| Design Spec | `title`, `description`, `type: design`, `status`, `version`, `created` |
+| ADR | `title`, `description`, `type: adr`, `status`, `created` |
+| Plan | `title`, `description`, `type: plan`, `status`, `created` |
+| Report | `title`, `description`, `type: report`, `status`, `created` |
+
+`created` 使用 ISO 8601 格式 (`YYYY-MM-DDTHH:MM:SSZ`)。`version` 仅 Design Spec 使用，整数递增。
+
+以下文件**不使用** frontmatter：
+- AGENTS.md、CONTRIBUTING.md、CHANGELOG.md
+- 所有 README.md
+
+### status 有效值
+
+| 文档类型 | 状态值 | 流转 |
+|----------|--------|------|
+| Vision | `draft` / `active` / `archived` | draft→active→archived |
+| Design Spec | `draft` / `active` / `archived` | draft→active→archived（同时只有一个 active） |
+| ADR | `draft` / `accepted` / `superseded` / `deprecated` | draft→accepted→superseded/deprecated |
+| Plan | `pending` / `in_progress` / `blocked` / `done` | pending→in_progress→done (可 blocked→in_progress) |
+| Report | `draft` / `complete` | draft→complete |
+
+**冻结定义：** status 从 `draft` 变为 `active`（或 `accepted`），伴随独立 commit。冻结后不可原地修改——要改必须退回 DESIGN、新建版本、旧版本归档。
+
+### 语义链
+
+关联通过文档正文中的文本引用和命名约定表达，不依赖 frontmatter 的 related 字段：
+
+```
+Design Spec AC-003
+  → Plan 01-plan-order-api.md 步骤 2: "实现 AC-003 订单创建"
+    → Commit: "feat(order): 实现 AC-003 订单创建"
+      → Report 01-report-order-api.md: "AC-003 ✅, commit abc123"
+```
+
+### Git 规则
+
+- 文档变更和代码变更永远分开 commit
+- 状态变更伴随独立 commit，约定前缀 `docs(state):`
+- 文档 commit 格式：`docs(<scope>): <简述>`
+- Plan 执行在独立 branch 中
 
 ---
 

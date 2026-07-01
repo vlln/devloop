@@ -105,69 +105,12 @@ npm run dev
 
 ### 文档体系
 
-项目文档遵循 AGENTS.md 中定义的结构。新增或修改文档前，先阅读 AGENTS.md。
-
-### 文档命名规范
-
-| 文档 | 格式 | 示例 |
-|------|------|------|
-| Design Spec | `00x-xxxx.md` | `001-vagent.md` |
-| ADR | `000x-xxxx.md` | `0001-db-choice.md` |
-| Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
-| Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
-| Report | `0x-report-xxx.md` | `01-report-order-api.md` |
-
-### Frontmatter 规范
-
-以下文档类型使用 YAML frontmatter（`---` 包裹），位于文件最顶部：
-
-| 文档类型 | 必填字段 |
-|----------|----------|
-| Vision | `title`, `description`, `type: vision`, `status`, `created` |
-| Design Spec | `title`, `description`, `type: design`, `status`, `version`, `created` |
-| ADR | `title`, `description`, `type: adr`, `status`, `created` |
-| Plan | `title`, `description`, `type: plan`, `status`, `created` |
-| Report | `title`, `description`, `type: report`, `status`, `created` |
-
-**字段说明：** `title` 文档标题 / `description` 一句话摘要 / `type` 固定值 / `created` ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`) / `version` 仅 Design Spec，整数递增。
-
-**status 有效值：**
-
-| 文档类型 | 状态值 | 流转 |
-|----------|--------|------|
-| Vision | `draft` / `active` / `archived` | draft→active→archived |
-| Design Spec | `draft` / `active` / `archived` | draft→active→archived（同时只有一个 active） |
-| ADR | `draft` / `accepted` / `superseded` / `deprecated` | draft→accepted→superseded/deprecated |
-| Plan | `pending` / `in_progress` / `blocked` / `done` | pending→in_progress→done (可 blocked→in_progress) |
-| Report | `draft` / `complete` | draft→complete |
-
-**冻结定义：** status 从 `draft` 变为 `active`（或 `accepted`），伴随独立 commit。冻结后不可原地修改——要改必须退回 DESIGN、新建版本、旧版本归档。
-
-以下文件**不使用** frontmatter：
-- AGENTS.md、CONTRIBUTING.md、CHANGELOG.md（标准文件）
-- 所有 README.md（目录索引）
-
-```yaml
----
-title: 文档标题
-description: 一句话摘要
-type: design | adr | plan | report
-status: draft | active | accepted | ...
-created: YYYY-MM-DDTHH:MM:SSZ
----
-```
-
-### 路径引用
-
-- 所有跨文档引用使用相对路径 Markdown 链接：`[text](relative/path.md)`
-- 禁止使用反引号包裹的纯文本路径
-- 关联用语义链（正文中引用 AC 编号和文件路径），不依赖 frontmatter 的 related 字段
+项目文档遵循 AGENTS.md 中定义的结构。文档命名、frontmatter、status 等系统规则见 skill 的「系统规则」段。
 
 ### 文档 Commit
 
 - 文档修改必须独立 Commit，不与代码混合
 - 格式：`docs(<scope>): <简述>`
-- 状态变更伴随独立 commit：`docs(state): DESIGN → DEVELOP`
 
 ---
 
