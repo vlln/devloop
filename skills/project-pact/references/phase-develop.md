@@ -82,7 +82,7 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 - 轨道 A：测试基础设施（参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)，必须最先完成）
 - 轨道 B：后端开发（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
 - 轨道 C：前端开发（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
-- 轨道 D：数据库/部署
+- 轨道 D：数据库/部署脚本
 - 轨道 E：系统级测试用例（基于 AC 编写集成/E2E 用例，在 A 就位后、INTEGRATE 之前完成）
 
 ### CLI 工具项目
