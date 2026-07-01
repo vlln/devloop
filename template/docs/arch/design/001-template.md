@@ -40,6 +40,8 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 ---
 
+# 概要设计
+
 ## 一、项目概述
 
 <!-- 简要描述本项目要构建什么，解决什么问题 -->
@@ -63,6 +65,8 @@ created: YYYY-MM-DDTHH:MM:SSZ
 | | | P0 |
 
 ---
+
+# 详细设计
 
 ## 四、接口定义
 
@@ -130,6 +134,8 @@ created: YYYY-MM-DDTHH:MM:SSZ
 <!-- 若有 Visual Regression Test 要求，在此定义基准和阈值 -->
 
 ---
+
+# 验收与约束
 
 ## 八、验收标准（AC）
 
