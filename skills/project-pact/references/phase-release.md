@@ -26,8 +26,5 @@
 
 ## 回退规则
 
-- 在 PRE_RELEASE 发现问题 → 修复后重新部署，直到通过
-- 在 RELEASE 发现重大缺陷 → 退回 DESIGN:
-  ```
-  更新 docs/README.md 当前阶段为 DESIGN，追加最近事件，提交
-  ```
+- 在 PRE_RELEASE 发现问题 → 修复 CD 脚本或配置，重新部署，直到通过
+- RELEASE 完成后，如有生产缺陷 → 启动新一轮迭代（RELEASE → DESIGN），以增量模式处理
