@@ -25,8 +25,8 @@ Plan 必须包含以下段：
 
 **你必须做：**
 - 实现 [具体功能]，按 Design Spec 00x 第 x 节定义
-- 编写测试覆盖 AC-00x 到 AC-00x
-- 运行测试直到全部通过（具体命令见 CONTRIBUTING.md）
+- 编写单元测试覆盖本次修改的代码
+- 运行单元测试直到全部通过（具体命令见 CONTRIBUTING.md）
 - 完成后更新 Plan status 为 done，写入 Report
 
 **你必须不做：**

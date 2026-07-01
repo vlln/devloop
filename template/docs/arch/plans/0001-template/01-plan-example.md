@@ -59,6 +59,8 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 **你必须做：**
 - [具体任务描述]
+- 编写单元测试覆盖本次修改的代码
+- 运行单元测试直到全部通过（具体命令见 CONTRIBUTING.md）
 
 **你必须不做：**
 - 不修改 Design Spec 或 ADR
