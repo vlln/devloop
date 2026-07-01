@@ -26,7 +26,7 @@ RELEASE → DESIGN  (新一轮迭代)
 | 阶段 | 证明命题 | 出口把关（Agent 必须验证） |
 |------|---------|--------------------------|
 | **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化 |
-| **DESIGN** | 契约已冻结，可进入编码 | vision.md status=active、Design Spec status=active、核心 ADR 全部 status=accepted 且验证段不为空、Plan 已拆解 |
+| **DESIGN** | 契约已冻结，可进入编码 | vision.md status=active、Design Spec status=active、核心 ADR 全部 status=accepted（技术选型类 ADR 验证段不为空）、Plan 已拆解 |
 | **DEVELOP** | 各轨道独立功能正确，可进入集成验证 | 全部轨道 Plan done、各轨道 Report 中 AC 全部 ✅ |
 | **INTEGRATE** | 跨轨道协作正确，可进入预发布 | 全部测试层通过（单元→集成→接口→E2E），无阻塞级缺陷 |
 | **PRE_RELEASE** | 部署环境就绪，可发布 | 版本号确认、回滚方案验证、环境配置检查通过 |
