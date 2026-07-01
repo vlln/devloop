@@ -327,7 +327,7 @@ RELEASE → DESIGN  (新一轮迭代)
 | 业务契约 | 必选 | vision.md + Design Spec（含 AC） | status=active |
 | 架构契约 | 必选 | ADR | status=accepted |
 | 接口契约 | 适用：有 API 的项目 | API 契约定义 | 入参/出参/错误码已定义 |
-| 测试覆盖规划 | 必选 | 每条 AC 标注测试层级和验证方式 | 全部 AC 有对应标注，基础设施可覆盖 |
+| 测试覆盖规划 | 必选 | 每条 AC 标注验证方式，基础设施覆盖系统级测试层 | 全部 AC 有验证方式，基础设施覆盖到位 |
 | Plan 拆解 | 必选 | Plan 文件夹 + README | 所有轨道 Plan 文件夹已创建 |
 
 **设计评估：** 推进到 DEVELOP 前，在 `docs/README.md` 中设置评估等级：
