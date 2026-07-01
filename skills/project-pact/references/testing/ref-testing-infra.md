@@ -1,4 +1,4 @@
-# 测试基础设施 Plan（DEVELOP 轨道 C）
+# 测试基础设施 Plan（DEVELOP 轨道 A）
 
 当你在 DEVELOP 阶段创建测试基础设施的 Plan 时，参考以下内容编写 Plan 文件。
 

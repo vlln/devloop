@@ -1,4 +1,4 @@
-# 编码自测 Plan（DEVELOP 轨道 A/B）
+# 编码自测 Plan（DEVELOP 轨道 B/C）
 
 当你在 DEVELOP 阶段创建后端或前端开发的 Plan 时，参考以下内容编写 Plan 文件。
 

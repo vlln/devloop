@@ -59,7 +59,7 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 
 ### 测试基础设施（适用：需要自动化测试的项目）
 
-测试基础设施必须在其他轨道开始编码前完成。职责是搭建框架和 E2E 脚手架，不编写具体测试用例。参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)。
+测试基础设施（轨道 A）必须在其他轨道开始编码前完成。职责是搭建框架和 E2E 脚手架，不编写具体测试用例。参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)。
 
 ## 推进到 INTEGRATE
 
@@ -79,13 +79,14 @@ Plan 执行完成后，检查 `01-report-xxx.md`：
 ### 全栈 Web 项目
 
 4 条轨道并行：
-- 轨道 A：后端开发（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
-- 轨道 B：前端开发（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
-- 轨道 C：测试基础设施（参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)）
+- 轨道 A：测试基础设施（参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)，必须最先完成）
+- 轨道 B：后端开发（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
+- 轨道 C：前端开发（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
 - 轨道 D：数据库/部署
+- 轨道 E：系统级测试用例（基于 AC 编写集成/E2E 用例，在 A 就位后、INTEGRATE 之前完成）
 
 ### CLI 工具项目
 
 2 条轨道：
-- 轨道 A：核心功能（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
-- 轨道 B：测试基础设施（参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)）
+- 轨道 A：测试基础设施（参考 [testing/ref-testing-infra.md](testing/ref-testing-infra.md)，必须最先完成）
+- 轨道 B：核心功能（编码自测参考 [testing/ref-testing-dev.md](testing/ref-testing-dev.md)）
