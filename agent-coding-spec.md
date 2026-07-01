@@ -8,7 +8,7 @@ created: 2026-06-26T00:00:00Z
 ---
 
 > 本文档是规范本身的 Design Spec，描述文档体系的设计决策、约束和完整规则。
-> 执行层实现见 [skills/project-pact/](skills/project-pact/)，模板见 [template/](template/)。
+> 执行层实现见 [skills/devpact/](skills/devpact/)，模板见 `skills/devpact/assets/templates/`。
 
 ---
 
@@ -25,14 +25,13 @@ created: 2026-06-26T00:00:00Z
 
 ### 适用范围
 
-本文档定义的是**文档体系的结构和规则**。编码规范、Git 工作流等见 [template/CONTRIBUTING.md](template/CONTRIBUTING.md)。
+本文档定义的是**文档体系的结构和规则**。编码规范、Git 工作流等见 `skills/devpact/assets/templates/CONTRIBUTING.md`。
 
 ### 三层交付物
 
 ```
 agent-coding-spec.md  ← 元设计（本文档）：描述"为什么这样设计"
-skills/project-pact/     ← 执行层（bootloader）：Agent 加载后知道如何操作系统
-template/              ← 交付物：安装到项目中的文档模板
+skills/devpact/     ← 执行层（bootloader + 模板）：Agent 加载后知道如何操作系统
 ```
 
 ---
@@ -44,7 +43,7 @@ template/              ← 交付物：安装到项目中的文档模板
 每层只描述**下一级**的内容，不越级展开细节。
 
 ```
-skills/project-pact/SKILL.md（bootloader：状态机 + 路由）
+skills/devpact/SKILL.md（bootloader：状态机 + 路由）
   └── AGENTS.md（项目入口地图：文档类型、目录结构、系统边界、阶段行为）
         └── docs/README.md（当前状态 + 最近事件 + 设计评估）
               ├── design/README.md（Spec 版本索引）→ 001-template.md
@@ -747,16 +746,16 @@ draft ──→ complete
 
 ### 11.1 Skills 层（bootloader）
 
-`skills/project-pact/` 是执行层入口。Agent 加载 skill 后获得：
+`skills/devpact/` 是执行层入口。Agent 加载 skill 后获得：
 - 状态机全貌和路由
 - 系统安装指令
 - 按阶段的操作流程（references/）
 
 Skill 不包含项目规则（文档类型、命名规范、frontmatter 等）——这些在系统文档中。
 
-### 11.2 项目文档层（template/ 交付物）
+### 11.2 项目文档层（模板交付物）
 
-安装到项目中的文档。包含 AGENTS.md、CONTRIBUTING.md、CHANGELOG.md 和 docs/ 子目录。项目内 Agent 读取此层即可工作，无需加载 skill。
+安装到项目中的文档。包含 AGENTS.md、CONTRIBUTING.md、CHANGELOG.md 和 docs/ 子目录。模板位于 `skills/devpact/assets/templates/`。项目内 Agent 读取此层即可工作，无需加载 skill。
 
 ### 11.3 调度/协调层（外部基础设施）
 
@@ -775,7 +774,7 @@ Skills 层（bootloader）
   │ 提供系统安装、导航、路由
   │ 按阶段提供操作流程
   ▼
-项目文档层（template/）
+项目文档层
   │ Agent 读取 AGENTS.md → 阶段行为边界
   │ Agent 读取 docs/README.md → 当前阶段 + 最近事件
   │ Agent 读取 Plan → 执行边界 → 执行
