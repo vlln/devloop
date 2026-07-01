@@ -1,5 +1,4 @@
-> 本文档遵循 GitHub 标准 Contributing Guide 结构。
-> Agent 启动前必须完整读取，所有编码产出必须遵守本文件约束。
+> 编码规范。项目自定义。Agent 在 DEVELOP 阶段读取。
 
 ---
 
@@ -54,13 +53,15 @@ npm run dev
 
 ### 2. Code Style & Lint
 
-- 语言：TypeScript（严格模式）
-- 格式化：Prettier（2 空格缩进，单引号，无分号）
+<!-- 根据项目实际配置修改 -->
+
+- 语言：<!-- 例如: TypeScript（严格模式） -->
+- 格式化：<!-- 例如: Prettier（2 空格缩进，单引号，无分号） -->
 - 命名：
-  - 文件：kebab-case（`user-service.ts`）
-  - 变量/函数：camelCase
-  - 类/接口：PascalCase
-  - 常量：UPPER_SNAKE_CASE
+  - 文件：<!-- 例如: kebab-case（user-service.ts） -->
+  - 变量/函数：<!-- 例如: camelCase -->
+  - 类/接口：<!-- 例如: PascalCase -->
+  - 常量：<!-- 例如: UPPER_SNAKE_CASE -->
 
 ### 3. Commit Rules
 
@@ -90,10 +91,10 @@ npm run dev
 | `npm run test:e2e` | E2E 测试 |
 
 **检查清单：**
-- [ ] 类型检查通过（`tsc --noEmit`）
-- [ ] Lint 通过（`eslint`）
+- [ ] 类型检查通过
+- [ ] Lint 通过
 - [ ] 单元测试通过
-- [ ] 无 console.log 残留
+- [ ] 无调试代码残留
 
 ### 5. Open PR
 
@@ -101,25 +102,12 @@ npm run dev
 
 ---
 
-## 六、Docs Contribution
-
-### 文档体系
-
-项目文档遵循 AGENTS.md 中定义的结构。文档命名、frontmatter、status 等系统规则见 skill 的「系统规则」段。
-
-### 文档 Commit
-
-- 文档修改必须独立 Commit，不与代码混合
-- 格式：`docs(<scope>): <简述>`
-
----
-
-## 七、License & CLA
+## 六、License & CLA
 
 <!-- 项目许可证和贡献者协议 -->
 
 ---
 
-## 八、Get Help
+## 七、Get Help
 
 <!-- 联系方式、讨论渠道 -->
