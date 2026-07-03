@@ -1,5 +1,5 @@
 ---
-name: devpact
+name: devloop
 description: 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。
 ---
 
@@ -13,12 +13,12 @@ description: 契约驱动的项目开发系统。当 Agent 需要初始化项目
 stateDiagram-v2
     direction LR
     INIT --> DESIGN : 项目启动
-    DESIGN --> TEST : 契约冻结
-    TEST --> DEVELOP : 一次性基建就绪
+    DESIGN --> TEST_INFRA : 契约冻结
+    TEST_INFRA --> DEVELOP : 一次性基建就绪
     DEVELOP --> SYSTEM_TEST : 提测门禁通过
     SYSTEM_TEST --> RELEASE : 系统测试通过
     DEVELOP --> DESIGN : 架构颠覆
-    SYSTEM_TEST --> TEST : 基建缺陷
+    SYSTEM_TEST --> TEST_INFRA : 基建缺陷
     SYSTEM_TEST --> DESIGN : 设计缺陷
     RELEASE --> DESIGN : 新一轮迭代 / hotfix
 ```
@@ -31,14 +31,14 @@ stateDiagram-v2
 |------|---------|--------------------------|
 | **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化 |
 | **DESIGN** | 契约已冻结，可进入一次性基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（技术选型/存储/架构模式，验证段不为空）。审查通过后 promote proposed→active/accepted |
-| **TEST** | 一次性基建就绪，可进入业务开发 | 测试基建 ADR 全部 proposed、CI 流水线可运行、MR 门禁正确拦截、提测门禁正确拦截、Mock 返回正确、覆盖率数据准确、E2E 框架可跑冒烟、E2E 脚本对齐 AC、全部 Plan 文件夹已创建 |
-| **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 Plan 完成、MR 门禁全部通过（TEST 已配置）、打包部署成功、提测门禁通过（TEST 已配置） |
-| **SYSTEM_TEST** | 系统级验证通过，可进入预发布 | 全部测试层通过（集成→系统→专项），无阻塞级缺陷。基建缺陷退回 TEST，设计缺陷退回 DESIGN |
+| **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 测试基建 ADR 全部 proposed、CI 流水线可运行、MR 门禁正确拦截、提测门禁正确拦截、Mock 返回正确、覆盖率数据准确、E2E 框架可跑冒烟、E2E 脚本对齐 AC、全部 Plan 文件夹已创建 |
+| **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 Plan 完成、MR 门禁全部通过（TEST_INFRA 已配置）、打包部署成功、提测门禁通过（TEST_INFRA 已配置） |
+| **SYSTEM_TEST** | 系统级验证通过，可进入预发布 | 全部测试层通过（集成→系统→专项），无阻塞级缺陷。基建缺陷退回 TEST_INFRA，设计缺陷退回 DESIGN |
 | **RELEASE** | 本轮迭代已闭环，可开始新迭代 | CD 部署到 production 成功、生产冒烟测试通过、版本 tag 已打、CHANGELOG 已整理、归档完成。staging 验证作为 RELEASE 内部步骤
 
 **出口把关是不可跳过的硬性检查。** Agent 在每个阶段结束时必须逐项验证出口把关，全部通过方可推进。如果出口把关不通过，留在当前阶段修复，不得推进。
 
-**DEVELOP 流程：** 编码（TDD 左移）→ MR 门禁（TEST 已配置）→ 打包部署 → 提测门禁（TEST 已配置）。
+**DEVELOP 流程：** 编码（TDD 左移）→ MR 门禁（TEST_INFRA 已配置）→ 打包部署 → 提测门禁（TEST_INFRA 已配置）。
 
 **Agent 无状态。** 任何 Agent 可以随时被终止，下次启动时仅凭文件系统恢复状态。所有关键信息在文档中，不在对话历史中。
 
@@ -71,13 +71,13 @@ stateDiagram-v2
 
 **注意：** 轻微约束（依赖能用但方式与预期不一致）在 DEVELOP 内解决，不退回 DESIGN。
 
-### 基建修复（SYSTEM_TEST → TEST，基建缺陷退回）
+### 基建修复（SYSTEM_TEST → TEST_INFRA，基建缺陷退回）
 
-从 SYSTEM_TEST 因基建缺陷退回。进入 TEST 后走增量修复：
+从 SYSTEM_TEST 因基建缺陷退回。进入 TEST_INFRA 后走增量修复：
 1. 定级：确认为基建缺陷（门禁未拦截、覆盖率错乱、Mock 不对、E2E 框架不稳定），非业务 bug 或设计缺陷
 2. 定位：定位到具体基建组件，修复对应的 Plan 或配置
-3. 自证：修复后重新走 TEST 出口把关（特别是"正确拦截"项）
-4. 恢复流程：TEST 出口把关通过后重新推进到 DEVELOP，已完成的业务 Plan 不受影响
+3. 自证：修复后重新走 TEST_INFRA 出口把关（特别是"正确拦截"项）
+4. 恢复流程：TEST_INFRA 出口把关通过后重新推进到 DEVELOP，已完成的业务 Plan 不受影响
 
 ### 设计缺陷（SYSTEM_TEST → DESIGN）
 
@@ -89,7 +89,7 @@ stateDiagram-v2
 
 1. 定级：确认为阻断性故障（线上不可用/核心功能损坏），非轻微缺陷
 2. 轻量 DESIGN：跳过 full Spec/AC，仅修订受影响 ADR（如有设计变更）
-3. TEST：增量修复，已完成基建不受影响
+3. TEST_INFRA：增量修复，已完成基建不受影响
 4. DEVELOP：创建最小修复 Plan，走 TDD → MR 门禁
 5. SYSTEM_TEST：全量回归测试
 6. RELEASE：打补丁 tag（如 v1.2.1），归档
@@ -110,7 +110,7 @@ stateDiagram-v2
 
 ## 安装系统
 
-INIT 阶段将项目接入 devpact 系统。分新项目（安装）和旧项目（接入）两种场景，详见 [references/phase-init.md](references/phase-init.md)。
+INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目（接入）两种场景，详见 [references/phase-init.md](references/phase-init.md)。
 
 ---
 
@@ -204,7 +204,7 @@ AC 文档 AC-003-N-1（正常场景）
 |----------|------|
 | INIT | [references/phase-init.md](references/phase-init.md) |
 | DESIGN | [references/phase-design.md](references/phase-design.md) |
-| TEST | [references/phase-test.md](references/phase-test.md) |
+| TEST_INFRA | [references/phase-test-infra.md](references/phase-test-infra.md) |
 | DEVELOP | [references/phase-develop.md](references/phase-develop.md) |
 | SYSTEM_TEST | [references/phase-system-test.md](references/phase-system-test.md) |
 | RELEASE | [references/phase-release.md](references/phase-release.md) |

@@ -1,4 +1,4 @@
-# devpact
+# devloop
 
 契约驱动的项目开发系统 — 基于 6 阶段状态机的 Agent 自主编码框架。
 
@@ -10,14 +10,14 @@ used by skills-compatible agents.
 
 | Skill | Description |
 |-------|-------------|
-| [`devpact`](skills/devpact) | 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。 |
+| [`devloop`](skills/devloop) | 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。 |
 
 ## Quick Start
 
 Paste this into your AI agent (Claude Code, Cursor, OpenAI Assistants, etc.):
 
 ```text
-Install the Agent Skills from https://raw.githubusercontent.com/vlln/devpact/main/README.md
+Install the Agent Skills from https://raw.githubusercontent.com/vlln/devloop/main/README.md
 ```
 
 ## Installation
@@ -39,19 +39,19 @@ For other platforms, see the `skit` installation instructions.
 Install one skill:
 
 ```sh
-skit install vlln/devpact/skills/devpact
+skit install vlln/devloop/skills/devloop
 ```
 
 Install all skills in this repository:
 
 ```sh
-skit install vlln/devpact --all
+skit install vlln/devloop --all
 ```
 
 ### npx skills
 
 ```sh
-npx skills add vlln/devpact
+npx skills add vlln/devloop
 ```
 
 ### Manual

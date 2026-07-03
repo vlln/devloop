@@ -2,7 +2,7 @@
 
 ## 流程
 
-DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。全部文档冻结后推进到 TEST。
+DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。全部文档冻结后推进到 TEST_INFRA。
 
 ```mermaid
 flowchart TD
@@ -14,7 +14,7 @@ flowchart TD
     VERIFY -->|不可行| ADR
     AC --> G{出口把关}
     IF --> G
-    G -->|通过| TST[TEST]
+    G -->|通过| TST[TEST_INFRA]
     G -->|不通过| FIX[定位失败项<br/>退回对应文档]
 ```
 
@@ -191,16 +191,16 @@ promote 伴随独立 commit。约定前缀 `docs(state):`。
 
 涉及文档：vision.md → Spec → AC 文档 → ADR → 验证 → 接口定义
 
-TEST 节点：CI 流水线 + 部署底座 + 测试框架 + Mock 服务 + 契约测试框架 + E2E 框架 + 覆盖率配置 + 测试数据工厂 + MR 门禁 + 提测门禁
+TEST_INFRA 节点：CI 流水线 + 部署底座 + 测试框架 + Mock 服务 + 契约测试框架 + E2E 框架 + 覆盖率配置 + 测试数据工厂 + MR 门禁 + 提测门禁
 
 ### CLI 工具项目（示例）
 
 涉及文档：vision.md → Spec → AC 文档 → ADR → 验证
 
-TEST 节点：CI 流水线 + 部署底座 + 测试框架 + 覆盖率配置 + 测试数据工厂 + MR 门禁 + 提测门禁
+TEST_INFRA 节点：CI 流水线 + 部署底座 + 测试框架 + 覆盖率配置 + 测试数据工厂 + MR 门禁 + 提测门禁
 
 ### 前端组件库项目（示例）
 
 涉及文档：vision.md → Spec → AC 文档 → ADR → 验证
 
-TEST 节点：CI 流水线 + 部署底座 + 测试框架 + 组件测试框架 + 视觉回归框架 + 覆盖率配置 + MR 门禁 + 提测门禁
+TEST_INFRA 节点：CI 流水线 + 部署底座 + 测试框架 + 组件测试框架 + 视觉回归框架 + 覆盖率配置 + MR 门禁 + 提测门禁

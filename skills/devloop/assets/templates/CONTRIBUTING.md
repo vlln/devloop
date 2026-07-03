@@ -53,7 +53,7 @@ cd <project>
 | test | 测试相关 |
 | chore | 构建/工具/依赖 |
 
-### devpact 约定
+### devloop 约定
 
 - 文档变更和代码变更永远分开 commit
 - 阶段推进伴随独立 commit，前缀 `docs(state):`

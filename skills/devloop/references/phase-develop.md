@@ -2,16 +2,16 @@
 
 ## 流程
 
-DEVELOP 是基于 TEST 阶段搭建的一次性基建，执行业务开发的阶段。MR 门禁、提测门禁已在 TEST 配置完成，本阶段直接使用。
+DEVELOP 是基于 TEST_INFRA 阶段搭建的一次性基建，执行业务开发的阶段。MR 门禁、提测门禁已在 TEST_INFRA 配置完成，本阶段直接使用。
 
 ```mermaid
 flowchart TD
     PLAN[Plan 任务<br/>TDD 左移 → 编码 → 提交 MR]
-    MR[MR 门禁<br/>TEST 已配置]
+    MR[MR 门禁<br/>TEST_INFRA 已配置]
     PLAN --> MR
     MR -->|通过| BUILD[打包 + 测试环境部署]
     MR -->|不通过| PLAN
-    BUILD --> GATE{提测门禁<br/>TEST 已配置}
+    BUILD --> GATE{提测门禁<br/>TEST_INFRA 已配置}
     GATE -->|不通过| PLAN
     GATE -->|通过| ST[SYSTEM_TEST]
 ```
@@ -22,7 +22,7 @@ flowchart TD
 
 在 `docs/plans/` 下创建执行单元。
 
-**从 Spec 创建 Plan：** Spec 的模块划分表每行对应一个 Plan 文件夹。Plan 的粒度由项目自行决定，devpact 不预设。
+**从 Spec 创建 Plan：** Spec 的模块划分表每行对应一个 Plan 文件夹。Plan 的粒度由项目自行决定，devloop 不预设。
 
 示例：
 ```
@@ -54,7 +54,7 @@ Spec 模块划分表              →  Plan 文件夹
 
 ### 编码
 
-每个 Plan 在独立 Git branch 中执行。流程：TDD 左移 → 提交 MR → MR 门禁自动运行（TEST 阶段已配置）。
+每个 Plan 在独立 Git branch 中执行。流程：TDD 左移 → 提交 MR → MR 门禁自动运行（TEST_INFRA 阶段已配置）。
 
 **TDD 左移：** 基于 AC 四场景（正常/边界/异常/失败），先写测试，再写代码，跑通。必须编写：
 
@@ -128,11 +128,11 @@ Spec 模块划分表              →  Plan 文件夹
 
 ### 打包部署
 
-所有 Plan 完成、MR 门禁全部通过后，执行打包部署。部署底座由 TEST 阶段搭建，各服务的部署配置（构建命令、环境配置、部署描述）作为 Plan 的执行产出之一。部署到测试环境后冒烟测试通过即完成。
+所有 Plan 完成、MR 门禁全部通过后，执行打包部署。部署底座由 TEST_INFRA 阶段搭建，各服务的部署配置（构建命令、环境配置、部署描述）作为 Plan 的执行产出之一。部署到测试环境后冒烟测试通过即完成。
 
 ### 提测门禁
 
-提测门禁在 TEST 阶段已配置，此处仅执行。验证内容：
+提测门禁在 TEST_INFRA 阶段已配置，此处仅执行。验证内容：
 
 | 审查内容 | 审查方法 |
 |---------|---------|

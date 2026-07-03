@@ -2,7 +2,7 @@
 
 ## 流程
 
-INIT 是将项目接入 devpact 系统的阶段。系统 = 文档体系（状态）+ 流程描述（skill）。接入后，状态机接管，Agent 按流程走。
+INIT 是将项目接入 devloop 系统的阶段。系统 = 文档体系（状态）+ 流程描述（skill）。接入后，状态机接管，Agent 按流程走。
 
 ```mermaid
 flowchart TD
@@ -34,7 +34,7 @@ flowchart TD
 ```
 1. 复制 assets/templates/ 下的 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
 2. 复制 assets/templates/docs/ 下全部内容到项目 docs/ 目录
-3. 填写 CONTRIBUTING.md 的项目信息：开发环境、代码风格、分支策略、PR 流程（测试命令和测试目录段留空，由 TEST 阶段填写）
+3. 填写 CONTRIBUTING.md 的项目信息：开发环境、代码风格、分支策略、PR 流程（测试命令和测试目录段留空，由 TEST_INFRA 阶段填写）
 4. git init（如尚未初始化）
 5. 在 docs/README.md 中设置当前阶段为 DESIGN
 6. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
@@ -44,8 +44,8 @@ flowchart TD
 
 旧项目接入遵循两个原则：
 
-1. **合并/转换优先，隔离安装兜底。** 尽最大努力将现有内容融入 devpact 体系，而非另起炉灶。
-2. **devpact 自完备。** 接入后，devpact 所需的全部文档类型（vision、Spec、AC、ADR、Plan）必须存在，即使部分内容为占位符。
+1. **合并/转换优先，隔离安装兜底。** 尽最大努力将现有内容融入 devloop 体系，而非另起炉灶。
+2. **devloop 自完备。** 接入后，devloop 所需的全部文档类型（vision、Spec、AC、ADR、Plan）必须存在，即使部分内容为占位符。
 
 **第一步：扫描**
 
@@ -62,9 +62,9 @@ flowchart TD
 | 操作 | 含义 |
 |------|------|
 | 创建 | 新文件，从模板安装 |
-| 合并 | 现有文件 + devpact 内容追加整合 |
-| 转换 | 现有内容转换格式后移入 devpact 目录 |
-| 保留 | 现有内容不动，在 devpact 文档中引用 |
+| 合并 | 现有文件 + devloop 内容追加整合 |
+| 转换 | 现有内容转换格式后移入 devloop 目录 |
+| 保留 | 现有内容不动，在 devloop 文档中引用 |
 | 跳过 | 已存在且无需变更 |
 
 **合并计划示例：**
@@ -74,8 +74,8 @@ flowchart TD
 
 | 目标文件 | 操作 | 说明 |
 |---------|------|------|
-| AGENTS.md | 跳过 | 已存在，在现有文件中追加 devpact 导航段 |
-| CONTRIBUTING.md | 合并 | 追加 devpact 约定段（commit 格式、文档命名、frontmatter 规则） |
+| AGENTS.md | 跳过 | 已存在，在现有文件中追加 devloop 导航段 |
+| CONTRIBUTING.md | 合并 | 追加 devloop 约定段（commit 格式、文档命名、frontmatter 规则） |
 | CHANGELOG.md | 跳过 | 已存在 |
 | docs/vision.md | 创建 | 从 README 提取 |
 | docs/spec/ | 创建 | 从现有代码推断模块，占位符填充 |
