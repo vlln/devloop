@@ -1,0 +1,23 @@
+---
+title: interface/ 接口定义
+description: 接口定义索引，列出所有接口文档的版本和状态。
+type: index
+---
+
+## 状态说明
+
+| 状态 | 含义 |
+|------|------|
+| draft | 编写中 |
+| proposed | 编写完成，待出口把关审查 |
+| active | 审查通过，当前生效 |
+| archived | 已归档，仅作历史参考 |
+
+---
+
+## 版本列表
+
+| 文件 | 状态 |
+|------|------|
+| [001-template.md](001-template.md) | active |
+| | |

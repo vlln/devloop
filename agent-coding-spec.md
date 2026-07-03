@@ -808,7 +808,6 @@ Skills 层（bootloader）
 | 测试分层不集中 | AC 在 Design，架构在 ADR，PR 流程在 CONTRIBUTING |
 | 测试按项目类型可伸缩 | 不强制固定层数 |
 | 每种文档有独立的状态集合和流转规则 | 不同生命周期语义，不共用 |
-| 无全局 Index.md | 各目录 README.md 自治，渐进式披露 |
 | Plan 不移动归档 | README 状态字段区分，原地保留 |
 | 统一 YAML frontmatter | 元信息结构化 |
 | 标准文件/README 无 frontmatter | 标准文件和索引文件无需 frontmatter |

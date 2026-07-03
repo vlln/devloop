@@ -2,68 +2,43 @@
 
 ---
 
-## 一、Code of Conduct
+## 一、开发环境
 
-<!-- 项目行为准则，可引用 Contributor Covenant -->
-
----
-
-## 二、Types of Contributions
-
-- 代码贡献（feat / fix / refactor）
-- 文档贡献（docs）
-- 测试贡献（test）
-- 问题反馈（Bug Report / Feature Request）
-
----
-
-## 三、Before You Start
-
-### Report Bugs
-
-<!-- 使用 GitHub Issues，模板 -->
-
-### Feature Requests
-
-<!-- 先检查 docs/vision.md 和 docs/design/ 确认是否在规划内 -->
-
----
-
-## 四、Setup Dev Environment
-
-<!-- 克隆、安装依赖、启动开发服务器 -->
+<!-- 克隆、安装依赖、启动 -->
 
 ```bash
 git clone <repo-url>
 cd <project>
-npm install
-npm run dev
+<!-- 安装依赖命令 -->
+<!-- 启动开发环境命令 -->
 ```
+
+**构建/配置入口：**
+
+| 文件 | 用途 |
+|------|------|
+| <!-- 构建入口 --> | |
+| <!-- 环境配置 --> | |
+| <!-- 依赖声明 --> | |
 
 ---
 
-## 五、Pull Request Workflow
+## 二、代码风格
 
-### 1. Fork & Branch
+<!-- 根据项目实际配置 -->
 
-- `main`：生产分支，受保护
-- `develop`：开发分支
-- `feature/xxx`：功能分支
-- `fix/xxx`：修复分支
-
-### 2. Code Style & Lint
-
-<!-- 根据项目实际配置修改 -->
-
-- 语言：<!-- 例如: TypeScript（严格模式） -->
-- 格式化：<!-- 例如: Prettier（2 空格缩进，单引号，无分号） -->
+- 格式化：<!-- 工具和规则 -->
 - 命名：
-  - 文件：<!-- 例如: kebab-case（user-service.ts） -->
-  - 变量/函数：<!-- 例如: camelCase -->
-  - 类/接口：<!-- 例如: PascalCase -->
-  - 常量：<!-- 例如: UPPER_SNAKE_CASE -->
+  - 文件：<!-- kebab-case / snake_case -->
+  - 变量/函数：<!-- camelCase / snake_case -->
+  - 类/接口：<!-- PascalCase -->
+  - 常量：<!-- UPPER_SNAKE_CASE -->
 
-### 3. Commit Rules
+---
+
+## 三、Commit 规则
+
+### 格式
 
 ```
 <type>(<scope>): <简短描述>
@@ -78,36 +53,58 @@ npm run dev
 | test | 测试相关 |
 | chore | 构建/工具/依赖 |
 
-### 4. Test
+### devpact 约定
 
-测试体系按项目类型可伸缩。提交前必须通过对应项目类型所要求的测试层。
+- 文档变更和代码变更永远分开 commit
+- 阶段推进伴随独立 commit，前缀 `docs(state):`
+- 文档 commit 格式：`docs(<scope>): <简述>`
 
-**测试命令：**（根据项目实际配置修改）
+---
+
+## 四、分支策略
+
+<!-- 根据项目实际配置 -->
+
+- 主分支：<!-- main / master -->
+- 功能分支：<!-- feature/xxx -->
+- 修复分支：<!-- fix/xxx -->
+
+---
+
+## 五、测试
+
+### 测试命令
+
+<!-- 根据项目实际配置 -->
 
 | 命令 | 用途 |
 |------|------|
-| `npm run test:unit` | 单元测试 |
-| `npm run test:integration` | 集成测试 |
-| `npm run test:e2e` | E2E 测试 |
+| <!-- 测试命令 --> | 单元测试 |
+| <!-- 测试命令 --> | 集成测试 |
+| <!-- 测试命令 --> | E2E 测试 |
 
-**检查清单：**
-- [ ] 类型检查通过
-- [ ] Lint 通过
-- [ ] 单元测试通过
-- [ ] 无调试代码残留
+### 测试目录
 
-### 5. Open PR
-
-<!-- PR 描述模板、Review 流程 -->
+| 层级 | 目录路径 | 说明 |
+|------|---------|------|
+| <!-- 单元测试 --> | | |
+| <!-- 集成测试 --> | | |
+| <!-- E2E 测试 --> | | |
 
 ---
 
-## 六、License & CLA
+## 六、PR 流程
 
-<!-- 项目许可证和贡献者协议 -->
+<!-- PR 描述模板、Review 要求、合并策略 -->
 
 ---
 
-## 七、Get Help
+## 七、行为准则
 
-<!-- 联系方式、讨论渠道 -->
+<!-- 项目行为准则，可引用 Contributor Covenant -->
+
+---
+
+## 八、许可证
+
+<!-- 项目许可证 -->

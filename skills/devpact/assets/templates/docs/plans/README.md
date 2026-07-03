@@ -1,17 +1,12 @@
 ---
 title: plans/ 任务执行计划
-description: 任务执行计划索引，列出所有 Plan 容器的状态、创建时间和关联 Design。
+description: 任务执行计划索引，列出所有 Plan 容器的状态、创建时间和关联 Spec。
 type: index
----
-
-> 单次 Agent 执行任务的完整上下文容器。每个文件夹是一次独立执行，内部可包含多个子任务。
-> 结构示例见 [0001-template/](0001-template/)。
-
 ---
 
 ## 任务列表
 
-| 编号 | 标题 | 状态 | 创建时间 | 绑定 Design | 关联 ADR |
+| 编号 | 标题 | 状态 | 创建时间 | 绑定 Spec | 关联 ADR |
 |------|------|------|----------|-------------|---|
 | [0001](0001-template/) | Plan 模板（参考用） | template | — | — | - |
 
@@ -37,6 +32,6 @@ type: index
 
 ## 规则
 
-- Plan 可由人创建，Agent 也可基于 ADR 自行生成
+- Plan 由各阶段根据 Spec 模块划分自行创建
 - Agent 权限边界见 [AGENTS.md](../../AGENTS.md)
 - 状态在 Plan 文件夹的 README.md 和本 README 中维护，Plan 文件夹原地保留

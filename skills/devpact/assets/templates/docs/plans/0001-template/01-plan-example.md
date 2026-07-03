@@ -22,8 +22,9 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 | 文档 | 路径 | 说明 |
 |------|------|------|
-| Design Spec | [../design/001-template.md](../design/001-template.md) | 业务需求和 AC |
-| ADR | [../adr/0001-xxx.md](../adr/0001-xxx.md) | 相关架构决策 |
+| Spec | [../../spec/001-template.md](../../spec/001-template.md) | 业务需求 |
+| AC | [../../ac/001-template.md](../../ac/001-template.md) | 验收标准 |
+| ADR | [../../adr/0001-xxx.md](../../adr/0001-xxx.md) | 相关架构决策 |
 
 ---
 
@@ -63,6 +64,6 @@ created: YYYY-MM-DDTHH:MM:SSZ
 - 运行单元测试直到全部通过（具体命令见 CONTRIBUTING.md）
 
 **你必须不做：**
-- 不修改 Design Spec 或 ADR
+- 不修改 Spec 或 ADR
 - 不新增未在 AC 中定义的功能
-- 不修改 docs/arch/README.md 的系统状态字段
+- 不修改 docs/README.md 的系统状态字段
