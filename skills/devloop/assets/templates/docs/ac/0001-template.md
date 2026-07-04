@@ -2,11 +2,10 @@
 title: AC Template 001
 description: 一句话说明本 AC 文档覆盖的产品或功能模块。
 type: ac
-# status: draft | proposed | active | archived
+# status: draft | proposed | active
 #   draft    → 编写中（Designer 变更）
 #   proposed → 编写完成，待出口把关审查（Designer 变更）
 #   active   → 审查通过，当前唯一生效版本（出口把关 promote）
-#   archived → 被新版本替代，原地保留供追溯（Designer 变更）
 status: proposed
 version: 1
 created: YYYY-MM-DDTHH:MM:SSZ

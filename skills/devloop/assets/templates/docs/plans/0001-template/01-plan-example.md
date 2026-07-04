@@ -22,8 +22,8 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 | 文档 | 路径 | 说明 |
 |------|------|------|
-| Spec | [../../spec/001-template.md](../../spec/001-template.md) | 业务需求 |
-| AC | [../../ac/001-template.md](../../ac/001-template.md) | 验收标准 |
+| Spec | [../../spec/0001-template.md](../../spec/0001-template.md) | 业务需求 |
+| AC | [../../ac/0001-template.md](../../ac/0001-template.md) | 验收标准 |
 | ADR | [../../adr/0001-xxx.md](../../adr/0001-xxx.md) | 相关架构决策 |
 
 ---

@@ -11,7 +11,6 @@ type: index
 | draft | 编写中 |
 | proposed | 编写完成，待出口把关审查 |
 | active | 审查通过，当前生效 |
-| archived | 已归档，仅作历史参考 |
 
 ---
 
@@ -19,5 +18,5 @@ type: index
 
 | 文件 | 状态 |
 |------|------|
-| [001-template.md](001-template.md) | active |
+| [0001-template.md](0001-template.md) | active |
 | | |

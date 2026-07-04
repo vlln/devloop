@@ -135,9 +135,9 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 | 文档 | 格式 | 示例 |
 |------|------|------|
 | Vision | `vision.md` | `vision.md` |
-| Spec | `00x-xxxx.md` | `001-vagent.md` |
-| Interface | `00x-xxxx.md` | `001-order-api.md` |
-| AC | `00x-xxxx.md` | `001-order-ac.md` |
+| Spec | `000x-xxxx.md` | `0001-vagent.md` |
+| Interface | `000x-xxxx.md` | `0001-order-api.md` |
+| AC | `000x-xxxx.md` | `0001-order-ac.md` |
 | ADR | `000x-xxxx.md` | `0001-db-choice.md` |
 | Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
 | Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
@@ -167,15 +167,15 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 
 | 文档类型 | 状态值 | 流转 |
 |----------|--------|------|
-| Vision | `draft` / `proposed` / `active` / `archived` | draft→proposed→active→archived |
-| Spec | `draft` / `proposed` / `active` / `archived` | draft→proposed→active→archived（同时只有一个 active） |
-| AC | `draft` / `proposed` / `active` / `archived` | draft→proposed→active→archived（同时只有一个 active） |
-| Interface | `draft` / `proposed` / `active` / `archived` | draft→proposed→active→archived（同时只有一个 active） |
+| Vision | `draft` / `proposed` / `active` | draft→proposed→active |
+| Spec | `draft` / `proposed` / `active` | draft→proposed→active（同时只有一个 active） |
+| AC | `draft` / `proposed` / `active` | draft→proposed→active（同时只有一个 active） |
+| Interface | `draft` / `proposed` / `active` | draft→proposed→active（同时只有一个 active） |
 | ADR | `draft` / `proposed` / `accepted` / `superseded` / `deprecated` | draft→proposed→accepted→superseded/deprecated |
 | Plan | `pending` / `in_progress` / `blocked` / `done` | pending→in_progress→done (可 blocked→in_progress) |
 | Report | `draft` / `complete` | draft→complete |
 
-**冻结定义：** 设计师完成编写后将 status 从 `draft` 改为 `proposed`（表示"我写完了，待审查"）。出口把关审查通过后，将 `proposed` 改为 `active`（或 ADR 的 `accepted`），表示系统正式采纳。冻结后不可原地修改——要改必须退回 DESIGN、新建版本、旧版本归档。
+**冻结定义：** 设计师完成编写后将 status 从 `draft` 改为 `proposed`（表示"我写完了，待审查"）。出口把关审查通过后，将 `proposed` 改为 `active`（或 ADR 的 `accepted`），表示系统正式采纳。冻结后不可原地修改——要改必须退回 DESIGN，修改后重新 promote 为 active。Git 记录变更历史。
 
 ### 语义链
 
@@ -193,6 +193,25 @@ AC 文档 AC-003-N-1（正常场景）
 - 文档变更和代码变更永远分开 commit
 - 阶段推进伴随独立 commit，约定前缀 `docs(state):`
 - 具体 commit 格式和分支策略见 CONTRIBUTING.md
+
+### 模板注释约定
+
+模板文件（`assets/templates/` 下）中混有两种内容：模板骨架（实例化时保留）和说明性内容（实例化时移除）。通过注释类型区分：
+
+| 注释类型 | 语法 | 用途 | 实例化时 |
+|----------|------|------|---------|
+| Markdown 注释 | `<!-- -->` | 包裹说明性内容（节标注、填写指引、边界说明） | 移除 |
+| YAML 注释 | `#` | 仅 frontmatter 内，解释 status 字段的有效值和流转规则 | 保留或移除 |
+
+未被注释包裹的内容（标题、表格结构、frontmatter 键名）是模板骨架，实例化时保留。
+
+### 模板生命周期
+
+项目中的模板文件（`0001-template.md`）是临时参考，不是永久文档。规则：
+
+- 创建该类型第一个正式文档后，删除对应的模板文件
+- 删除动作是正式文档创建后的原子清理，不单独执行
+- 示例：DESIGN 阶段创建第一个 Spec `0001-order.md` 后，删除 `0001-template.md`
 
 ---
 

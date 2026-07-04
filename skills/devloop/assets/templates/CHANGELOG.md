@@ -1,6 +1,6 @@
 
-> 项目版本变更记录，遵循 [Keep a Changelog](https://keepachangelog.com/) 规范。
-> 文档与代码的变更分别记录，各自独立 Commit，在此汇总。
+<!-- 项目版本变更记录，遵循 [Keep a Changelog](https://keepachangelog.com/) 规范。
+文档与代码的变更分别记录，各自独立 Commit，在此汇总。 -->
 
 ---
 

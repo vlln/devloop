@@ -2,15 +2,14 @@
 title: Vision — 项目顶层愿景
 description: 全局顶层愿景，一句话说明项目的核心目标和约束。
 type: vision
-# status: draft | proposed | active | archived
+# status: draft | proposed | active
 #   draft    → 编写中（Designer 变更）
 #   proposed → 编写完成，待出口把关审查（Designer 变更）
 #   active   → 审查通过，当前唯一生效版本（出口把关 promote）
-#   archived → 被新版本替代，原地保留供追溯（Designer 变更）
 status: proposed
 ---
 
-> 全局唯一，项目启动一次性定稿。仅重大业务转型才修订。
+<!-- 全局唯一，项目启动一次性定稿。仅重大业务转型才修订。 -->
 
 ---
 

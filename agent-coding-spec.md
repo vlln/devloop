@@ -120,7 +120,7 @@ Git 是整个项目（代码 + 文档）的**存储和版本控制器**。系统
 **Level 1 — 冻结的硬性定义：**
 
 - 冻结 = 对应文档的 `status` 字段从 `draft` 变为 `proposed`（设计师写完了），出口把关审查通过后 promote 为 `active`（或 `accepted`），伴随独立 Git commit
-- 冻结后不可原地修改。要改必须走正式回退：退回 DESIGN → 新建版本 → 旧版本归档
+- 冻结后不可原地修改。要改必须走正式回退：退回 DESIGN → 修改后重新 promote 为 active。Git 记录变更历史
 
 **Level 2 — 实现模式：**
 
@@ -332,7 +332,7 @@ RELEASE → DESIGN  (新一轮迭代 / 热修复)
 | Spec | 必选 | 用户故事、模块划分、数据模型、非功能指标 | status=proposed |
 | AC 文档 | 必选 | 四场景验收标准（正常/边界/异常/失败） | status=proposed |
 | ADR | 必选 | 核心 ADR（技术栈/存储/架构模式） | status=proposed |
-| 验证 | 必选 | ADR 验证段填写 | 结论为「可行」 |
+| 验证 | 必选 | ADR 验证段填写（含复现步骤 + 验证 branch） | 结论为「可行」，验证 branch 已记录 |
 | 接口定义 | 适用 | 接口入参/出参/错误码 | status=proposed |
 
 **出口把关：** 逐项审查，非全部退回。失败定位到具体文档，修复后重新检查该项。审查通过后 promote：proposed→active（ADR 为 accepted）。
@@ -464,39 +464,41 @@ vision.md → Spec → AC 文档 + ADR 并行
 |------|------|
 | **定位** | 全局唯一顶层愿景：业务目标、用户范围、长期理想形态 |
 | **创建时机** | DESIGN 阶段 |
-| **变更规则** | 一次性定稿，不可退回。仅重大业务转型才修订 |
-| **生命周期** | draft → proposed → active → archived |
+| **变更规则** | 一次性定稿，不可退回。仅重大业务转型才修订。旧版本由 Git 历史追溯，不原地保留 |
+
+| **生命周期** | draft → proposed → active |
 
 **设计理由：** vision.md 只回答"为什么要做这个项目"。架构约束、非功能指标、硬性规则分别属于 ADR、Spec。不混入 vision。
 
-### 5.2 Spec（docs/spec/00x-xxxx.md）
+### 5.2 Spec（docs/spec/000x-xxxx.md）
 
 | 维度 | 定义 |
 |------|------|
 | **定位** | 需求规格：用户故事、模块划分、数据模型、非功能指标。所有业务需求的唯一事实源 |
 | **创建时机** | DESIGN 阶段 |
-| **变更规则** | 冻结后不可原地修改。要改须退回 DESIGN、新建版本、旧版本归档 |
-| **生命周期** | draft → proposed → active → archived。同时只有一个 active |
+| **变更规则** | 冻结后不可原地修改。增量迭代追加内容，设计变更（架构颠覆）退回 DESIGN 修改。Git 记录变更历史，不原地保留旧版本 |
 
-### 5.3 Interface（docs/interface/00x-xxxx.md）
+| **生命周期** | draft → proposed → active。同时只有一个 active |
+
+### 5.3 Interface（docs/interface/000x-xxxx.md）
 
 | 维度 | 定义 |
 |------|------|
 | **定位** | 接口定义：入参/出参/错误码。业务字段来自 Spec，传输格式由 ADR 决定 |
 | **创建时机** | DESIGN 阶段，ADR 验证后 |
 | **变更规则** | 同 Spec |
-| **生命周期** | draft → proposed → active → archived |
+| **生命周期** | draft → proposed → active |
 
 **设计理由：** 接口定义独立于 Spec。Spec 定义模块和业务规则，Interface 定义模块间通信契约。分离后接口变更不影响 Spec，且前后端可基于 Interface 并行开发。
 
-### 5.4 AC（docs/ac/00x-xxxx.md）
+### 5.4 AC（docs/ac/000x-xxxx.md）
 
 | 维度 | 定义 |
 |------|------|
 | **定位** | 验收标准：测试的唯一权威依据。每条 AC 必须覆盖四场景（正常/边界/异常/失败） |
 | **创建时机** | DESIGN 阶段 |
 | **变更规则** | 同 Spec |
-| **生命周期** | draft → proposed → active → archived |
+| **生命周期** | draft → proposed → active |
 
 **设计理由：** AC 独立于 Spec。AC 是 Spec、开发、测试三方共享的契约。只写正常流程的 AC 属于无效 AC。四场景全覆盖确保测试不遗漏。
 
@@ -506,7 +508,7 @@ vision.md → Spec → AC 文档 + ADR 并行
 |------|------|
 | **定位** | 架构决策记录：技术选型、方案折中、风险取舍。覆盖业务架构 + 测试基建架构 |
 | **创建时机** | DESIGN 阶段（业务 ADR）+ TEST_INFRA 阶段（测试基建 ADR） |
-| **变更规则** | 持续新增，不删除。修订时旧 ADR 标记 superseded + 新建 ADR |
+| **变更规则** | 持续新增，不删除。修订时旧 ADR 标记 superseded + 新建 ADR。验证 branch 保留不合并，供后续阶段参考 |
 | **生命周期** | draft → proposed → accepted → superseded/deprecated |
 
 ### 5.6 Plan + Report（docs/plans/000x-任务名/）
@@ -570,7 +572,7 @@ vision.md → Spec → AC 文档 + ADR 并行
 ### 6.1 Vision
 
 ```
-draft ──→ proposed ──→ active ──→ archived
+draft ──→ proposed ──→ active
 ```
 
 | 状态 | 含义 |
@@ -578,14 +580,13 @@ draft ──→ proposed ──→ active ──→ archived
 | `draft` | 编写中 |
 | `proposed` | 编写完成，待出口把关审查 |
 | `active` | 审查通过，当前生效 |
-| `archived` | 因重大业务转型被归档 |
 
-**设计理由：** proposed 是"设计师写完"和"系统采纳"之间的中间态。设计师标记 proposed 表示"我写完了"，出口把关审查通过后 promote 为 active。这防止未审查的内容直接生效。
+**设计理由：** proposed 是"设计师写完"和"系统采纳"之间的中间态。设计师标记 proposed 表示"我写完了"，出口把关审查通过后 promote 为 active。这防止未审查的内容直接生效。旧版本由 Git 历史追溯，不原地保留。
 
 ### 6.2 Spec / Interface / AC
 
 ```
-draft ──→ proposed ──→ active ──→ archived
+draft ──→ proposed ──→ active
 ```
 
 | 状态 | 含义 |
@@ -593,9 +594,8 @@ draft ──→ proposed ──→ active ──→ archived
 | `draft` | 编写中，尚未冻结 |
 | `proposed` | 编写完成，待出口把关审查 |
 | `active` | 审查通过，当前唯一生效版本 |
-| `archived` | 被新版本替代，原地保留 |
 
-- 同时只有一个 active。冻结后不可原地修改。
+- 同时只有一个 active。冻结后不可原地修改。旧版本由 Git 历史追溯，不原地保留。
 
 ### 6.3 ADR
 
@@ -682,9 +682,9 @@ draft ──→ complete
 | 文档 | 命名 | 示例 |
 |------|------|------|
 | Vision | `vision.md` | `vision.md` |
-| Spec | `00x-xxxx.md` | `001-vagent.md` |
-| Interface | `00x-xxxx.md` | `001-order-api.md` |
-| AC | `00x-xxxx.md` | `001-order-ac.md` |
+| Spec | `000x-xxxx.md` | `0001-vagent.md` |
+| Interface | `000x-xxxx.md` | `0001-order-api.md` |
+| AC | `000x-xxxx.md` | `0001-order-ac.md` |
 | ADR | `000x-xxxx.md` | `0001-db-choice.md` |
 | Plan 文件夹 | `000x-简短描述` | `0001-订单模块` |
 | Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
@@ -704,13 +704,13 @@ draft ──→ complete
 │   ├── vision.md
 │   ├── spec/
 │   │   ├── README.md
-│   │   └── 001-template.md
+│   │   └── 0001-template.md
 │   ├── interface/
 │   │   ├── README.md
-│   │   └── 001-template.md
+│   │   └── 0001-template.md
 │   ├── ac/
 │   │   ├── README.md
-│   │   └── 001-xxx.md
+│   │   └── 0001-xxx.md
 │   ├── adr/
 │   │   ├── README.md
 │   │   └── 0001-xxx.md
@@ -740,12 +740,6 @@ draft ──→ complete
 
 1. 更新 `docs/adr/README.md`
 2. 若替代旧 ADR，旧 ADR 状态改为 `superseded`，新 ADR 正文中引用旧 ADR 路径
-
-### 归档旧 Spec
-
-1. 旧 Spec 状态标记为 `archived`（原地保留，不移动）
-2. 更新 `docs/spec/README.md`
-3. 更新 `docs/adr/README.md` 中所有引用
 
 ---
 
