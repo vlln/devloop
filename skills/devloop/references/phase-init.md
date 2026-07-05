@@ -35,7 +35,7 @@ flowchart TD
 1. 复制 assets/templates/ 下的 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
 2. 复制 assets/templates/docs/ 下全部内容到项目 docs/ 目录
 3. 填写 CONTRIBUTING.md 的项目信息：开发环境、代码风格、分支策略、PR 流程（测试命令和测试目录段留空，由 TEST_INFRA 阶段填写）
-4. git init（如尚未初始化）
+4. git init（如尚未初始化），创建 `main` 分支，再创建 `develop` 分支
 5. 在 docs/README.md 中设置当前阶段为 DESIGN
 6. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
 ```

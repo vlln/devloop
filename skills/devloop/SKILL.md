@@ -7,40 +7,64 @@ description: 契约驱动的项目开发系统。当 Agent 需要初始化项目
 
 ## 系统全貌
 
-项目开发遵循 6 阶段状态机。每个阶段有明确的**证明命题**和**出口把关**——Agent 通过出口把关证明该阶段的命题成立，方可推进。
+项目开发遵循 6 阶段状态机，以 **Gitflow** 为分支容器。每个阶段有明确的**证明命题**和**出口把关**——Agent 通过出口把关证明该阶段的命题成立，方可推进。
 
 ```mermaid
 stateDiagram-v2
     direction LR
     INIT --> DESIGN : 项目启动
     DESIGN --> TEST_INFRA : 契约冻结
-    TEST_INFRA --> DEVELOP : 一次性基建就绪
-    DEVELOP --> SYSTEM_TEST : 提测门禁通过
-    SYSTEM_TEST --> RELEASE : 系统测试通过
+    TEST_INFRA --> DEVELOP : 基建就绪
+    DEVELOP --> SYSTEM_TEST : develop 可测试
+    SYSTEM_TEST --> RELEASE : develop 全绿
     DEVELOP --> DESIGN : 架构颠覆
     SYSTEM_TEST --> TEST_INFRA : 基建缺陷
     SYSTEM_TEST --> DESIGN : 设计缺陷
     RELEASE --> DESIGN : 新一轮迭代 / hotfix
 ```
 
-内层流程（子阶段、并行策略、TDD 闭环）见各阶段独立文档，SKILL.md 仅定义外层跳转。
+### Gitflow 分支全景
+
+```
+main     ─────●──────────●──────────●────→  (tag: v1.0, v1.1, v1.2)
+              ↑          ↑          ↑
+release  ──── v1.0 ───── v1.1 ───── v1.2
+              ↑          ↑          ↑
+develop  ────●──●──●──●──●──●──●──●──●──→  (持续集成)
+              ↑  ↑  ↑  ↑  ↑  ↑
+             ci/ test/ feat/ feat/ fix/
+             
+hotfix   ──────────────────────●────────→  (main → hotfix → main + develop)
+```
+
+`main` 只有 release 节点，`develop` 有完整 TDD 证据链。`spike/*` 保留不合并。
+
+### 阶段 → 分支 → 把关映射
+
+| 阶段 | 在哪个分支 | 把关锚点（Git 事件） | Agent 验证 |
+|------|-----------|---------------------|-----------|
+| INIT | 创建 `main` + `develop` | — | 目录结构、文件存在、Git 初始化 |
+| DESIGN | `spike/*`（不合并） | — | 文档内容级审查（语义、完整性、一致性） |
+| TEST_INFRA | `ci/*` `test/*` `build/*` → `develop` | 全部基建分支合并 | CI 可运行（自动化）+ Mock 返回正确、覆盖率准确、门禁正确拦截（Agent 自证） |
+| DEVELOP | `feat/*` `refactor/*` `perf/*` → `develop` | 全部 feature 分支合并 | MR 门禁/提测门禁（自动化）+ Report 验收结果合理性（Agent 判断） |
+| SYSTEM_TEST | 在 `develop` 上执行全量测试 | develop 全量测试完成 | 测试通过（自动化）+ 失败原因分类、E2E 语义验证、阻塞级缺陷判定（Agent 判断） |
+| RELEASE | `release/*` → staging → `main` + `develop` | release 合并到 main | CD 部署/冒烟（自动化）+ 发布策略、监控判定、回滚决策（Agent 判断） |
+| Hotfix | `hotfix/*` → `main` + `develop` | hotfix 合并到 main | 同 RELEASE |
 
 ### 阶段证明链
 
-| 阶段 | 证明命题 | 出口把关（Agent 必须验证） |
-|------|---------|--------------------------|
-| **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化 |
-| **DESIGN** | 契约已冻结，可进入一次性基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（技术选型/存储/架构模式，验证段不为空）。审查通过后 promote proposed→active/accepted |
-| **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 测试基建 ADR 全部 proposed、CI 流水线可运行、MR 门禁正确拦截、提测门禁正确拦截、Mock 返回正确、覆盖率数据准确、E2E 框架可跑冒烟、E2E 脚本对齐 AC、全部 Plan 文件夹已创建 |
-| **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 Plan 完成、MR 门禁全部通过（TEST_INFRA 已配置）、打包部署成功、提测门禁通过（TEST_INFRA 已配置） |
-| **SYSTEM_TEST** | 系统级验证通过，可进入预发布 | 全部测试层通过（集成→系统→专项），无阻塞级缺陷。基建缺陷退回 TEST_INFRA，设计缺陷退回 DESIGN |
-| **RELEASE** | 本轮迭代已闭环，可开始新迭代 | CD 部署到 production 成功、生产冒烟测试通过、版本 tag 已打、CHANGELOG 已整理、归档完成。staging 验证作为 RELEASE 内部步骤
+| 阶段 | 证明命题 | 出口把关 |
+|------|---------|---------|
+| **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化、`main` + `develop` 分支已创建 |
+| **DESIGN** | 契约已冻结，可进入基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（验证段不为空）。审查通过后 promote proposed→active/accepted |
+| **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 全部基建分支已合并到 `develop`、CI 可运行（自动化）、MR 门禁正确拦截（Agent 自证）、Mock 返回正确（Agent 自证）、覆盖率数据准确（Agent 自证）、E2E 框架可跑冒烟 `[适用]` |
+| **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 feature 分支已合并到 `develop`、MR 门禁 + 提测门禁通过（自动化）、Report 中 AC 验收结果经 Agent 确认合理 |
+| **SYSTEM_TEST** | 系统级验证通过，可进入发布 | `develop` 上全部测试层通过（自动化）、Agent 完成失败原因分类（基建缺陷/设计缺陷/局部 bug）、无阻塞级缺陷（Agent 判定） |
+| **RELEASE** | 本轮迭代已闭环，可开始新迭代 | `release/*` 已合并到 `main` + `develop`、staging 冒烟通过（自动化）、production 冒烟通过（自动化）、Agent 确认发布策略执行和监控正常、版本 tag 已打、CHANGELOG 已整理 |
 
-**出口把关是不可跳过的硬性检查。** Agent 在每个阶段结束时必须逐项验证出口把关，全部通过方可推进。如果出口把关不通过，留在当前阶段修复，不得推进。
+**出口把关是不可跳过的硬性检查。** Agent 在每个阶段结束时必须逐项验证出口把关，全部通过方可推进。Gitflow 提供容器的正确性（分支在哪里、合并到哪里、谁从谁拉），Agent 提供内容的正确性（文档语义、Mock 准确性、E2E 断言合理性、失败原因分类、发布决策）。
 
-**DEVELOP 流程：** 编码（TDD 左移）→ MR 门禁（TEST_INFRA 已配置）→ 打包部署 → 提测门禁（TEST_INFRA 已配置）。
-
-**Agent 无状态。** 任何 Agent 可以随时被终止，下次启动时仅凭文件系统恢复状态。所有关键信息在文档中，不在对话历史中。
+**Agent 无状态。** 任何 Agent 可以随时被终止，下次启动时仅凭文件系统恢复状态。所有关键信息在文档中，不在对话历史中。中断恢复时通过 `git log --oneline --grep="docs(state):\|docs(plan):"` 重建上下文。
 
 ---
 
@@ -85,14 +109,15 @@ stateDiagram-v2
 
 ### 热修复（RELEASE → DESIGN，生产阻断性故障）
 
-生产阻断性故障走热修复快速通道，不完整走全量 DESIGN：
+生产阻断性故障走热修复快速通道，从 `main` 拉 `hotfix/*` 分支：
 
 1. 定级：确认为阻断性故障（线上不可用/核心功能损坏），非轻微缺陷
 2. 轻量 DESIGN：跳过 full Spec/AC，仅修订受影响 ADR（如有设计变更）
 3. TEST_INFRA：增量修复，已完成基建不受影响
 4. DEVELOP：创建最小修复 Plan，走 TDD → MR 门禁
 5. SYSTEM_TEST：全量回归测试
-6. RELEASE：打补丁 tag（如 v1.2.1），归档
+6. 合并 `hotfix/*` 到 `main` + `develop`
+7. RELEASE：在 `main` 上打补丁 tag（如 v1.2.1），归档
 
 **注意：** 非阻断性缺陷走正常增量迭代（RELEASE → DESIGN），不走热修复。
 
@@ -103,7 +128,10 @@ stateDiagram-v2
 `docs/plans/` 下的每个文件夹是一个执行单元。任何需要执行的任务（搭建基建、业务开发、部署）都通过创建 Plan 文件夹来组织。
 
 - 文件夹内包含 Plan 文件（描述执行计划）和 Report 文件（执行结果留档）
-- 每个 Plan 在独立 Git branch 中执行，完成后合并
+- 一个 Plan 文件夹 = 一个 Git 分支，从 `develop` 拉出，合并到 `develop` 后删除
+- 分支类型与 commit type 一致（`feat/` `fix/` `ci/` `test/` `refactor/` `perf/` `build/` `chore/` `docs/`），系统特有类型 `spike/`（ADR 验证，保留不合并）
+- 分支命名格式：`<type>/<编号>-<描述>`，编号与 Plan 文件夹一致。示例：`feat/0001-order-api`、`ci/0001-pipeline`
+- 多个 Plan 并行执行时，必须使用 `git worktree`，保证隔离且共享同一个 repo
 - 各阶段创建自己的 Plan 文件夹，不替下游阶段创建
 
 ---
@@ -192,7 +220,11 @@ AC 文档 AC-003-N-1（正常场景）
 
 - 文档变更和代码变更永远分开 commit
 - 阶段推进伴随独立 commit，约定前缀 `docs(state):`
-- 具体 commit 格式和分支策略见 CONTRIBUTING.md
+- 分支模型遵循 Gitflow：`main` 仅含 release 节点，`develop` 为持续集成分支
+- 分支类型与 commit type 一致，从 `develop` 拉出，合并到 `develop` 后删除
+- `spike/*` 例外——ADR 验证分支，保留不合并
+- `release/*` 和 `hotfix/*` 同时合并到 `main` 和 `develop`
+- 具体 commit 格式和 merge 策略见 CONTRIBUTING.md
 
 ### 模板注释约定
 

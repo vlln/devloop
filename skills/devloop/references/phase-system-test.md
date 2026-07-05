@@ -2,7 +2,7 @@
 
 ## 流程
 
-SYSTEM_TEST 必须等所有 Plan done 才能进入。执行系统级验证——集成测试、系统测试、专项测试。单元测试和开发集成自测已在 DEVELOP 阶段完成，不在此重复。禁止新增功能代码。
+SYSTEM_TEST 在 `develop` 分支上执行系统级验证——集成测试、系统测试、专项测试。单元测试和开发集成自测已在 DEVELOP 阶段完成，不在此重复。禁止新增功能代码。修复 bug 使用 `fix/*` 分支。
 
 ```mermaid
 flowchart TD
@@ -69,7 +69,7 @@ flowchart TD
 每层失败时：
 1. 停止，不继续下一层
 2. 提取失败信息：失败用例名、失败断言、截图路径
-3. 在 SYSTEM_TEST 内修复 bug（创建临时 branch，修复后合并）
+3. 在 SYSTEM_TEST 内修复 bug（创建 `fix/*` 分支，修复后合并到 `develop`）
 4. 修复完成后，重新从失败的那层开始执行
 
 修复规则：
@@ -78,9 +78,11 @@ flowchart TD
 - 如果发现基建缺陷（门禁未拦截、覆盖率数据错乱、Mock 返回不对、E2E 框架不稳定）→ 更新 `docs/README.md` 当前阶段为 TEST_INFRA，提交
 - 如果发现设计缺陷（不是 bug，是契约本身有问题）→ 更新 `docs/README.md` 当前阶段为 DESIGN，提交
 
+**提示：** 定位回归 bug 时，可用 `git bisect` 二分查找引入 bug 的 commit。
+
 ## 推进到 RELEASE
 
-全部测试通过后：更新 `docs/README.md` 当前阶段为 RELEASE，追加最近事件，提交。约定前缀 `docs(state):`。
+全部测试通过后：更新 `docs/README.md` 当前阶段为 RELEASE，提交。约定前缀 `docs(state):`。`develop` 即为待发布状态。
 
 ## 输出格式（示例）
 

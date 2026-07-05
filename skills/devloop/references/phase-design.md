@@ -56,6 +56,8 @@ flowchart TD
 
 **退出条件：** 核心 ADR 全部 status=proposed（验证段可为空，验证在下一子阶段进行）。
 
+**提示：** ADR 修订历史无需手动维护表格。`git log -p -- docs/adr/0001-xxx.md` 即为完整修订记录。
+
 ### 验证（必选，所有项目）
 
 **产出：** ADR 验证段填写完成
@@ -67,7 +69,7 @@ flowchart TD
 - 多 ADR 组合：验证协同工作（如"框架 + ORM + 缓存 三者能否一起跑通"）
 - 约定/标准类 ADR：不需要验证（编码规范、版本策略、命名约定）
 
-**验证方式：** 创建临时 branch，编写最小验证代码。验证通过后保留 branch（不合并到 main），ADR 的「验证」段记录复现步骤和 branch 名，供后续 DEVELOP 阶段参考。后续阶段上下文被清空时，可通过 branch 恢复验证路径。
+**验证方式：** 从 `develop` 拉出 `spike/<描述>` 分支，编写最小验证代码。验证通过后保留分支（不合并），ADR 的「验证」段记录复现步骤和分支名，供后续阶段参考。
 
 **退出条件：** 所有需验证的 ADR 验证段非空且结论为「可行」，验证 branch 已记录在 ADR 中。不可行则退回修改 ADR，重新验证。
 
@@ -175,7 +177,7 @@ flowchart TD
 
 promote 伴随独立 commit。约定前缀 `docs(state):`。
 
-全部满足后：更新 `docs/README.md` 当前阶段为 DEVELOP，追加最近事件，提交。
+全部满足后：更新 `docs/README.md` 当前阶段为 DEVELOP，提交。
 
 ## 回退规则
 

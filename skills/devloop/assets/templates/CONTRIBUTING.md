@@ -59,11 +59,32 @@
 
 ## 四、分支策略
 
-<!-- 根据项目实际配置 -->
+遵循 Gitflow：
 
-- 主分支：<!-- main / master -->
-- 功能分支：<!-- feature/xxx -->
-- 修复分支：<!-- fix/xxx -->
+```
+main     ─────●──────────●────→  (tag: v1.0, v1.1)
+              ↑          ↑
+release  ──── v1.0 ───── v1.1
+              ↑          ↑
+develop  ────●──●──●──●──●──→  (持续集成)
+              ↑  ↑  ↑
+             ci/ feat/ fix/
+```
+
+| 分支 | 用途 | 从哪拉 | 合并到哪 |
+|------|------|--------|---------|
+| `main` | 仅含 release 节点，始终可部署 | — | — |
+| `develop` | 持续集成分支 | `main` | — |
+| `feat/*` `refactor/*` `perf/*` | 功能开发 | `develop` | `develop` |
+| `ci/*` `test/*` `build/*` | 基建搭建 | `develop` | `develop` |
+| `fix/*` | 集成修复 | `develop` | `develop` |
+| `spike/*` | ADR 技术验证 | `develop` | 不合并（保留） |
+| `release/*` | 版本发布 | `develop` | `main` + `develop` |
+| `hotfix/*` | 生产热修复 | `main` | `main` + `develop` |
+
+一个 Plan 文件夹 = 一个分支，编号与 Plan 对应。分支类型与 commit type 一致。
+
+<!-- Merge 策略：merge commit / squash / rebase（项目自定义） -->
 
 ---
 

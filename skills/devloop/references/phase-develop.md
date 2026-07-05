@@ -2,7 +2,9 @@
 
 ## 流程
 
-DEVELOP 是基于 TEST_INFRA 阶段搭建的一次性基建，执行业务开发的阶段。MR 门禁、提测门禁已在 TEST_INFRA 配置完成，本阶段直接使用。
+DEVELOP 是基于 TEST_INFRA 阶段搭建的一次性基建，执行业务开发的阶段。MR 门禁、提测门禁已在 TEST_INFRA 配置完成，在分支合并时自动执行。
+
+分支类型：`feat/*` `refactor/*` `perf/*`，从 `develop` 拉出，合并到 `develop` 后删除。
 
 ```mermaid
 flowchart TD
@@ -54,7 +56,7 @@ Spec 模块划分表              →  Plan 文件夹
 
 ### 编码
 
-每个 Plan 在独立 Git branch 中执行。流程：TDD 左移 → 提交 MR → MR 门禁自动运行（TEST_INFRA 阶段已配置）。
+每个 Plan 从 `develop` 拉出分支（命名 `<type>/<编号>-<描述>`），在分支中执行。流程：TDD 左移 → 提交 MR → MR 门禁自动运行（TEST_INFRA 阶段已配置）。
 
 **TDD 左移：** 基于 AC 四场景（正常/边界/异常/失败），先写测试，再写代码，跑通。必须编写：
 
@@ -103,6 +105,8 @@ Spec 模块划分表              →  Plan 文件夹
 - 你必须做：实现 Spec 定义的接口和逻辑、TDD 左移、编写部署配置、逐条 AC 场景标注 [PASS]/[FAIL]
 - 你必须不做：不修改 Spec/ADR/AC 文档、不新增未在 AC 中定义的功能、不修改 docs/README.md 的系统状态字段
 
+**提示：** 填写 Report 的「关联 Commit」段时，可用 `git log --oneline --grep="AC-xxx"` 反向查找相关 commit。
+
 **Report 输出格式（示例）：**
 
 ```markdown
@@ -145,7 +149,7 @@ Spec 模块划分表              →  Plan 文件夹
 
 ## 推进到 SYSTEM_TEST
 
-提测门禁通过后：更新 `docs/README.md` 当前阶段为 SYSTEM_TEST，追加最近事件，提交。约定前缀 `docs(state):`。
+提测门禁通过后：全部 feature Plan 分支已合并到 `develop`，`develop` CI 全绿。更新 `docs/README.md` 当前阶段为 SYSTEM_TEST，提交。约定前缀 `docs(state):`。
 
 ## 异常处理
 
