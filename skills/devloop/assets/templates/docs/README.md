@@ -9,8 +9,6 @@
 
 <!-- Agent 中断恢复时，用 git log --oneline --grep="docs(state):\|docs(plan):" 重建上下文。 -->
 
----
-
 ## 子目录
 
 | 路径 | 用途 |

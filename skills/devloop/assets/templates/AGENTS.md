@@ -18,7 +18,7 @@
 | [docs/interface/](docs/interface/) | 接口定义：入参/出参/错误码。适用有 API 时 |
 | [docs/ac/](docs/ac/) | 验收标准（AC）：正常/边界/异常/失败四场景。测试唯一权威依据 |
 | [docs/adr/](docs/adr/) | 架构决策记录：技术选型、方案对比、取舍 |
-| [docs/plans/](docs/plans/) | 单次执行容器：Plan + Report 成对 |
+| [docs/plans/](docs/plans/) | 执行容器：对应一个 Git 分支，内含多个最小执行单元（Plan + Report 成对） |
 | [docs/README.md](docs/README.md) | 子目录索引 + **当前系统状态** |
 | 各级 README.md | 该目录的索引和状态说明 |
 

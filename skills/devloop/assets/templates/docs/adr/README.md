@@ -10,8 +10,6 @@ type: index
 |------|------|------|-------------|
 | [0001](0001-template.md) | ADR 模板（参考用） | template | — |
 
----
-
 ## 状态说明
 
 | 状态 | 含义 |
@@ -21,8 +19,6 @@ type: index
 | accepted | 审查通过，当前生效 |
 | superseded | 被新版 ADR 替代 |
 | deprecated | 已废弃，不再适用 |
-
----
 
 ## 命名规范
 

@@ -1,69 +1,52 @@
 ---
 title: 01-plan-example
-description: 子任务执行计划，一句话说明本 Plan 要达成什么。
-# 保持简短：Agent 扫描时通过 description 判断是否相关，不需要列出具体步骤。
+description: 一句话说明本 Plan 要达成什么。Agent 扫描时通过 description 判断是否相关。
 type: plan
-# status: pending | in_progress | blocked | done
-#   pending     → 已创建，等待执行
-#   in_progress → 正在执行
-#   blocked     → 遇到阻塞，等待外部条件
-#   done        → 已完成，不再修改
+# status: pending | done
+#   pending → 未执行
+#   done    → 已执行（无论成功/失败），不再分配。失败时另写新 Plan 继续。
 status: template
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
 
-# 01-plan: [子任务标题]
+# 01-plan: [任务标题]
 
 ---
 
-## 关联文档
+## Context
 
-<!-- 执行者需要读取的权威文档 -->
-
-| 文档 | 路径 | 说明 |
-|------|------|------|
-| Spec | [../../spec/0001-template.md](../../spec/0001-template.md) | 业务需求 |
-| AC | [../../ac/0001-template.md](../../ac/0001-template.md) | 验收标准 |
-| ADR | [../../adr/0001-xxx.md](../../adr/0001-xxx.md) | 相关架构决策 |
+<!-- 执行本任务需要知道的背景信息。不是系统状态快照，是"理解这个任务需要什么上下文"。 -->
 
 ---
 
-## 目标
+## Request
 
-<!-- 本次子任务要达成的具体目标，1-2 句话 -->
-
----
-
-## 依赖项
-
-<!-- 本 Plan 依赖的其他 Plan、外部服务、环境。文档依赖已在关联文档中列出。 -->
-
-| 依赖 | 类型 | 状态 |
-|------|------|------|
-| | Plan / 外部服务 / 环境 | 就绪 / 等待中 |
+<!-- 需要做什么，1-3 句话。 -->
 
 ---
 
-## 分步计划
+## Output Format
 
-<!-- 本 Plan 要执行的步骤。不是前置条件，不是依赖项。 -->
+<!-- 结果怎么交付。 -->
 
-- [ ] Step 1: 
-- [ ] Step 2: 
-- [ ] Step 3: 
+- [产出物类型]：[描述]
+- Report 文档（按 Report 模板）
 
 ---
 
-## 执行边界
+## Constraints
 
-<!-- 执行者可能不加载 skill，仅凭 Plan 和系统文档工作。此段是执行者与协调者之间的契约。 -->
+<!-- 不能假设的、不能越界的。 -->
 
-**你必须做：**
-- [具体任务描述]
-- 编写单元测试覆盖本次修改的代码
-- 运行单元测试直到全部通过（具体命令见 CONTRIBUTING.md）
+---
 
-**你必须不做：**
-- 不修改 Spec 或 ADR
-- 不新增未在 AC 中定义的功能
-- 不修改 docs/README.md 的系统状态字段
+## Checkpoint
+
+<!-- 终止条件：什么算完成，什么情况下停止。 -->
+
+---
+
+## Steps
+
+<!-- 任务的大致拆解，不是操作流程。Agent 可自行调整顺序。 -->
+

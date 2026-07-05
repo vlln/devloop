@@ -5,17 +5,13 @@ type: index
 ---
 
 <!-- 唯一业务事实源。数据表结构、UI 约束均在此定义。验收标准（AC）在 [ac/](../ac/)，接口定义在 [interface/](../interface/)。
-**修改必须人参与，Agent 禁止自行修改。** 模板示例见 [0001-template.md](0001-template.md)。 -->
-
----
+**修改必须 Leader 参与，Follwer 禁止自行修改。** 模板示例见 [0001-template.md](0001-template.md)。 -->
 
 ## 版本列表
 
 | 文件 | 状态 |
 |------|------|
 | [0001-template.md](0001-template.md) | active |
-
----
 
 ## 状态说明
 
@@ -24,8 +20,6 @@ type: index
 | draft | 编写中 |
 | proposed | 编写完成，待出口把关审查 |
 | active | 审查通过，当前生效，Agent 执行依据 |
-
----
 
 ## 命名规范
 
