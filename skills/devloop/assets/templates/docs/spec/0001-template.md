@@ -2,10 +2,7 @@
 title: Spec Template 001
 description: 一句话说明本设计文档覆盖的产品或功能模块。
 type: spec
-# status: draft | proposed | active
-#   draft    → 编写中（Designer 变更）
-#   proposed → 编写完成，待出口把关审查（Designer 变更）
-#   active   → 审查通过，当前唯一生效版本（出口把关 promote）
+# status: 见 SKILL.md status 有效值表
 status: proposed
 version: 1
 created: YYYY-MM-DDTHH:MM:SSZ
@@ -64,9 +61,9 @@ Spec / Interface / ADR / AC 边界：
 
 ## 三、模块划分
 
-| 模块 | 提供的能力 |  优先级 |
-|------|-----------|---------|
-| | | P0 |
+| 模块 | 提供的能力 | 目录路径 | 优先级 |
+|------|-----------|---------|---------|
+| | | | P0 |
 
 <!-- "提供的能力"是模块对外的可验证功能列表（如"注册、登录、Token 刷新"），直接映射到 AC 和接口定义。不写"负责用户功能"这类模糊描述。 -->
 

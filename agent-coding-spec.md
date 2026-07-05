@@ -120,7 +120,7 @@ Git 是整个项目（代码 + 文档）的**存储和版本控制器**。系统
 **Level 1 — 冻结的硬性定义：**
 
 - 冻结 = 对应文档的 `status` 字段从 `draft` 变为 `proposed`（设计师写完了），出口把关审查通过后 promote 为 `active`（或 `accepted`），伴随独立 Git commit
-- 冻结后不可原地修改。要改必须走正式回退：退回 DESIGN → 修改后重新 promote 为 active。Git 记录变更历史
+- 冻结后不可原地修改。要改必须走正式回退：退回 DESIGN → 修改后重新 promote 为 active。typo 修复、措辞澄清等非破坏性修改除外。Git 记录变更历史
 
 **Level 2 — 实现模式：**
 
@@ -392,11 +392,14 @@ vision.md → Spec → AC 文档 + ADR 并行
 
 | Plan（静态，创建后不改） | Report（动态，执行中持续更新） |
 |--------------------------|------------------------------|
-| 关联文档、目标、前置条件 | 执行摘要、关联 Commit |
-| 依赖项、分步计划、执行边界 | 产物清单、测试摘要、验收结果 |
-| — | 变更摘要、当前进度、阻塞点、遗留问题、改动建议 |
+| Context（背景信息） | 执行摘要、关联 Commit |
+| Request（要做什么） | 产物清单、测试摘要、验收结果 |
+| Output Format（怎么交付） | 遗留问题 |
+| Constraints（不能越界的） | |
+| Checkpoint（终止条件） | |
+| Steps（大致拆解） | |
 
-**执行边界：** Plan 必须包含「执行边界」段，明确指定执行者必须做和必须不做的事。执行者可能不加载 skill，仅凭 Plan 和系统文档工作，因此执行边界是执行者与协调者之间的契约。
+**Constraints：** Plan 必须包含「Constraints」段，明确指定执行者不能假设的、不能越界的。执行者可能不加载 skill，仅凭 Plan 和系统文档工作，因此 Constraints 是执行者与协调者之间的契约。
 
 **架构级依赖：** 独立服务/前后端可并行，共享库/基础包先做。代码级依赖 Agent 内部处理。
 
@@ -480,7 +483,7 @@ vision.md → Spec → AC 文档 + ADR 并行
 |------|------|
 | **定位** | 需求规格：用户故事、模块划分、数据模型、非功能指标。所有业务需求的唯一事实源 |
 | **创建时机** | DESIGN 阶段 |
-| **变更规则** | 冻结后不可原地修改。增量迭代追加内容，设计变更（架构颠覆）退回 DESIGN 修改。Git 记录变更历史，不原地保留旧版本 |
+| **变更规则** | 冻结后不可原地修改。增量迭代追加内容，设计变更（架构颠覆）退回 DESIGN 修改。typo 修复、措辞澄清等非破坏性修改除外。Git 记录变更历史，不原地保留旧版本 |
 
 | **生命周期** | draft → proposed → active。同时只有一个 active |
 
@@ -522,24 +525,24 @@ vision.md → Spec → AC 文档 + ADR 并行
 | **定位** | 执行容器。任何需要执行的任务都通过创建执行容器来组织。一个执行容器对应一个 Git 分支，内含多个最小执行单元（Plan + Report 成对） |
 | **创建时机** | 各阶段自行创建（TEST_INFRA 创建基建 Plan，DEVELOP 创建业务 Plan） |
 | **变更规则** | Plan 创建后不改；Report 执行中持续更新，完成后标记 complete |
-| **生命周期** | pending → in_progress → done（可 blocked→in_progress）。原地保留不删除 |
+| **生命周期** | pending → done。执行失败也标记 done，另写新 Plan 继续。原地保留不删除 |
 
 **内部结构：**
 
 ```
 000x-任务名/
-├── README.md              # 子任务状态表 + 依赖 + AC 覆盖 + commit 映射
-├── 01-plan-xxx.md         # 子任务计划（静态）
-├── 01-report-xxx.md       # 子任务报告（动态，一一对应）
+├── README.md              # 最小执行单元状态表 + 依赖 + AC 覆盖 + commit 映射
+├── 01-plan-xxx.md         # Plan 文件（静态）
+├── 01-report-xxx.md       # Report 文件（动态，一一对应）
 ```
 
-**Plan 段（静态）：** 关联文档、目标、前置条件、依赖项、分步计划、执行边界。
+**Plan 段（静态）：** Context（背景信息）、Request（要做什么）、Output Format（怎么交付）、Constraints（不能越界的）、Checkpoint（终止条件）、Steps（大致拆解）。
 
-**Report 段（动态）：** 执行摘要、关联 Commit、产物清单、测试摘要、验收结果、变更摘要、当前进度、阻塞点、遗留问题、对权威文档的改动建议。
+**Report 段（动态）：** 执行摘要、关联 Commit、产物清单、测试摘要、验收结果、遗留问题。
 
-**Plan/Report 成对规则：** 一一对应。一个 Plan 可对应多个 commit。若同一 Plan 需要多次执行，续写同一个 Report。
+**Plan/Report 成对规则：** 一一对应。一个 Plan 可对应多个 commit。
 
-**执行边界：** Plan 必须包含「执行边界」段，明确指定执行者必须做和必须不做的事。执行者可能不加载 skill，仅凭 Plan 和系统文档工作。
+**Constraints：** Plan 必须包含「Constraints」段，明确指定执行者不能假设的、不能越界的。执行者可能不加载 skill，仅凭 Plan 和系统文档工作。
 
 ### 5.7 CHANGELOG.md（项目根目录）
 
@@ -560,7 +563,7 @@ vision.md → Spec → AC 文档 + ADR 并行
 | `docs/ac/` | AC 文档列表 |
 | `docs/adr/` | 决策列表（编号、标题、状态） |
 | `docs/plans/` | 任务列表（编号、标题、状态、创建时间） |
-| 执行容器内 | 子任务状态表（编号、子任务、Plan、Report、覆盖 AC、状态、Commits） |
+| 执行容器内 | 最小执行单元状态表（编号、Plan、Report、覆盖 AC、状态、Commits） |
 
 **docs/README.md 关键字段：**
 
@@ -598,7 +601,7 @@ draft ──→ proposed ──→ active
 | `proposed` | 编写完成，待出口把关审查 |
 | `active` | 审查通过，当前唯一生效版本 |
 
-- 同时只有一个 active。冻结后不可原地修改。旧版本由 Git 历史追溯，不原地保留。
+- 同时只有一个 active。冻结后不可原地修改。typo 修复、措辞澄清等非破坏性修改除外。旧版本由 Git 历史追溯，不原地保留。
 
 ### 6.3 ADR
 
@@ -619,17 +622,13 @@ draft ──→ proposed ──→ accepted ──→ superseded
 ### 6.4 Plan
 
 ```
-pending ──→ in_progress ──→ done
-              │
-              └──→ blocked ──→ in_progress
+pending ──→ done
 ```
 
 | 状态 | 含义 |
 |------|------|
-| `pending` | 已创建，等待执行 |
-| `in_progress` | 正在执行 |
-| `blocked` | 遇到阻塞 |
-| `done` | 已完成 |
+| `pending` | 未执行 |
+| `done` | 已执行（无论成功/失败）。失败时另写新 Plan 继续 |
 
 ### 6.5 Report
 
@@ -658,8 +657,8 @@ draft ──→ complete
 |----------|----------|
 | Vision | `title`, `description`, `type: vision`, `status`, `created` |
 | Spec | `title`, `description`, `type: spec`, `status`, `version`, `created` |
-| Interface | `title`, `description`, `type: interface`, `status`, `version`, `created` |
-| AC | `title`, `description`, `type: ac`, `status`, `version`, `created` |
+| Interface | `title`, `description`, `type: interface`, `status`, `created` |
+| AC | `title`, `description`, `type: ac`, `status`, `created` |
 | ADR | `title`, `description`, `type: adr`, `status`, `created` |
 | Plan | `title`, `description`, `type: plan`, `status`, `created` |
 | Report | `title`, `description`, `type: report`, `status`, `created` |
@@ -671,7 +670,7 @@ draft ──→ complete
 字段说明：
 - `title`：文档标题
 - `description`：一句话摘要
-- `type`：`design` | `adr` | `plan` | `report`
+- `type`：`vision` | `spec` | `interface` | `ac` | `adr` | `plan` | `report`
 - `status`：见 [六、文档状态定义](#六文档状态定义)
 - `created`：ISO 8601 格式
 - `version`：仅 Spec，整数递增
@@ -690,7 +689,7 @@ draft ──→ complete
 | AC | `000x-xxxx.md` | `0001-order-ac.md` |
 | ADR | `000x-xxxx.md` | `0001-db-choice.md` |
 | 执行容器 | `000x-简短描述` | `0001-订单模块` |
-| Plan 子任务 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
+| Plan 文件 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
 | Report | `0x-report-xxx.md` | `01-report-order-api.md` |
 
 ---
@@ -813,7 +812,7 @@ Skills 层（bootloader）
 项目文档层
   │ Agent 读取 AGENTS.md → 阶段行为边界
   │ Agent 读取 docs/README.md → 当前阶段
-  │ Agent 读取 Plan → 执行边界 → 执行
+  │ Agent 读取 Plan → Constraints/Checkpoint → 执行
   │ 产出通过 Git commit 反馈
 ```
 
@@ -824,7 +823,7 @@ Skills 层（bootloader）
 | 决策 | 理由 |
 |------|------|
 | 6 条系统边界为不可违反的硬性约束 | Level 1 约束机制，Level 2 允许自适应 |
-| 契约与执行分离 | 并行化的唯一前提。冻结后不可原地修改 |
+| 契约与执行分离 | 并行化的唯一前提。冻结后不可原地修改（typo 修复、措辞澄清除外） |
 | 验证先于实现 | 低层机器化，高层智能化。测试基建在编码前就位 |
 | 状态变更 = 原子承诺 | branch 为最小执行边界 |
 | 语义链为底线 | 准入判断灵活：程序或 Agent 均可 |
@@ -839,7 +838,7 @@ Skills 层（bootloader）
 | 通用优先 | 不绑定项目类型、技术栈。E2E/契约标注 `[适用]`，示例标记清楚 |
 | 阶段行为模型取代角色模型 | Agent 无固定身份，行为由当前阶段决定 |
 | Plan 静态 / Report 动态 | 计划创建后不改，执行信息在 Report 中持续更新 |
-| 执行边界 | Plan 必须明确指定执行者必须做和必须不做 |
+| Constraints | Plan 通过 Constraints + Checkpoint 明确执行约束 |
 | Git 作为存储底座 | 状态流转以 commit 为切分边界。Agent 中断恢复时通过 git log 重建上下文 |
 | 热修复通道 | 阻断性故障走快速通道，不完整走全量 DESIGN |
 | 接口定义独立 | 接口变更不影响 Spec，前后端可基于接口定义并行开发 |

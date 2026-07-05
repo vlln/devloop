@@ -1,9 +1,3 @@
----
-title: interface/ 接口定义
-description: 接口定义索引，列出所有接口文档的版本和状态。
-type: index
----
-
 ## 状态说明
 
 | 状态 | 含义 |
@@ -18,5 +12,5 @@ type: index
 
 | 文件 | 状态 |
 |------|------|
-| [0001-template.md](0001-template.md) | active |
+| [0001-template.md](0001-template.md) | template |
 | | |

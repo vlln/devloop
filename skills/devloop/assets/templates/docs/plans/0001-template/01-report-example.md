@@ -2,10 +2,8 @@
 title: 01-report-example
 description: 子任务执行报告，一句话说明执行结果（成功/失败/部分完成）。
 type: report
-# status: draft | complete
-#   draft    → 编写中，伴随 Plan 执行同步更新
-#   complete → 已提交，内容不再修改
-status: template
+# status: 见 SKILL.md status 有效值表
+status: draft
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
 

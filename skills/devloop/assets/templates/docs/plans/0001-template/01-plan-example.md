@@ -2,10 +2,8 @@
 title: 01-plan-example
 description: 一句话说明本 Plan 要达成什么。Agent 扫描时通过 description 判断是否相关。
 type: plan
-# status: pending | done
-#   pending → 未执行
-#   done    → 已执行（无论成功/失败），不再分配。失败时另写新 Plan 继续。
-status: template
+# status: 见 SKILL.md status 有效值表
+status: pending
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
 

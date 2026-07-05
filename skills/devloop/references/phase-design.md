@@ -34,7 +34,7 @@ flowchart TD
 
 **产出：** Spec
 
-编写用户故事、模块划分、数据模型、接口定义、业务规则、UI 约束。参考 `docs/spec/0001-template.md`。模块划分表需包含「提供的能力」和「目录路径」列（模块→源码目录的映射）。
+编写用户故事、模块划分、数据模型、业务规则、UI 约束。参考 `docs/spec/0001-template.md`。模块划分表需包含「提供的能力」和「目录路径」列（模块→源码目录的映射）。
 
 **退出条件：** status=proposed。
 
@@ -151,7 +151,7 @@ flowchart TD
 | 修改 Spec 的节保持原有完整性 | 对比修改前后，确认无意外删除 |
 | 新增 AC 文档满足四场景维度检查 | 按首次设计 AC 表逐项检查 |
 | 新增 ADR status=proposed（技术选型类验证段不为空） | 读 frontmatter + 验证段 |
-| 新增 Plan 含执行边界 | 逐 Plan 检查 |
+| 新增 Plan 含 Constraints/Checkpoint | 逐 Plan 检查 |
 | 已有 ADR 未被原地修改 | 检查已有 ADR 的修订记录，确认无直接篡改原始决策 |
 
 ### 设计变更
@@ -177,7 +177,7 @@ flowchart TD
 
 promote 伴随独立 commit。约定前缀 `docs(state):`。
 
-全部满足后：更新 `docs/README.md` 当前阶段为 DEVELOP，提交。
+全部满足后：更新 `docs/README.md` 当前阶段为 TEST_INFRA，提交。
 
 ## 回退规则
 

@@ -1,9 +1,3 @@
----
-title: adr/ 架构决策记录
-description: 架构决策记录索引，列出所有技术选型、状态和关联的 Spec。
-type: index
----
-
 ## 决策列表
 
 | 编号 | 标题 | 状态 | 关联 Spec |
@@ -20,6 +14,3 @@ type: index
 | superseded | 被新版 ADR 替代 |
 | deprecated | 已废弃，不再适用 |
 
-## 命名规范
-
-- 格式：`xxxx-xxxx.md`（四位序号 + 简短描述）

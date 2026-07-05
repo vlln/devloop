@@ -1,13 +1,8 @@
 ---
-title: ADR-0001
+title: ADR-0000
 description: 一句话说明本决策的内容和选择。
 type: adr
-# status: draft | proposed | accepted | superseded | deprecated
-#   draft      → 编写中（Designer 变更）
-#   proposed   → 编写完成，待出口把关审查（Designer 变更）
-#   accepted   → 审查通过，当前生效（出口把关 promote）
-#   superseded → 被新 ADR 替代，保留供追溯（Designer 变更）
-#   deprecated → 已废弃，保留供追溯（Designer 变更）
+# status: 见 SKILL.md status 有效值表
 status: proposed
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
