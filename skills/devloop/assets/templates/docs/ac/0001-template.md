@@ -11,7 +11,7 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 验证方式：
   自动化    = 机器断言（状态码、返回值、DOM 存在性），DEVELOP 阶段用单元/集成测试覆盖
-  Agent 判定 = Agent 语义判断（布局合理性、文案可读性），DEVELOP 阶段用 E2E 或手动验证覆盖 -->
+  Agent 判定 = Agent 语义判断（布局合理性、文案可读性），DEVELOP 阶段用系统测试或手动验证覆盖 -->
 
 ---
 

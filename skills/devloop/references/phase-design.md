@@ -193,7 +193,7 @@ promote 伴随独立 commit。约定前缀 `docs(state):`。
 
 涉及文档：vision.md → Spec → AC 文档 → ADR → 验证 → 接口定义
 
-TEST_INFRA 节点：CI 流水线 + 部署底座 + 测试框架 + Mock 服务 + 契约测试框架 + E2E 框架 + 覆盖率配置 + 测试数据工厂 + MR 门禁 + 提测门禁
+TEST_INFRA 节点：CI 流水线 + 部署底座 + 测试框架 + Mock 服务 + 契约测试框架 + 系统测试框架 + 覆盖率配置 + 测试数据工厂 + MR 门禁 + 提测门禁
 
 ### CLI 工具项目（示例）
 
