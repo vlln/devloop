@@ -1,8 +1,19 @@
 # DESIGN 阶段
 
+## 角色
+
+DESIGN 阶段有两个角色，**不可合并为同一人**（同一 Agent 不可既设计又审查）：
+
+| 角色 | 职责 | 状态操作 |
+|------|------|---------|
+| **设计师** | 编写文档（vision.md → Spec → AC → ADR → 验证 → 接口定义） | `draft → proposed` |
+| **Leader** | 审查出口把关，确认契约冻结 | `proposed → active / accepted` |
+
+设计师完成编写后标记 `proposed`（"我写完了，待审查"），Leader 审查通过后 promote 为 `active`/`accepted`（"审查通过，正式采纳"）。**设计师不可审查自己的文档。**
+
 ## 流程
 
-DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。全部文档冻结后推进到 TEST_INFRA。
+DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。设计师完成全部文档 → Leader 审查通过 → 全部文档冻结 → 推进到 TEST_INFRA。
 
 ```mermaid
 flowchart TD
@@ -12,15 +23,16 @@ flowchart TD
     ADR --> VERIFY[验证]
     VERIFY -->|可行| IF[接口定义<br/>适用]
     VERIFY -->|不可行| ADR
-    AC --> G{出口把关}
+    AC --> G{Leader 审查}
     IF --> G
-    G -->|通过| TST[TEST_INFRA]
-    G -->|不通过| FIX[定位失败项<br/>退回对应文档]
+    G -->|通过| PROMOTE[promote<br/>proposed→active]
+    PROMOTE --> TST[TEST_INFRA]
+    G -->|不通过| FIX[定位失败项<br/>退回设计师修改]
 ```
 
-**出口把关是逐项审查，不是全部退回。** 失败项定位到具体文档，修复后重新检查该项。仅当修复影响下游时级联更新。
+## 子阶段（设计师）
 
-## 子阶段
+以下子阶段由**设计师**执行，将文档从 `draft` 编写至 `proposed`。
 
 ### vision.md（必选，所有项目）
 
@@ -83,9 +95,9 @@ flowchart TD
 
 ---
 
-## 出口把关
+## Leader 审查（出口把关）
 
-出口把关是逐项审查，不是全部退回。每项检查包含 **审查内容** 和 **审查方法**。失败时定位到具体文档，修复后重新检查该项。仅当修复影响下游时级联更新。
+**此阶段由 Leader 执行，不可由设计师自审。** 逐项审查，不是全部退回。每项检查包含 **审查内容** 和 **审查方法**。失败时定位到具体文档，退回设计师修改后重新检查该项。仅当修复影响下游时级联更新。
 
 ### 首次设计
 
@@ -169,15 +181,15 @@ flowchart TD
 
 ---
 
-**审查通过后，执行 promote：**
+**Leader 审查通过后，执行 promote：**
 
 将所有 `proposed` 文档提升为正式状态：
 - vision.md / Spec / AC 文档 / 接口定义：`proposed → active`
 - ADR：`proposed → accepted`
 
-promote 伴随独立 commit。约定前缀 `docs(state):`。
+promote 由 Leader 执行，伴随独立 commit。约定前缀 `docs(state):`。
 
-全部满足后：更新 `docs/README.md` 当前阶段为 TEST_INFRA，提交。
+全部满足后：Leader 更新 `docs/README.md` 当前阶段为 TEST_INFRA，提交。
 
 ## 回退规则
 
