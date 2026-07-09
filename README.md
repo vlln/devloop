@@ -28,8 +28,8 @@ stateDiagram-v2
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
+| Skill | 描述 |
+|-------|------|
 | [`devloop`](skills/devloop) | 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。 |
 
 ## 文档
@@ -37,35 +37,35 @@ stateDiagram-v2
 - [元设计文档](docs/design.md) — 系统边界、状态机定义、文档体系、测试体系
 - [SKILL.md](skills/devloop/SKILL.md) — 执行层入口：状态机路由、系统规则、按阶段操作路径
 
-## Quick Start
+## 快速开始
 
-Paste this into your AI agent (Claude Code, Cursor, OpenAI Assistants, etc.):
+将以下内容粘贴到 AI Agent（Claude Code、Cursor、OpenAI Assistants 等）中：
 
 ```text
 Install the Agent Skills from https://raw.githubusercontent.com/vlln/devloop/main/README.md
 ```
 
-## Installation
+## 安装
 
-Recommended: install these skills with `skit`. It fetches skills from the published repository, records them in a local manifest, and activates them for local agents.
+推荐使用 `skit` 安装。它从发布仓库获取 skills，记录到本地清单，并为本地 Agent 激活。
 
 ### skit
 
-Install `skit` with Homebrew:
+通过 Homebrew 安装 `skit`：
 
 ```sh
 brew install vlln/tap/skit
 ```
 
-For other platforms, see the `skit` installation instructions.
+其他平台见 `skit` 安装文档。
 
-Install one skill:
+安装单个 skill：
 
 ```sh
 skit install vlln/devloop/skills/devloop
 ```
 
-Install all skills in this repository:
+安装本仓库所有 skills：
 
 ```sh
 skit install vlln/devloop --all
@@ -77,20 +77,20 @@ skit install vlln/devloop --all
 npx skills add vlln/devloop
 ```
 
-### Manual
+### 手动安装
 
-Copy the desired skill directory from `skills/<skill-name>` into your agent's skills directory, then restart the agent if required.
+将 `skills/<skill-name>` 目录复制到 Agent 的 skills 目录，重启 Agent 即可。
 
-Common locations:
+常见路径：
 
 - Codex CLI: `~/.codex/skills`
-- Claude Code: `.claude/skills` in the project, or the configured user skills directory
+- Claude Code: 项目中的 `.claude/skills`，或已配置的用户 skills 目录
 - OpenCode: `~/.opencode/skills/<repo-name>`
 
-## Requirements
+## 依赖
 
-- `skit` CLI for install and validation workflows.
+- `skit` CLI，用于安装和校验 workflow。
 
-## License
+## 许可证
 
 MIT
