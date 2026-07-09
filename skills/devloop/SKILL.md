@@ -212,10 +212,10 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 关联通过文档正文中的文本引用和命名约定表达，不依赖 frontmatter 的 related 字段。示例：
 
 ```
-AC 文档 AC-003-N-1（正常场景）
-  → Plan 01-plan-order-api.md 步骤 2: "实现 AC-003 订单创建，覆盖所有场景"
-    → Commit: "feat(order): 实现 AC-003 订单创建"
-      → Report 01-report-order-api.md: "AC-003-N-1 [PASS], AC-003-B-1 [PASS], AC-003-E-1 [PASS], AC-003-F-1 [PASS], commit abc123"
+AC 文档 AC-0003-N-1（正常场景）
+  → Plan 01-plan-order-api.md 步骤 2: "实现 AC-0003 订单创建，覆盖所有场景"
+    → Commit: "feat(order): 实现 AC-0003 订单创建"
+      → Report 01-report-order-api.md: "AC-0003-N-1 [PASS], AC-0003-B-1 [PASS], AC-0003-E-1 [PASS], AC-0003-F-1 [PASS], commit abc123"
 ```
 
 ### Git 规则

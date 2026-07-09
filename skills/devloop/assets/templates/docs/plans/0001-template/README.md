@@ -4,7 +4,7 @@
 
 | 编号 | 子任务 | Plan | Report | 覆盖 AC | 状态 | Commits |
 |------|--------|------|--------|---------|------|---------|
-| 01 | 示例任务 | [01-plan-example.md](01-plan-example.md) | [01-report-example.md](01-report-example.md) | AC-001 ~ AC-005 | pending | — |
+| 01 | 示例任务 | [01-plan-example.md](01-plan-example.md) | [01-report-example.md](01-report-example.md) | AC-0001 ~ AC-0005 | pending | — |
 
 <!-- 状态：pending = 未执行，done = 已执行（无论成功/失败）。失败时另写新 Plan 继续。 -->
 

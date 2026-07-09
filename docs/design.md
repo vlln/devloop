@@ -216,10 +216,10 @@ Git 是整个项目（代码 + 文档）的**存储和版本控制器**。系统
 追溯通过文档正文中的文本引用、命名约定、commit message 关联自然形成，不依赖 frontmatter 的 `related_*` 字段：
 
 ```
-AC 文档 AC-003
-  → Plan 01-plan-order-api.md 步骤 2: "实现 AC-003 订单创建"
-    → Commit: "feat(order): 实现 AC-003 订单创建"
-      → Report 01-report-order-api.md: "AC-003 ✅, commit abc123"
+AC 文档 AC-0003
+  → Plan 01-plan-order-api.md 步骤 2: "实现 AC-0003 订单创建"
+    → Commit: "feat(order): 实现 AC-0003 订单创建"
+      → Report 01-report-order-api.md: "AC-0003 ✅, commit abc123"
 ```
 
 **Level 1 — 文档变更与代码变更分离：**
