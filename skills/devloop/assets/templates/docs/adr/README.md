@@ -9,7 +9,7 @@
 | 状态 | 含义 |
 |------|------|
 | draft | 草稿，编写中 |
-| proposed | 编写完成，待出口把关审查 |
+| proposed | 编写完成，待门禁审查 |
 | accepted | 审查通过，当前生效 |
 | superseded | 被新版 ADR 替代 |
 | deprecated | 已废弃，不再适用 |

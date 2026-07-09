@@ -586,7 +586,7 @@ draft ──→ proposed ──→ active
 | 状态 | 含义 |
 |------|------|
 | `draft` | 编写中 |
-| `proposed` | 编写完成，待出口把关审查 |
+| `proposed` | 编写完成，待门禁审查 |
 | `active` | 审查通过，当前生效 |
 
 **设计理由：** proposed 是"设计师写完"和"系统采纳"之间的中间态。设计师标记 proposed 表示"我写完了"，审查通过后 promote 为 active。这防止未审查的内容直接生效。旧版本由 Git 历史追溯，不原地保留。
@@ -600,7 +600,7 @@ draft ──→ proposed ──→ active
 | 状态 | 含义 |
 |------|------|
 | `draft` | 编写中，尚未冻结 |
-| `proposed` | 编写完成，待出口把关审查 |
+| `proposed` | 编写完成，待门禁审查 |
 | `active` | 审查通过，当前唯一生效版本 |
 
 - 同时只有一个 active。冻结后不可原地修改。typo 修复、措辞澄清等非破坏性修改除外。旧版本由 Git 历史追溯，不原地保留。
@@ -616,7 +616,7 @@ draft ──→ proposed ──→ accepted ──→ superseded
 | 状态 | 含义 |
 |------|------|
 | `draft` | 提案中，尚未采纳 |
-| `proposed` | 编写完成，待出口把关审查 |
+| `proposed` | 编写完成，待门禁审查 |
 | `accepted` | 审查通过，当前生效 |
 | `superseded` | 被新 ADR 替代 |
 | `deprecated` | 已废弃 |
@@ -843,7 +843,7 @@ Skills 层（bootloader）
 | 6 阶段状态机 | INIT→DESIGN→TEST_INFRA→DEVELOP→SYSTEM_TEST→RELEASE。以 Gitflow 为分支容器，把关分两层：自动化（CI/门禁/部署）+ Agent 判断（文档语义/自证/失败分类/发布决策） |
 | 固定阶段 → 子阶段 → 参考实现三层模型 | 固定约束 + 可选组合 + 自由实现 |
 | proposed 状态 | 设计师写完→待审查→审查通过才冻结。防止未审查内容直接生效 |
-| 出口把关 = 内容级检查 | 每个文档写完即审，非形式检查，逐项审查。失败定位到具体文档 |
+| 门禁 = 内容级检查 | 每个文档写完即审，非形式检查，逐项审查。失败定位到具体文档 |
 | 一次性基建（TEST_INFRA） | 测试基建独立搭建，自证正确性，DEVELOP 直接使用 |
 | 系统测试（SYSTEM_TEST） | 集成+系统+专项统一阶段，PRE_RELEASE 作为 RELEASE 内部步骤 |
 | 执行容器 | 各阶段创建自己的执行容器，不替下游创建 |
