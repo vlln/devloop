@@ -2,20 +2,32 @@
 
 ## 流程
 
-DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。全部文档冻结后推进到 TEST_INFRA。
+DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。
+
+**按因果链顺序推进，每个文档写完即审，审过才进下游。** 禁止全部写完后一次性审查。审查者不可由文档编写者担任。
 
 ```mermaid
 flowchart TD
-    V[vision.md] --> DS[Spec]
-    DS --> AC[AC 文档]
-    DS --> ADR[ADR]
-    ADR --> VERIFY[验证]
+    V[vision.md] --> VG{审查} -->|通过| VOK[vision active]
+    VG -->|不通过| V
+    VOK --> DS[Spec]
+    DS --> DSG{审查} -->|通过| DSOK[Spec active]
+    DSG -->|不通过| DS
+    DSOK --> AC[AC 文档]
+    DSOK --> ADR[ADR]
+    AC --> ACG{审查}
+    ADR --> ADRG{审查}
+    ACG -->|通过| ACOK[AC active]
+    ADRG -->|通过| ADROK[ADR accepted]
+    ACG -->|不通过| AC
+    ADRG -->|不通过| ADR
+    ADROK --> VERIFY[验证]
     VERIFY -->|可行| IF[接口定义<br/>适用]
     VERIFY -->|不可行| ADR
-    AC --> G{出口把关}
-    IF --> G
-    G -->|通过| TST[TEST_INFRA]
-    G -->|不通过| FIX[定位失败项<br/>退回对应文档]
+    IF --> IFG{审查} -->|通过| IFOK[接口定义 active]
+    IFG -->|不通过| IF
+    ACOK --> TST[TEST_INFRA]
+    IFOK --> TST
 ```
 
 ## 子阶段
@@ -26,7 +38,15 @@ flowchart TD
 
 编写业务目标、用户范围、长期理想形态。一次性定稿，不可退回。参考 `docs/vision.md` 模板。
 
-**退出条件：** status=proposed。
+**审查：**
+
+| 审查内容 | 审查方法 |
+|---------|---------|
+| status=proposed | 读 frontmatter |
+| 业务目标：非空 | 读「业务目标」段，确认有实质内容 |
+| 用户范围：非空 | 读「用户范围」段，确认有实质内容 |
+
+**审查通过后：** promote `proposed → active`，独立 commit，约定前缀 `docs(state):`。进入 Spec。
 
 ### Spec（必选，所有项目）
 
@@ -34,7 +54,19 @@ flowchart TD
 
 编写用户故事、模块划分、数据模型、业务规则、UI 约束。参考 `docs/spec/0001-template.md`。模块划分表需包含「提供的能力」和「目录路径」列（模块→源码目录的映射）。
 
-**退出条件：** status=proposed。
+**审查：**
+
+| 审查内容 | 审查方法 |
+|---------|---------|
+| status=proposed | 读 frontmatter |
+| 用户故事 ≥ 1 条，每条含编号、角色、需求、目的、优先级 | 读用户故事表，逐行检查列完整性 |
+| 模块划分 ≥ 1 个，每个含提供的能力 + 目录路径；单模块需说明原因 | 读模块划分表，检查无空列 |
+| [适用] 有 API → 接口定义：入参/出参/错误码完整 | 逐接口检查三要素 |
+| [适用] 有持久化 → 数据模型非空 | 读数据模型段，确认有实体定义 |
+| [适用] 前端项目 → UI 约束非空 | 读 UI 约束段，确认有页面结构或组件规范 |
+| 非功能指标非空 | 读非功能指标段，确认有实质内容或"无特殊要求" |
+
+**审查通过后：** promote `proposed → active`。进入 AC 文档 + ADR（可并行）。
 
 ### AC 文档（必选，所有项目）
 
@@ -42,7 +74,16 @@ flowchart TD
 
 每条 AC 必须覆盖四个场景维度（正常/边界/异常/失败）。只写正常流程的 AC 属于无效 AC。参考 `docs/ac/0001-template.md`。
 
-**退出条件：** status=proposed。
+**审查：**
+
+| 审查内容 | 审查方法 |
+|---------|---------|
+| status=proposed | 读 frontmatter |
+| AC ≥ 1 条，每条覆盖四场景（正常/边界/异常/失败） | 逐条 AC 检查场景编号：N/B/E/F 各至少 1 个 |
+| 无只含正常场景的 AC | 检查每条 AC 的 B/E/F 场景是否非空 |
+| 预期结果可观测、可验证，无模糊词汇 | 抽查预期结果列，搜索"合理""流畅""适当""正常"等模糊词 |
+
+**审查通过后：** promote `proposed → active`。
 
 ### ADR（必选，所有项目）
 
@@ -52,7 +93,15 @@ flowchart TD
 
 **核心 ADR 判定：** 技术栈 ADR 必选。有持久化→存储 ADR。多模块/多服务→架构模式 ADR。
 
-**退出条件：** 核心 ADR 全部 status=proposed（验证段可为空，验证在下一子阶段进行）。
+**审查：**
+
+| 审查内容 | 审查方法 |
+|---------|---------|
+| 技术栈 ADR status=proposed | 读 frontmatter |
+| [适用] 有持久化 → 存储 ADR status=proposed | 读 frontmatter |
+| [适用] 多模块/多服务 → 架构模式 ADR status=proposed | 读 frontmatter |
+
+**审查通过后：** promote `proposed → accepted`。进入验证。
 
 **提示：** ADR 修订历史无需手动维护表格。`git log -p -- docs/adr/0001-xxx.md` 即为完整修订记录。
 
@@ -69,64 +118,7 @@ flowchart TD
 
 **验证方式：** 从 `develop` 拉出 `spike/<描述>` 分支，编写最小验证代码。验证通过后保留分支（不合并），ADR 的「验证」段记录复现步骤和分支名，供后续阶段参考。
 
-**退出条件：** 所有需验证的 ADR 验证段非空且结论为「可行」，验证 branch 已记录在 ADR 中。不可行则退回修改 ADR，重新验证。
-
-### 接口定义（适用：有 API 的项目）
-
-**产出：** 接口定义文档（独立于 Spec，参考 `docs/interface/0001-template.md`）
-
-接口的业务字段来自 Spec 的用户故事、模块划分、数据实体。AC 的异常/失败场景决定错误码。ADR 决定的是传输格式，接口定义决定的是传输内容（字段名、类型、含义）。
-
-**退出条件：** status=proposed，所有接口有明确的入参/出参/错误码。
-
----
-
-## 出口把关
-
-逐项审查，不是全部退回。每项检查包含 **审查内容** 和 **审查方法**。失败时定位到具体文档，修复后重新检查该项。仅当修复影响下游时级联更新。
-
-**审查者不可由文档编写者担任。** 编写者标记 `proposed` 后，由另一位 Agent（或人工）执行出口把关审查，审查通过后执行 promote。
-
-### 首次设计
-
-**vision.md：**
-
-| 审查内容 | 审查方法 |
-|---------|---------|
-| status=proposed | 读 frontmatter |
-| 业务目标：非空 | 读「业务目标」段，确认有实质内容 |
-| 用户范围：非空 | 读「用户范围」段，确认有实质内容 |
-
-**Spec：**
-
-| 审查内容 | 审查方法 |
-|---------|---------|
-| status=proposed | 读 frontmatter |
-| 用户故事 ≥ 1 条，每条含编号、角色、需求、目的、优先级 | 读用户故事表，逐行检查列完整性 |
-| 模块划分 ≥ 1 个，每个含提供的能力 + 目录路径；单模块需说明原因 | 读模块划分表，检查无空列 |
-| [适用] 有 API → 接口定义：入参/出参/错误码完整 | 逐接口检查三要素 |
-| [适用] 有持久化 → 数据模型非空 | 读数据模型段，确认有实体定义 |
-| [适用] 前端项目 → UI 约束非空 | 读 UI 约束段，确认有页面结构或组件规范 |
-| 非功能指标非空 | 读非功能指标段，确认有实质内容或"无特殊要求" |
-
-**AC 文档：**
-
-| 审查内容 | 审查方法 |
-|---------|---------|
-| status=proposed | 读 frontmatter |
-| AC ≥ 1 条，每条覆盖四场景（正常/边界/异常/失败） | 逐条 AC 检查场景编号：N/B/E/F 各至少 1 个 |
-| 无只含正常场景的 AC | 检查每条 AC 的 B/E/F 场景是否非空 |
-| 预期结果可观测、可验证，无模糊词汇 | 抽查预期结果列，搜索"合理""流畅""适当""正常"等模糊词 |
-
-**核心 ADR：**
-
-| 审查内容 | 审查方法 |
-|---------|---------|
-| 技术栈 ADR status=proposed | 读 frontmatter |
-| [适用] 有持久化 → 存储 ADR status=proposed | 读 frontmatter |
-| [适用] 多模块/多服务 → 架构模式 ADR status=proposed | 读 frontmatter |
-
-**验证：**
+**审查：**
 
 | 审查内容 | 审查方法 |
 |---------|---------|
@@ -134,14 +126,28 @@ flowchart TD
 | 所有验证结论为「可行」 | 逐 ADR 读「验证」段结论列，确认无「不可行」 |
 | 约定/标准类 ADR 可跳过验证 | 检查 ADR 类型，确认不涉及技术选型 |
 
-**接口定义（适用：有 API）：**
+**审查通过后：** 进入接口定义（如有）。验证 branch 记录在 ADR 中，不合并。
+
+### 接口定义（适用：有 API 的项目）
+
+**产出：** 接口定义文档（独立于 Spec，参考 `docs/interface/0001-template.md`）
+
+接口的业务字段来自 Spec 的用户故事、模块划分、数据实体。AC 的异常/失败场景决定错误码。ADR 决定的是传输格式，接口定义决定的是传输内容（字段名、类型、含义）。
+
+**审查：**
 
 | 审查内容 | 审查方法 |
 |---------|---------|
 | status=proposed | 读 frontmatter |
 | 所有接口有明确的入参/出参/错误码 | 逐接口检查三要素 |
 
-### 增量迭代
+**审查通过后：** promote `proposed → active`。
+
+---
+
+全部文档审查通过后：更新 `docs/README.md` 当前阶段为 TEST_INFRA，提交。约定前缀 `docs(state):`。
+
+## 增量迭代
 
 已有文档已冻结，仅审查**新增/修改**的文档：
 
@@ -154,7 +160,7 @@ flowchart TD
 | 新增 Plan 含 Constraints/Checkpoint | 逐 Plan 检查 |
 | 已有 ADR 未被原地修改 | 检查已有 ADR 的修订记录，确认无直接篡改原始决策 |
 
-### 设计变更
+## 设计变更
 
 从 DEVELOP 退回时，仅审查**变更影响范围**：
 
@@ -166,18 +172,6 @@ flowchart TD
 | Plan 已调整（受影响 Plan） | 读受影响 Plan，确认已更新 |
 | 新增技术选型类 ADR 的验证段不为空 | 读「验证」段 |
 | 新增 ADR status=proposed | 读 frontmatter |
-
----
-
-**审查通过后，执行 promote：**
-
-将所有 `proposed` 文档提升为正式状态：
-- vision.md / Spec / AC 文档 / 接口定义：`proposed → active`
-- ADR：`proposed → accepted`
-
-promote 伴随独立 commit。约定前缀 `docs(state):`。
-
-全部满足后：更新 `docs/README.md` 当前阶段为 TEST_INFRA，提交。
 
 ## 回退规则
 
