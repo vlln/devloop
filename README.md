@@ -1,6 +1,13 @@
+<div align="center">
+
 # devloop
 
 契约驱动的项目开发系统 — Agent 加载后按 6 阶段状态机自主推进项目，非一次性，多轮迭代。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Agent Skills](https://img.shields.io/badge/Agent_Skills-spec-6e3af2)](https://agentskills.io/specification)
+
+</div>
 
 ```mermaid
 stateDiagram-v2
