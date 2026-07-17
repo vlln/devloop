@@ -43,7 +43,7 @@ stateDiagram-v2
 
 ## Documentation
 
-- [Design Spec](docs/design.md) — System boundaries, state machine definition, document architecture, testing system
+- [Design Spec](docs/design.md) — Guiding philosophy, design principles, system boundaries, key design decisions (mechanism details live in skills/devloop/)
 - [SKILL.md](skills/devloop/SKILL.md) — Execution layer entry: state machine routing, system rules, per-phase operation paths
 
 ## Quick Start

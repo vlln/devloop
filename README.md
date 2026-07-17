@@ -43,7 +43,7 @@ stateDiagram-v2
 
 ## 文档
 
-- [元设计文档](docs/design.md) — 系统边界、状态机定义、文档体系、测试体系
+- [元设计文档](docs/design.md) — 思想纲领、设计原则、系统边界、关键设计决策（机制细节见 skills/devloop/）
 - [SKILL.md](skills/devloop/SKILL.md) — 执行层入口：状态机路由、系统规则、按阶段操作路径
 
 ## 快速开始

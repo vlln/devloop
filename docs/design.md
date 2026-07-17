@@ -1,14 +1,14 @@
 ---
 title: Agent Coding System — 文档规范设计
-description: 无人循环自主 Agent 编码系统的文档规范设计，定义文档体系的结构、规则和设计决策。
+description: 无人循环自主 Agent 编码系统的元设计——设计原则、系统边界、状态机与文档体系的设计决策。机制细节的权威定义在执行层（skills/devloop/）。
 type: design
 status: active
-version: 2
+version: 3
 created: 2026-06-26T00:00:00Z
 ---
 
-> 本文档是规范本身的 Design Spec，描述文档体系的设计决策、约束和完整规则。
-> 执行层实现见 [skills/devloop/](skills/devloop/)，模板见 `skills/devloop/assets/templates/`。
+> 本文档是规范本身的 Design Spec，只描述设计决策与不可违反的约束（why + Level 1）。
+> 机制细节（状态定义、门禁、命名、frontmatter、联动规则）的权威定义在执行层：[skills/devloop/](../skills/devloop/)，模板见 `skills/devloop/assets/templates/`。
 
 ---
 
@@ -87,6 +87,8 @@ skills/devloop/SKILL.md（bootloader：状态机 + 路由）
 | 技术选型、架构决策 | ADR | 只引用，不复制 |
 | 编码规范、Git 规则 | CONTRIBUTING.md | 只引用，不复制 |
 | 系统当前阶段 | docs/README.md | 只引用，不复制 |
+
+本原则同样约束元设计层自身：**系统机制细节（状态定义、门禁审查表、命名规范、frontmatter、status 流转、联动规则、目录结构）的唯一权威定义位置是执行层（SKILL.md + references/ + templates/）**。本文档只保留设计理由（why）和 Level 1 约束，机制细节一律引用执行层，不复制——防止元设计层与执行层双源漂移。
 
 ### 2.3 阶段行为模型
 
@@ -199,6 +201,10 @@ Git 是整个项目（代码 + 文档）的**存储和版本控制器**。系统
 - 阈值保守起步，防止 Agent 陷入追逐 lint 警告的噪音循环
 - 机器查不到的维度（命名质量、抽象是否合理）留给 Agent 审查——机器预检先行（快、确定），Agent 审查殿后
 
+**Level 1 — 付费外部依赖隔离：**
+
+扣费类外部调用禁止进入高频自动化流水线。三层防护：单元测试守住代码分支逻辑，Mock 替身自动化守住代码退化，沙箱小规模验收守住环境兼容性。替身与沙箱在 TEST_INFRA 搭建，沙箱验收在 SYSTEM_TEST 执行（操作细节见对应 phase 文档）。
+
 **Level 2 — 实现模式：**
 
 - 机器化测试：Jest/Vitest/Playwright 等框架
@@ -212,12 +218,9 @@ Git 是整个项目（代码 + 文档）的**存储和版本控制器**。系统
 
 **Level 1 — 分支模型（Gitflow）：**
 
-- `main` 仅含 release 节点，始终可部署。`develop` 为持续集成分支，所有 Plan 分支合并到 `develop`。
-- 分支类型与 commit type 一致：`feat/` `fix/` `ci/` `test/` `refactor/` `perf/` `build/` `chore/` `docs/`。系统特有类型 `spike/`（ADR 验证，保留不合并）。
-- 一个执行容器 = 一个分支，从 `develop` 拉出，编号与执行容器对应。命名：`<type>/<编号>-<描述>`。
-- `release/*` 和 `hotfix/*` 同时合并到 `main` 和 `develop`。
-- 分支生命周期：创建 → 推送 → MR 门禁通过 → 合并到 `develop` → 删除。`release/*`/`hotfix/*` 额外合并到 `main`。
-- 多个 Plan 并行执行时，必须使用 `git worktree`，保证隔离且共享同一个 repo。
+- 以 Gitflow 为分支容器：`main` 仅含 release 节点始终可部署，`develop` 为持续集成分支，一个执行容器 = 一个分支
+- 多个执行容器并行时必须使用 `git worktree`，保证隔离且共享同一个 repo
+- 分支类型、命名、生命周期、合并规则的权威定义见 [SKILL.md](../skills/devloop/SKILL.md)「Git 规则」
 
 **Level 1 — 变更锚点：**
 
@@ -343,137 +346,13 @@ RELEASE → DESIGN  (新一轮迭代 / 热修复)
 
 ### 4.4 各状态定义
 
-#### INIT — 项目初始化
+各状态的允许/禁止行为、准入与推进条件、子阶段划分、门禁审查表的权威定义在执行层——[SKILL.md](../skills/devloop/SKILL.md)（阶段证明链）+ `skills/devloop/references/phase-*.md`（每阶段一个文件）。本层只保留各状态的设计理由：
 
-| 维度 | 定义 |
-|------|------|
-| **含义** | 项目骨架搭建。将项目接入 devloop 系统。新项目安装模板，旧项目扫描合并 |
-| **允许** | 创建目录结构、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md、初始化 Git、填写 CONTRIBUTING.md 项目信息 |
-| **禁止** | 编写 Vision/Spec/ADR/Plan、编写业务代码 |
-| **准入条件** | —（项目启动的起点） |
-| **→ DESIGN 条件** | 目录结构就位、标准文件已创建、Git 仓库已初始化、`main` + `develop` 分支已创建 |
-
-#### DESIGN — 规划设计
-
-| 维度 | 定义 |
-|------|------|
-| **含义** | 需求分析、架构设计、验收标准定义。按因果链顺序推进，每个文档写完即审，审过才进下游 |
-| **允许** | 编写 vision.md → Spec → AC 文档 → ADR → 验证 → 接口定义 |
-| **禁止** | 编写业务代码 |
-| **准入条件** | INIT 完成 |
-| **→ TEST_INFRA 条件** | 全部文档各自审查通过，status=active/accepted |
-| **回退** | vision.md 不可退回。其他文档发现设计缺陷 → 退回 DESIGN 自身 |
-
-**DESIGN 子阶段：**
-
-| 子阶段 | 适用 | 产出 | 退出条件 |
-|--------|------|------|----------|
-| vision.md | 必选 | 业务目标、用户范围、长期理想形态 | status=active |
-| Spec | 必选 | 用户故事、模块划分、数据模型、非功能指标 | status=active |
-| AC 文档 | 必选 | 四场景验收标准（正常/边界/异常/失败） | status=active |
-| ADR | 必选 | 核心 ADR（技术栈/存储/架构模式） | status=accepted |
-| 验证 | 必选 | ADR 验证段填写（含复现步骤 + 验证 branch） | 结论为「可行」，验证 branch 已记录 |
-| 接口定义 | 适用 | 接口入参/出参/错误码 | status=active |
-
-**审查规则：** 每个文档写完即审，审过才进下游。审查者不可由编写者担任。审查通过后 promote：proposed→active（ADR 为 accepted）。
-
-**DESIGN 内部因果链：**
-
-```
-vision.md → Spec → AC 文档 + ADR 并行
-                      ADR → 验证 → 接口定义
-```
-
-#### TEST_INFRA — 一次性基建
-
-| 维度 | 定义 |
-|------|------|
-| **含义** | 设计并搭建测试基建——CI、测试框架、Mock、覆盖率、门禁、部署底座。为 DEVELOP 提供可验证的环境 |
-| **允许** | 编写测试基建 ADR、创建执行容器、搭建基建、更新 CONTRIBUTING.md 测试段 |
-| **禁止** | 编写业务测试用例、编写业务代码 |
-| **准入条件** | DESIGN 完成（契约冻结） |
-| **→ DEVELOP 条件** | 全部基建分支已合并到 `develop`、CI 可运行（自动化）、MR 门禁正确拦截（Agent 自证）、Mock 返回正确（Agent 自证）、覆盖率数据准确（Agent 自证）、系统测试框架可跑冒烟、CONTRIBUTING.md 测试段已填写 |
-
-**TEST_INFRA 子阶段：**
-
-| 子阶段 | 适用 | 产出 | 退出条件 |
-|--------|------|------|----------|
-| 测试基建 ADR | 必选 | 框架选型、Mock 方案、CI 平台、部署策略等 | status=proposed |
-| 一次性基建搭建 | 必选 | CI/测试框架/Mock/覆盖率/门禁/部署底座 | 自证通过 |
-
-**设计理由：** 测试开发与业务开发分离。TEST_INFRA 阶段搭建武器工厂，DEVELOP 阶段制造武器。测试基建自证能正确判断对错（不仅能启动），而非在业务开发中边用边修。
-
-#### DEVELOP — 编码开发（最高并行期）
-
-| 维度 | 定义 |
-|------|------|
-| **含义** | 基于 TEST_INFRA 搭建的一次性基建，按 Spec 模块划分创建执行容器，TDD 左移开发 |
-| **允许** | 创建 Plan、执行 Plan（编码/测试）、更新 Plan/Report |
-| **禁止** | 修改 Spec/ADR/AC 文档、修改全局契约 |
-| **准入条件** | TEST_INFRA 完成（一次性基建就绪） |
-| **→ SYSTEM_TEST 条件** | 全部 feature 分支已合并到 `develop`、MR 门禁 + 提测门禁通过（自动化）、Report 中 AC 验收结果经 Agent 确认合理 |
-
-**DEVELOP 子阶段：**
-
-| 子阶段 | 适用 | 产出 |
-|--------|------|------|
-| 创建 Plan | 必选 | Spec 模块划分表 → 执行容器 |
-| 编码 | 必选 | TDD 左移（单元测试 + 开发集成自测 + 契约测试 `[适用]`） |
-| 打包部署 | 必选 | 部署配置 + 部署到测试环境 |
-| 提测门禁 | 必选 | Report/AC/覆盖率检查 |
-
-**Plan 与 Report 职责分离：**
-
-| Plan（静态，创建后不改） | Report（动态，执行中持续更新） |
-|--------------------------|------------------------------|
-| Context（背景信息） | 执行摘要、关联 Commit |
-| Request（要做什么） | 产物清单、测试摘要、验收结果 |
-| Output Format（怎么交付） | 遗留问题 |
-| Constraints（不能越界的） | |
-| Checkpoint（终止条件） | |
-| Steps（大致拆解） | |
-
-**Constraints：** Plan 必须包含「Constraints」段，明确指定执行者不能假设的、不能越界的。执行者可能不加载 skill，仅凭 Plan 和系统文档工作，因此 Constraints 是执行者与协调者之间的契约。
-
-**架构级依赖：** 独立服务/前后端可并行，共享库/基础包先做。代码级依赖 Agent 内部处理。
-
-#### SYSTEM_TEST — 系统测试（在 develop 上验证）
-
-| 维度 | 定义 |
-|------|------|
-| **含义** | 在 `develop` 分支上执行系统级验证——集成测试、系统测试、专项测试。单元测试和开发集成自测已在 DEVELOP 完成 |
-| **允许** | 执行全量测试、在 `fix/*` 分支修复 bug 后合并回 `develop`、生成测试报告 |
-| **禁止** | 新增功能代码、修改 Spec/ADR |
-| **准入条件** | 全部 feature Plan 分支已合并到 `develop` |
-| **→ RELEASE 条件** | `develop` 全部测试层通过，无阻塞级缺陷 |
-| **回退** | 基建缺陷 → TEST_INFRA，设计缺陷 → DESIGN |
-
-**SYSTEM_TEST 子阶段：**
-
-| 子阶段 | 适用 | 产出 |
-|--------|------|------|
-| 集成测试 | 必选 | 服务集成/契约/编排 |
-| 系统测试 | 必选 | 完整成品黑盒验证。UI 项目浏览器驱动 E2E，API/服务接口全链路，CLI 命令端到端 |
-| 视觉回归 | 前端项目 | 视觉回归 |
-| 专项测试 | 适用 | 性能/安全/兼容性 |
-
-**修复循环：** 修复在 SYSTEM_TEST 内部完成。局部 bug 内部修复；基建缺陷 → TEST_INFRA；设计缺陷 → DESIGN。
-
-#### RELEASE — 迭代闭环
-
-| 维度 | 定义 |
-|------|------|
-| **含义** | 从 `develop` 拉出 `release/*` 分支，staging 验证 → production 发布 → 合并到 `main` + `develop` |
-| **允许** | CD 部署、冒烟测试、打 tag、整理 CHANGELOG、归档 |
-| **禁止** | 修改任何代码 |
-| **准入条件** | SYSTEM_TEST 全部测试通过 |
-| **→ DESIGN 条件** | `release/*` 已合并到 `main` + `develop`，tag 已打 |
-
-**RELEASE 子阶段：** staging 验证（部署 + 冒烟 + 环境检查）→ production 发布（发布策略确认 + 监控 + 回滚方案 + 打 tag + 归档于 `main`）。
-
-**staging 失败分类：** CD/环境失败 → 在 `release/*` 内修复；业务 bug → 在 `develop` 修复后重新拉 `release/*`。
-
-**热修复：** 从 `main` 拉 `hotfix/*`，合并到 `main` + `develop`（RELEASE → DESIGN 轻量 → TEST_INFRA 增量 → DEVELOP 最小修复 → SYSTEM_TEST 回归 → RELEASE 补丁 tag）。
+- **DESIGN 写完即审**：按因果链（vision → Spec → AC + ADR → 验证 → 接口定义）逐文档审查，审过才进下游；审查者不可由编写者担任。失败可定位到具体文档，避免一次性审查的批量返工。
+- **TEST_INFRA 独立成阶段**：测试开发与业务开发分离——TEST_INFRA 搭建武器工厂，DEVELOP 制造武器。基建必须自证能正确判断对错（不仅能启动），而非在业务开发中边用边修。
+- **DEVELOP 是最高并行期**：契约冻结后各执行容器在独立 worktree 并行。架构级依赖决定容器执行顺序（共享库先做），代码级依赖 Agent 内部处理。
+- **SYSTEM_TEST 是唯一串行关口**：修复循环在阶段内完成（`fix/*`），不退回 DEVELOP；按失败原因分类退回——局部 bug 内修，基建缺陷 → TEST_INFRA，设计缺陷 → DESIGN。
+- **RELEASE 禁止修改代码**：staging 失败分类处理——CD/环境失败在 `release/*` 内修，业务 bug 回 `develop` 修复后重拉。阻断性故障走 `hotfix/*` 快速通道。
 
 ### 4.5 流转刚性规则
 
@@ -500,350 +379,54 @@ vision.md → Spec → AC 文档 + ADR 并行
 
 ## 五、文档体系
 
-### 5.1 Vision（docs/vision.md）
+各文档类型的命名规范、frontmatter 字段、status 有效值与流转、冻结定义、联动规则、目录结构的权威定义见 [SKILL.md](../skills/devloop/SKILL.md)「系统规则」；各类文档的骨架见 `skills/devloop/assets/templates/`。本层只保留每类文档的定位与设计理由。
 
-| 维度 | 定义 |
+**定位一览：**
+
+| 文档 | 定位 |
 |------|------|
-| **定位** | 全局唯一顶层愿景：业务目标、用户范围、长期理想形态 |
-| **创建时机** | DESIGN 阶段 |
-| **变更规则** | 一次性定稿，不可退回。仅重大业务转型才修订。旧版本由 Git 历史追溯，不原地保留 |
+| vision.md | 全局唯一顶层愿景：业务目标、用户范围、长期理想形态。一次性定稿，不可退回 |
+| Spec | 需求规格：用户故事、模块划分、数据模型、非功能指标、术语表。所有业务需求的唯一事实源 |
+| Interface | 接口定义：入参/出参/错误码。业务字段来自 Spec，传输格式由 ADR 决定 |
+| AC | 验收标准：测试的唯一权威依据，每条覆盖四场景（正常/边界/异常/失败） |
+| ADR | 架构决策记录：技术选型、方案折中、风险取舍。覆盖业务架构 + 测试基建架构。持续新增不删除，修订走 superseded |
+| Plan + Report | 执行容器：任何需执行任务的组织单位。一个容器对应一个 Git 分支，内含多个最小执行单元（Plan + Report 成对） |
+| CHANGELOG.md | 版本变更记录（[Keep a Changelog](https://keepachangelog.com/)），INIT 创建，RELEASE 整理 |
+| README.md | 各级目录索引；docs/README.md 额外承载**当前系统阶段**（单点可见） |
 
-| **生命周期** | draft → proposed → active |
+**设计理由：**
 
-**设计理由：** vision.md 只回答"为什么要做这个项目"。架构约束、非功能指标、硬性规则分别属于 ADR、Spec。不混入 vision。
-
-### 5.2 Spec（docs/spec/000x-xxxx.md）
-
-| 维度 | 定义 |
-|------|------|
-| **定位** | 需求规格：用户故事、模块划分、数据模型、非功能指标、术语表。所有业务需求的唯一事实源 |
-| **创建时机** | DESIGN 阶段 |
-| **变更规则** | 冻结后不可原地修改。增量迭代追加内容，设计变更（架构颠覆）退回 DESIGN 修改。typo 修复、措辞澄清等非破坏性修改除外。Git 记录变更历史，不原地保留旧版本 |
-
-| **生命周期** | draft → proposed → active。同时只有一个 active |
-
-**设计理由：** 术语表承担「统一语言」职责——Spec/AC/Interface 的用词和代码标识符必须与术语表一致，防止 Agent 跨文档、跨会话的术语漂移，语义链的文本引用依赖术语一致才可追溯。模块划分要求每个数据实体有且只有一个 owning 模块、模块间依赖方向明确且无环——这既是 DEVELOP 并行开发的边界依据，也是架构规则文件（见边界 2 质量门禁）的导出来源。不引入完整 DDD 方法论（违反通用优先），仅吸收统一语言和边界所有权两项。
-
-### 5.3 Interface（docs/interface/000x-xxxx.md）
-
-| 维度 | 定义 |
-|------|------|
-| **定位** | 接口定义：入参/出参/错误码。业务字段来自 Spec，传输格式由 ADR 决定 |
-| **创建时机** | DESIGN 阶段，ADR 验证后 |
-| **变更规则** | 同 Spec |
-| **生命周期** | draft → proposed → active |
-
-**设计理由：** 接口定义独立于 Spec。Spec 定义模块和业务规则，Interface 定义模块间通信契约。分离后接口变更不影响 Spec，且前后端可基于 Interface 并行开发。
-
-### 5.4 AC（docs/ac/000x-xxxx.md）
-
-| 维度 | 定义 |
-|------|------|
-| **定位** | 验收标准：测试的唯一权威依据。每条 AC 必须覆盖四场景（正常/边界/异常/失败） |
-| **创建时机** | DESIGN 阶段 |
-| **变更规则** | 同 Spec |
-| **生命周期** | draft → proposed → active |
-
-**设计理由：** AC 独立于 Spec。AC 是 Spec、开发、测试三方共享的契约。只写正常流程的 AC 属于无效 AC。四场景全覆盖确保测试不遗漏。
-
-### 5.5 ADR（docs/adr/000x-xxxx.md）
-
-| 维度 | 定义 |
-|------|------|
-| **定位** | 架构决策记录：技术选型、方案折中、风险取舍。覆盖业务架构 + 测试基建架构 |
-| **创建时机** | DESIGN 阶段（业务 ADR）+ TEST_INFRA 阶段（测试基建 ADR） |
-| **变更规则** | 持续新增，不删除。修订时旧 ADR 标记 superseded + 新建 ADR。验证 branch 保留不合并，供后续阶段参考 |
-| **生命周期** | draft → proposed → accepted → superseded/deprecated |
-
-### 5.6 Plan + Report（docs/plans/000x-任务名/）
-
-| 维度 | 定义 |
-|------|------|
-| **定位** | 执行容器。任何需要执行的任务都通过创建执行容器来组织。一个执行容器对应一个 Git 分支，内含多个最小执行单元（Plan + Report 成对） |
-| **创建时机** | 各阶段自行创建（TEST_INFRA 创建基建 Plan，DEVELOP 创建业务 Plan） |
-| **变更规则** | Plan 创建后不改；Report 执行中持续更新，完成后标记 complete |
-| **生命周期** | pending → done。执行失败也标记 done，另写新 Plan 继续。原地保留不删除 |
-
-**内部结构：**
-
-```
-000x-任务名/
-├── README.md              # 最小执行单元状态表 + 依赖 + AC 覆盖 + commit 映射
-├── 01-plan-xxx.md         # Plan 文件（静态）
-├── 01-report-xxx.md       # Report 文件（动态，一一对应）
-```
-
-**Plan 段（静态）：** Context（背景信息）、Request（要做什么）、Output Format（怎么交付）、Constraints（不能越界的）、Checkpoint（终止条件）、Steps（大致拆解）。
-
-**Report 段（动态）：** 执行摘要、关联 Commit、产物清单、测试摘要、验收结果、遗留问题。
-
-**Plan/Report 成对规则：** 一一对应。一个 Plan 可对应多个 commit。
-
-**Constraints：** Plan 必须包含「Constraints」段，明确指定执行者不能假设的、不能越界的。执行者可能不加载 skill，仅凭 Plan 和系统文档工作。
-
-### 5.7 CHANGELOG.md（项目根目录）
-
-| 维度 | 定义 |
-|------|------|
-| **定位** | 项目版本变更记录，遵循 [Keep a Changelog](https://keepachangelog.com/) |
-| **创建时机** | INIT 阶段创建 |
-| **变更规则** | RELEASE 阶段整理为正式版本条目 |
-| **生命周期** | 持续更新，不删除 |
-
-### 5.8 README.md（目录索引 + 系统状态）
-
-| 目录 | README 内容 |
-|------|------------|
-| `docs/` | 子目录列表、**当前阶段** |
-| `docs/spec/` | Spec 版本列表（文件、状态） |
-| `docs/interface/` | 接口定义列表 |
-| `docs/ac/` | AC 文档列表 |
-| `docs/adr/` | 决策列表（编号、标题、状态） |
-| `docs/plans/` | 任务列表（编号、标题、状态、创建时间） |
-| 执行容器内 | 最小执行单元状态表（编号、Plan、Report、覆盖 AC、状态、Commits） |
-
-**docs/README.md 关键字段：**
-
-- **当前阶段**：INIT/DESIGN/TEST_INFRA/DEVELOP/SYSTEM_TEST/RELEASE
+- **vision 只回答"为什么做"**：架构约束、非功能指标、硬性规则分别属于 ADR、Spec，不混入 vision。
+- **接口定义独立于 Spec**：Spec 定义模块和业务规则，Interface 定义模块间通信契约。分离后接口变更不影响 Spec，且前后端可基于 Interface 并行开发。
+- **AC 独立于 Spec**：AC 是 Spec、开发、测试三方共享的契约。只写正常流程的 AC 属于无效 AC，四场景全覆盖确保测试不遗漏。
+- **术语表 + 边界所有权**：术语表承担「统一语言」职责——Spec/AC/Interface 的用词和代码标识符必须与术语表一致，防止 Agent 跨文档、跨会话的术语漂移，语义链的文本引用依赖术语一致才可追溯。模块划分要求每个数据实体有且只有一个 owning 模块、模块间依赖方向明确且无环——这既是 DEVELOP 并行开发的边界依据，也是架构规则文件（见边界 2 质量门禁）的导出来源。不引入完整 DDD 方法论（违反通用优先），仅吸收统一语言和边界所有权两项。
+- **Plan 静态 / Report 动态**：计划创建后不改，执行信息在 Report 中持续更新，成对一一对应。Plan 的 Constraints + Checkpoint 是协调者与执行者之间的契约——执行者可能不加载 skill，仅凭 Plan 和系统文档工作。
+- **proposed 中间态**：proposed 是"设计师写完"和"系统采纳"之间的中间态，审查通过后才 promote 为 active/accepted。这防止未审查的内容直接生效。旧版本由 Git 历史追溯，不原地保留。
+- **执行失败也标记 done**：Plan 不重开，另写新 Plan 继续——保持 Plan 静态性和执行历史的完整留档。
 
 ---
 
-## 六、文档状态定义
+## 六、架构分层
 
-每种文档类型有各自独立的状态集合和流转规则。
-
-### 6.1 Vision
-
-```
-draft ──→ proposed ──→ active
-```
-
-| 状态 | 含义 |
-|------|------|
-| `draft` | 编写中 |
-| `proposed` | 编写完成，待门禁审查 |
-| `active` | 审查通过，当前生效 |
-
-**设计理由：** proposed 是"设计师写完"和"系统采纳"之间的中间态。设计师标记 proposed 表示"我写完了"，审查通过后 promote 为 active。这防止未审查的内容直接生效。旧版本由 Git 历史追溯，不原地保留。
-
-### 6.2 Spec / Interface / AC
-
-```
-draft ──→ proposed ──→ active
-```
-
-| 状态 | 含义 |
-|------|------|
-| `draft` | 编写中，尚未冻结 |
-| `proposed` | 编写完成，待门禁审查 |
-| `active` | 审查通过，当前唯一生效版本 |
-
-- 同时只有一个 active。冻结后不可原地修改。typo 修复、措辞澄清等非破坏性修改除外。旧版本由 Git 历史追溯，不原地保留。
-
-### 6.3 ADR
-
-```
-draft ──→ proposed ──→ accepted ──→ superseded
-  │                      │
-  └──────────────────────┴──→ deprecated
-```
-
-| 状态 | 含义 |
-|------|------|
-| `draft` | 提案中，尚未采纳 |
-| `proposed` | 编写完成，待门禁审查 |
-| `accepted` | 审查通过，当前生效 |
-| `superseded` | 被新 ADR 替代 |
-| `deprecated` | 已废弃 |
-
-### 6.4 Plan
-
-```
-pending ──→ done
-```
-
-| 状态 | 含义 |
-|------|------|
-| `pending` | 未执行 |
-| `done` | 已执行（无论成功/失败）。失败时另写新 Plan 继续 |
-
-### 6.5 Report
-
-```
-draft ──→ complete
-```
-
-| 状态 | 含义 |
-|------|------|
-| `draft` | 编写中，伴随 Plan 执行同步更新 |
-| `complete` | 已提交 |
-
-### 6.6 README.md / CHANGELOG.md
-
-无 frontmatter 状态字段。
-
----
-
-## 七、文档格式约定
-
-### 7.1 Frontmatter
-
-以下文档类型使用 YAML frontmatter：
-
-| 文档类型 | 必填字段 |
-|----------|----------|
-| Vision | `title`, `description`, `type: vision`, `status`, `created` |
-| Spec | `title`, `description`, `type: spec`, `status`, `version`, `created` |
-| Interface | `title`, `description`, `type: interface`, `status`, `created` |
-| AC | `title`, `description`, `type: ac`, `status`, `created` |
-| ADR | `title`, `description`, `type: adr`, `status`, `created` |
-| Plan | `title`, `description`, `type: plan`, `status`, `created` |
-| Report | `title`, `description`, `type: report`, `status`, `created` |
-
-以下文件**不使用** frontmatter：
-- AGENTS.md、CONTRIBUTING.md、CHANGELOG.md（标准文件）
-- 所有 README.md（目录索引）
-
-字段说明：
-- `title`：文档标题
-- `description`：一句话摘要
-- `type`：`vision` | `spec` | `interface` | `ac` | `adr` | `plan` | `report`
-- `status`：见 [六、文档状态定义](#六文档状态定义)
-- `created`：ISO 8601 格式
-- `version`：仅 Spec，整数递增
-
-### 7.2 路径引用
-
-所有跨文档引用使用相对路径 Markdown 链接。禁止使用反引号包裹的纯文本路径。
-
-### 7.3 命名规范
-
-| 文档 | 命名 | 示例 |
-|------|------|------|
-| Vision | `vision.md` | `vision.md` |
-| Spec | `000x-xxxx.md` | `0001-vagent.md` |
-| Interface | `000x-xxxx.md` | `0001-order-api.md` |
-| AC | `000x-xxxx.md` | `0001-order-ac.md` |
-| ADR | `000x-xxxx.md` | `0001-db-choice.md` |
-| 执行容器 | `000x-简短描述` | `0001-订单模块` |
-| Plan 文件 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
-| Report | `0x-report-xxx.md` | `01-report-order-api.md` |
-
----
-
-## 八、目录结构
-
-```
-项目根目录
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── AGENTS.md
-├── docs/
-│   ├── README.md          # 索引 + 当前阶段
-│   ├── vision.md
-│   ├── spec/
-│   │   ├── README.md
-│   │   └── 0001-template.md
-│   ├── interface/
-│   │   ├── README.md
-│   │   └── 0001-template.md
-│   ├── ac/
-│   │   ├── README.md
-│   │   └── 0001-xxx.md
-│   ├── adr/
-│   │   ├── README.md
-│   │   └── 0001-xxx.md
-│   └── plans/
-│       ├── README.md
-│       └── 0001-任务名/
-│           ├── README.md
-│           ├── 01-plan-xxx.md
-│           └── 01-report-xxx.md
-├── src/
-```
-
----
-
-## 九、联动规则
-
-当修改权威文档时，需遵循以下规则：
-
-### 修改 Spec
-
-1. 更新 `docs/spec/README.md` 中的版本状态
-2. 检查 `docs/adr/README.md` 中所有引用该 Spec 的 ADR，更新状态
-3. 若 AC 变更，同步更新 AC 文档
-4. 独立 Commit
-
-### 新增/修改 ADR
-
-1. 更新 `docs/adr/README.md`
-2. 若替代旧 ADR，旧 ADR 状态改为 `superseded`，新 ADR 正文中引用旧 ADR 路径
-
----
-
-## 十、测试体系（可伸缩）
-
-### 10.1 核心原则
-
-- 测试基础设施（CI/Mock/系统测试框架/覆盖率/门禁）由 TEST_INFRA 阶段一次性搭建，自证正确性
-- 业务测试用例由 DEVELOP 阶段各 Plan 自行编写
-- 低层机器化（单元/集成/契约），高层智能化（Agent 语义判定）
-- 测试作为合并闸门：全部测试通过方可提交合并
-
-### 10.2 测试层级
-
-| 测试层 | 适用条件 | 执行阶段 |
-|--------|---------|---------|
-| 单元测试 | 所有项目 | DEVELOP |
-| 开发集成自测 | 所有项目 | DEVELOP |
-| 契约测试 | 前后端/服务间 | DEVELOP |
-| 服务集成测试 | 所有项目 | SYSTEM_TEST |
-| 系统测试 | 所有项目 | SYSTEM_TEST |
-| 视觉回归 | 前端项目 | SYSTEM_TEST |
-| 专项测试 | 有性能/安全要求的项目 | SYSTEM_TEST |
-
-### 10.3 在文档体系中的分布
-
-| 内容 | 位置 |
-|------|------|
-| 验收标准 | AC 文档 |
-| 测试基建 ADR | docs/adr/（TEST_INFRA 阶段创建） |
-| 测试命令 | CONTRIBUTING.md（TEST_INFRA 阶段填写） |
-| 测试目录 | CONTRIBUTING.md（TEST_INFRA 阶段填写） |
-
-### 10.4 付费外部依赖隔离
-
-当外部依赖涉及按量计费、配额消耗、付费调用时（免费除外），测试策略必须显式隔离付费资源：
-
-1. **CI 高频回归**：使用 Mock/录制替身，隔离真实付费资源，禁止将扣费类外部调用放入高频自动化流水线
-2. **Staging 低频验收**：使用隔离沙箱账号做完整成品黑盒验证，不纳入流水线循环回归
-3. **三层防护**：单元测试守住代码分支逻辑，替身自动化守住代码退化，沙箱小规模验收守住环境兼容性
-
-Mock 替身和沙箱账号的搭建在 TEST_INFRA 阶段完成，沙箱验收在 SYSTEM_TEST 阶段执行。
-
----
-
-## 十一、架构分层
-
-### 11.1 Skills 层（bootloader）
+### 6.1 Skills 层（bootloader）
 
 `skills/devloop/` 是执行层入口。Agent 加载 skill 后获得：
 - 状态机全貌和路由
 - 系统安装指令
+- 系统规则（文档命名、frontmatter、status 流转、联动规则、Git 规则）
 - 按阶段的操作流程（references/）
 
-Skill 不包含项目规则（文档类型、命名规范、frontmatter 等）——这些在系统文档中。
+Skill 不包含项目特定内容（编码规范、测试命令、项目信息）——这些在项目文档层（CONTRIBUTING.md、AGENTS.md）。
 
-### 11.2 项目文档层（模板交付物）
+### 6.2 项目文档层（模板交付物）
 
 安装到项目中的文档。包含 AGENTS.md、CONTRIBUTING.md、CHANGELOG.md 和 docs/ 子目录。模板位于 `skills/devloop/assets/templates/`。项目内 Agent 读取此层即可工作，无需加载 skill。
 
-### 11.3 调度/协调层（外部基础设施）
+### 6.3 调度/协调层（外部基础设施）
 
 由更高层级的调度 Agent 执行。职责：读取状态机，执行状态流转、准入检查、任务分配、隔离环境创建与回收、异常上浮。项目内 Agent 不可见此层。
 
-### 11.4 三层交互
+### 6.4 三层交互
 
 ```
 调度/协调层（外部）
@@ -865,7 +448,7 @@ Skills 层（bootloader）
 
 ---
 
-## 十二、关键设计决策
+## 七、关键设计决策
 
 | 决策 | 理由 |
 |------|------|
