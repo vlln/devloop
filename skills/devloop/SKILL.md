@@ -218,6 +218,20 @@ AC 文档 AC-0003-N-1（正常场景）
       → Report 01-report-order-api.md: "AC-0003-N-1 [PASS], AC-0003-B-1 [PASS], AC-0003-E-1 [PASS], AC-0003-F-1 [PASS], commit abc123"
 ```
 
+### 联动规则
+
+修改权威文档时的联动动作：
+
+**修改 Spec：**
+1. 更新 `docs/spec/README.md` 中的版本状态
+2. 检查 `docs/adr/README.md` 中所有引用该 Spec 的 ADR，更新状态
+3. 若 AC 变更，同步更新 AC 文档
+4. 独立 Commit
+
+**新增/修改 ADR：**
+1. 更新 `docs/adr/README.md`
+2. 若替代旧 ADR，旧 ADR 状态改为 `superseded`，新 ADR 正文中引用旧 ADR 路径
+
 ### Git 规则
 
 - 文档变更和代码变更永远分开 commit
@@ -250,6 +264,7 @@ AC 文档 AC-0003-N-1（正常场景）
 ### 文档编写原则
 
 - 不重复上层文档：Vision 已定义的内容不重述，引用即可
+- 跨文档引用使用相对路径 Markdown 链接，禁止使用反引号包裹的纯文本路径
 - 接口定义优先使用可生成代码的契约格式（如 OpenAPI、TypeScript 接口声明）
 - 模块提供的能力 = 可验证的功能列表（不是"负责用户功能"，而是"提供用户注册、登录、信息查询接口"）
 
