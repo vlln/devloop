@@ -2,7 +2,7 @@
 
 ## 流程
 
-DEVELOP 是基于 TEST_INFRA 阶段搭建的一次性基建，执行业务开发的阶段。MR 门禁、提测门禁已在 TEST_INFRA 配置完成，在分支合并时自动执行。
+DEVELOP 是基于 TEST_INFRA 阶段搭建的一次性基建，执行业务开发的阶段。MR 门禁（含质量门禁：过程坏味道阈值 + 架构约束规则）、提测门禁已在 TEST_INFRA 配置完成，在分支合并时自动执行。
 
 分支类型：`feat/*` `refactor/*` `perf/*`，从 `develop` 拉出，合并到 `develop` 后删除。
 

@@ -14,7 +14,7 @@
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 编码/Commit/文档/测试规范 |
 | [CHANGELOG.md](CHANGELOG.md) | 版本变更记录（Keep a Changelog） |
 | [docs/vision.md](docs/vision.md) | 全局顶层愿景：业务目标、用户范围、长期理想形态（有 frontmatter） |
-| [docs/spec/](docs/spec/) | Spec：需求规格。用户故事、模块划分、数据模型 |
+| [docs/spec/](docs/spec/) | Spec：需求规格。用户故事、模块划分、数据模型、术语表 |
 | [docs/interface/](docs/interface/) | 接口定义：入参/出参/错误码。适用有 API 时 |
 | [docs/ac/](docs/ac/) | 验收标准（AC）：正常/边界/异常/失败四场景。测试唯一权威依据 |
 | [docs/adr/](docs/adr/) | 架构决策记录：技术选型、方案对比、取舍 |
