@@ -473,6 +473,7 @@ Skills 层（bootloader）
 | Constraints | Plan 通过 Constraints + Checkpoint 明确执行约束 |
 | Git 作为存储底座 | 状态流转以 commit 为切分边界。Agent 中断恢复时通过 git log 重建上下文 |
 | 热修复通道 | 阻断性故障走快速通道，不完整走全量 DESIGN |
+| 发布硬门禁 | 合并 `main` / production 部署 / 打版本 tag 必须获得人类显式批准，Agent 不得自证替代。发布成本高且难以撤销，防止全自动流程在最高风险动作上无人把关；项目可显式声明豁免但须标注风险 |
 | 接口定义独立 | 接口变更不影响 Spec，前后端可基于接口定义并行开发 |
 | AC 独立 | AC 是三方共享契约，独立于 Spec 确保测试权威性 |
 | 占位符规范 | 模板使用 `<!-- -->` 注释占位，非硬编码示例 |

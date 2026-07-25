@@ -48,7 +48,7 @@ hotfix   ──────────────────────●�
 | TEST_INFRA | `ci/*` `test/*` `build/*` → `develop` | 全部基建分支合并 | CI 可运行（自动化）+ Mock 返回正确、覆盖率准确、门禁正确拦截（Agent 自证） |
 | DEVELOP | `feat/*` `refactor/*` `perf/*` → `develop` | 全部 feature 分支合并 | MR 门禁/提测门禁（自动化）+ Report 验收结果合理性（Agent 判断） |
 | SYSTEM_TEST | 在 `develop` 上执行全量测试 | develop 全量测试完成 | 测试通过（自动化）+ 失败原因分类、系统测试语义验证、阻塞级缺陷判定（Agent 判断） |
-| RELEASE | `release/*` → staging → `main` + `develop` | release 合并到 main | CD 部署/冒烟（自动化）+ 发布策略、监控判定、回滚决策（上级审查 + Agent 判断） |
+| RELEASE | `release/*` → staging → `main` + `develop` | release 合并到 main | CD 部署/冒烟（自动化）+ 发布策略、监控判定、回滚决策（Agent 判断）；合并 main / production 部署 / 打 tag 需人类显式批准（见「不可委托门禁」） |
 | Hotfix | `hotfix/*` → `main` + `develop` | hotfix 合并到 main | 同 RELEASE |
 
 ### 阶段证明链
@@ -116,8 +116,8 @@ hotfix   ──────────────────────●�
 2. 轻量 DESIGN：跳过 full Spec/AC，仅修订受影响 ADR（如有设计变更）
 3. TEST_INFRA：增量修复，已完成基建不受影响
 4. DEVELOP：创建最小修复 Plan，走 TDD → MR 门禁
-5. SYSTEM_TEST：全量回归测试
-6. 合并 `hotfix/*` 到 `main` + `develop`
+5. SYSTEM_TEST：全量回归测试（SYSTEM_TEST 所属各层，见「测试执行边界」）
+6. 合并 `hotfix/*` 到 `main` + `develop`（合并前需人类显式批准，见「不可委托门禁」）
 7. RELEASE：在 `main` 上打补丁 tag（如 v0.1.1），归档
 
 **注意：** 非阻断性缺陷走正常增量迭代（RELEASE → DESIGN），不走热修复。
@@ -244,6 +244,30 @@ AC 文档 AC-0003-N-1（正常场景）
 - `spike/*` 例外——ADR 验证分支，保留不合并
 - `release/*` 和 `hotfix/*` 同时合并到 `main` 和 `develop`
 - 具体 commit 格式和 merge 策略见 CONTRIBUTING.md
+
+### 不可委托门禁
+
+以下动作成本高且难以撤销，必须获得**人类的显式批准**（对话中的明确确认或等价物），Agent 不得以自证或"上级审查"的名义替代：
+
+- `release/*`、`hotfix/*` 合并到 `main`
+- production 部署
+- 在 `main` 上打版本 tag
+
+项目可在 AGENTS.md 中显式声明豁免（追求全自动发布的场景），但必须在声明处标注风险警告；未声明豁免时此门禁不可跳过。hotfix 紧急场景允许先修复，但合并到 `main` 前仍需人类确认，确认前不得打 tag。
+
+### 测试执行边界（不重复原则）
+
+每层测试只有一个归属执行点。同一层测试在同一提交上不得在其归属门禁之外重复运行——重复运行不产生新信息，只产生耗时。
+
+| 测试层 | 唯一执行点 | 其他阶段 |
+|--------|-----------|---------|
+| 单元测试 + 开发集成自测 | DEVELOP（MR 门禁，每分支） | SYSTEM_TEST 不重复执行 |
+| 契约测试 `[适用]` | DEVELOP（MR 门禁） | SYSTEM_TEST 不重复执行 |
+| 集成 / 系统 / 视觉回归 / 专项 | SYSTEM_TEST（`develop` 全量一次） | DEVELOP 不执行 |
+| 冒烟测试 | RELEASE（staging 与 production 各一次） | — |
+| 付费依赖沙箱验证 `[适用]` | SYSTEM_TEST 手动一次 | 不纳入 CI 高频回归 |
+
+失败修复后的重跑从失败层开始，不回溯已通过的层。hotfix 的"全量回归测试"指 SYSTEM_TEST 所属各层。
 
 ### 模板注释约定
 
