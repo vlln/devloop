@@ -19,7 +19,7 @@ stateDiagram-v2
     TEST_INFRA --> DEVELOP : 基建就绪
     DEVELOP --> SYSTEM_TEST : develop 可测试
     SYSTEM_TEST --> RELEASE : develop 全绿
-    RELEASE --> DESIGN : 下一轮迭代
+    RELEASE --> DESIGN : 新一轮迭代 / hotfix
     DEVELOP --> DESIGN : 架构颠覆
     SYSTEM_TEST --> TEST_INFRA : 基建缺陷
     SYSTEM_TEST --> DESIGN : 设计缺陷
@@ -32,6 +32,9 @@ stateDiagram-v2
 - **Gitflow 分支模型**：`main` 仅含 release 节点，`develop` 持续集成，分支类型与 commit type 一致
 - **SemVer 版本策略**：`X.Y.Z`，MAJOR=0 期间 MINOR 升功能、PATCH 修 bug，首次从 `0.1.0` 起步
 - **双层门禁**：自动化（CI / 测试 / 覆盖率）+ Agent 判断（文档语义 / 自证 / 失败分类）
+- **发布硬门禁**：合并 `main` / production 部署 / 打 tag 必须人类显式批准，Agent 不可自证替代（项目可显式豁免）
+- **工程需求池（Backlog）**：`docs/backlog.md` 单文件管理迭代候选，DESIGN 从池中拉取，行序即优先级
+- **测试执行边界**：每层测试有唯一归属执行点，同一提交上不重复运行
 - **自描述入口**：Agent 中断后仅凭文件系统恢复状态，不依赖对话历史
 - **全链路可追溯**：Plan → Report → Commit 语义链
 
@@ -45,6 +48,7 @@ stateDiagram-v2
 
 - [元设计文档](docs/design.md) — 思想纲领、设计原则、系统边界、关键设计决策（机制细节见 skills/devloop/）
 - [SKILL.md](skills/devloop/SKILL.md) — 执行层入口：状态机路由、系统规则、按阶段操作路径
+- [Backlog](docs/backlog.md) — 本仓库自身的工程需求池
 
 ## 快速开始
 

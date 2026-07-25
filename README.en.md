@@ -19,7 +19,7 @@ stateDiagram-v2
     TEST_INFRA --> DEVELOP : Infra Ready
     DEVELOP --> SYSTEM_TEST : develop Testable
     SYSTEM_TEST --> RELEASE : develop Green
-    RELEASE --> DESIGN : Next Iteration
+    RELEASE --> DESIGN : Next Iteration / Hotfix
     DEVELOP --> DESIGN : Architecture Rework
     SYSTEM_TEST --> TEST_INFRA : Infra Defect
     SYSTEM_TEST --> DESIGN : Design Defect
@@ -32,6 +32,9 @@ stateDiagram-v2
 - **Gitflow Branch Model**: `main` contains only release nodes, `develop` for continuous integration, branch types aligned with commit types
 - **SemVer Versioning**: `X.Y.Z`, during MAJOR=0, MINOR = features, PATCH = fixes, starting from `0.1.0`
 - **Two-Tier Gates**: Automated (CI / tests / coverage) + Agent judgment (document semantics / self-verification / failure classification)
+- **Hard Release Gate**: Merging to `main` / production deploys / version tags require explicit human approval — Agents cannot self-certify (projects may explicitly opt out)
+- **Engineering Backlog**: `docs/backlog.md` manages iteration candidates in a single file; DESIGN pulls from the pool, row order is priority
+- **Test Execution Boundaries**: Each test layer has a single owning checkpoint — never re-run on the same commit
 - **Self-Describing Entry**: Agents recover state from the filesystem alone after interruption, with no dependency on conversation history
 - **Full Traceability**: Plan → Report → Commit semantic chain
 
@@ -45,6 +48,7 @@ stateDiagram-v2
 
 - [Design Spec](docs/design.md) — Guiding philosophy, design principles, system boundaries, key design decisions (mechanism details live in skills/devloop/)
 - [SKILL.md](skills/devloop/SKILL.md) — Execution layer entry: state machine routing, system rules, per-phase operation paths
+- [Backlog](docs/backlog.md) — This repository's own engineering backlog
 
 ## Quick Start
 
