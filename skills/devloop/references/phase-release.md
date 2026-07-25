@@ -48,8 +48,8 @@ staging 冒烟通过后，进入 production 发布前，需上级审查确认发
 5. 合并 `release/*` 到 `main` + `develop`
 6. 在 `main` 上打版本 tag: git tag vX.Y.Z
 7. 整理 CHANGELOG.md: 将 [Unreleased] 段整理为正式版本条目。可用 `git log --oneline v0.1.0..v0.2.0` 查看版本间变更列表，Agent 据此分类和润色。
-8. 迭代复盘: 记录工期偏差、问题总结、改进点
-9. 归档本轮迭代文档
+8. 迭代复盘: 记录工期偏差、问题总结、改进点（改进点中的工程需求录入 `docs/backlog.md`）
+9. 归档本轮迭代文档；更新 `docs/backlog.md`：本轮交付条目改为 `done`（填版本号）
 10. 删除 `release/*` 分支
 ```
 

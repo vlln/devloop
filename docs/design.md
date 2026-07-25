@@ -391,6 +391,7 @@ RELEASE → DESIGN  (新一轮迭代 / 热修复)
 | AC | 验收标准：测试的唯一权威依据，每条覆盖四场景（正常/边界/异常/失败） |
 | ADR | 架构决策记录：技术选型、方案折中、风险取舍。覆盖业务架构 + 测试基建架构。持续新增不删除，修订走 superseded |
 | Plan + Report | 执行容器：任何需执行任务的组织单位。一个容器对应一个 Git 分支，内含多个最小执行单元（Plan + Report 成对） |
+| backlog.md | 工程需求池：DESIGN 迭代候选的唯一来源。无 frontmatter，行序即优先级 |
 | CHANGELOG.md | 版本变更记录（[Keep a Changelog](https://keepachangelog.com/)），INIT 创建，RELEASE 整理 |
 | README.md | 各级目录索引；docs/README.md 额外承载**当前系统阶段**（单点可见） |
 
@@ -403,6 +404,7 @@ RELEASE → DESIGN  (新一轮迭代 / 热修复)
 - **Plan 静态 / Report 动态**：计划创建后不改，执行信息在 Report 中持续更新，成对一一对应。Plan 的 Constraints + Checkpoint 是协调者与执行者之间的契约——执行者可能不加载 skill，仅凭 Plan 和系统文档工作。
 - **proposed 中间态**：proposed 是"设计师写完"和"系统采纳"之间的中间态，审查通过后才 promote 为 active/accepted。这防止未审查的内容直接生效。旧版本由 Git 历史追溯，不原地保留。
 - **执行失败也标记 done**：Plan 不重开，另写新 Plan 继续——保持 Plan 静态性和执行历史的完整留档。
+- **backlog 单文件**：需求池条目轻量、优先级重排频繁，采用 Keep a Changelog 式单文件表格（行序即优先级），不套用 ADR 的逐文件 + frontmatter 机制——那是为需冻结、需逐条审查的契约型文档设计的。未定型想法属管理域，不入此文件。
 
 ---
 

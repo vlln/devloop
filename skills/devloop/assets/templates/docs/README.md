@@ -19,4 +19,5 @@
 | [adr/](adr/) | 架构决策记录 |
 | [plans/](plans/) | 任务执行计划 |
 | [ac/](ac/) | 验收标准 |
+| [backlog.md](backlog.md) | 工程需求池（DESIGN 迭代候选的唯一来源） |
 

@@ -19,6 +19,7 @@
 | [docs/ac/](docs/ac/) | 验收标准（AC）：正常/边界/异常/失败四场景。测试唯一权威依据 |
 | [docs/adr/](docs/adr/) | 架构决策记录：技术选型、方案对比、取舍 |
 | [docs/plans/](docs/plans/) | 执行容器：对应一个 Git 分支，内含多个最小执行单元（Plan + Report 成对） |
+| [docs/backlog.md](docs/backlog.md) | 工程需求池：DESIGN 迭代候选的唯一来源（无 frontmatter） |
 | [docs/README.md](docs/README.md) | 子目录索引 + **当前系统状态** |
 | 各级 README.md | 该目录的索引和状态说明 |
 

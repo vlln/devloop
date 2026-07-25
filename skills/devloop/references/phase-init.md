@@ -45,7 +45,7 @@ flowchart TD
 旧项目接入遵循两个原则：
 
 1. **合并/转换优先，隔离安装兜底。** 尽最大努力将现有内容融入 devloop 体系，而非另起炉灶。
-2. **devloop 自完备。** 接入后，devloop 所需的全部文档类型（vision、Spec、AC、ADR、Plan）必须存在，即使部分内容为占位符。
+2. **devloop 自完备。** 接入后，devloop 所需的全部文档类型（vision、Spec、AC、ADR、Plan、backlog）必须存在，即使部分内容为占位符。
 
 **第一步：扫描**
 

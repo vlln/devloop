@@ -79,6 +79,7 @@ hotfix   ──────────────────────●�
 ### 增量迭代（RELEASE → DESIGN）
 
 已有文档已冻结。进入 DESIGN 后：
+- 迭代候选从 `docs/backlog.md` 拉取，选定后将条目状态改为 `planned`
 - vision.md 已 active → 跳过，不重写
 - Spec 已 active → 在现有文档上追加，不重写
 - AC 文档已 active → 在现有文档上追加场景，不重写
@@ -149,9 +150,10 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 ```
 1. AGENTS.md           → 项目入口地图：文档类型、目录结构、系统边界、阶段行为
 2. docs/README.md      → 当前系统状态 + 行为边界（首先读取！）
-3. CONTRIBUTING.md     → 编码/测试/PR 规范（项目自定义）
-4. 各级 README.md      → 子目录索引和状态
-5. 具体文档             → Vision / AC / Spec / ADR / Plan / Report
+3. docs/backlog.md     → 工程需求池：迭代候选（进入 DESIGN 前读取）
+4. CONTRIBUTING.md     → 编码/测试/PR 规范（项目自定义）
+5. 各级 README.md      → 子目录索引和状态
+6. 具体文档             → Vision / AC / Spec / ADR / Plan / Report
 ```
 
 ---
@@ -167,6 +169,7 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 | Interface | `000x-xxxx.md` | `0001-order-api.md` |
 | AC | `000x-xxxx.md` | `0001-order-ac.md` |
 | ADR | `000x-xxxx.md` | `0001-db-choice.md` |
+| Backlog | `docs/backlog.md`（单文件，条目编号 `BL-000x`） | `docs/backlog.md` |
 | 执行容器 | `000x-简短描述` | `0001-订单模块` |
 | Plan 文件 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
 | Report | `0x-report-xxx.md` | `01-report-order-api.md` |
@@ -190,7 +193,7 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 `description` 字段用于 Agent 扫描时判断文档是否相关——Agent 通过 description 快速定位目标文档，无需通读全文。
 
 以下文件**不使用** frontmatter：
-- AGENTS.md、CONTRIBUTING.md、CHANGELOG.md
+- AGENTS.md、CONTRIBUTING.md、CHANGELOG.md、docs/backlog.md
 - 所有 README.md
 
 ### status 有效值
