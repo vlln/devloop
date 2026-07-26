@@ -56,7 +56,7 @@ hotfix   ──────────────────────●�
 | 阶段 | 证明命题 | 门禁 |
 |------|---------|---------|
 | **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化、`main` + `develop` 分支已创建 |
-| **DESIGN** | 契约已冻结，可进入基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（验证段不为空）。Agent 审查通过后，经人类确认（不可委托门禁）promote proposed→active/accepted |
+| **DESIGN** | 契约已冻结，可进入基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（验证段不为空）。全部文档 Agent 审查通过后，阶段末经人类**批量**确认（不可委托门禁，一份简报）统一 promote proposed→active/accepted |
 | **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 全部基建分支已合并到 `develop`、CI 可运行（自动化）、MR 门禁正确拦截（Agent 自证）、质量门禁正确拦截——过程坏味道阈值 + 架构约束规则 `[适用]`（Agent 自证）、Mock 返回正确（Agent 自证）、覆盖率数据准确（Agent 自证）、系统测试框架可跑冒烟 `[适用]`、测试基建 ADR 验证段已回填并经人类确认 promote proposed→accepted（不可委托门禁） |
 | **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 feature 分支已合并到 `develop`、MR 门禁 + 提测门禁通过（自动化）、Report 中 AC 验收结果经 Agent 确认合理 |
 | **SYSTEM_TEST** | 系统级验证通过，可进入发布 | `develop` 上全部测试层通过（自动化）、Agent 完成失败原因分类（基建缺陷/设计缺陷/局部 bug）、无阻塞级缺陷（Agent 判定） |
@@ -90,6 +90,7 @@ hotfix   ──────────────────────●�
 - AC 文档已 active → 在现有文档上追加场景，不重写
 - 已有 ADR 已 accepted → 不修改，仅新增 ADR
 - 已有 Plan 已 done → 新建 Plan，不重建
+- 测试基建已就绪 → 进入 TEST_INFRA 先做增量检查，复用既有基建，仅对本轮增量需求搭建，不重复搭建（见 [references/phase-test-infra.md](references/phase-test-infra.md)「增量检查」）
 
 ### 设计变更（DEVELOP → DESIGN，架构颠覆退回）
 
@@ -290,6 +291,7 @@ AC 文档 AC-0003-N-1（正常场景）
 - **简报 = 决策点 + 问题，不是执行日志。** 证据留在文档（Spec/Report/审查记录）中，简报只引用文档路径，不粘贴内容。
 - **异常驱动。** Agent 审查通过的项一行汇总（如"审查表 9 项全过"），只展开三类内容：有风险的点、需要取舍的点、Agent 拿不准的点。
 - **每个待定点是一个具体问题**，附 Agent 的建议答案和理由，人类可以只回"按建议走"。
+- **确认按批。** 同一阶段内的多个确认合并为一份简报在阶段末提出（如 DESIGN 全部文档统一确认、TEST_INFRA 基建 ADR 批量 promote），不逐文档、逐事项打断人类。
 - **重点问题 ≤ 5 个。** 超出说明确认点粒度过粗，应拆分为多次确认。
 - **简报不落盘。** 确认结果通过既有 Git 锚点体现（promote commit、合并、tag），简报本身不留档。
 
