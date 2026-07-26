@@ -4,19 +4,23 @@
 
 DESIGN 是需求分析、技术选型、验收标准定义的阶段。禁止编写业务代码。
 
-**按因果链顺序推进，每个文档写完即审，审过才进下游。** 禁止全部写完后一次性审查。审查者不可由文档编写者担任。
+**按因果链顺序推进，每个文档写完即审，审过才进下游。** 禁止全部写完后一次性审查。
+
+**审查独立性。** 审查由**不携带编写上下文的独立执行者**（全新 subagent 或等价物）担任，输入仅三样：被审文档、上游文档（一致性对照用）、审查表。禁止传递编写过程中的讨论和决策理由——理由必须在文档中自足，文档外才说得通的决策即审查不通过。独立审查发现的问题作为确认简报的重点展开项。
+
+**Agent 审查通过不等于冻结。** 每个文档 promote 前必须获得人类确认（见 SKILL.md「不可委托门禁」）。确认请求以**确认简报**的形式提出（见 SKILL.md「向上汇报原则」）：审查通过项一行汇总，只展开关键决策、风险点和 Agent 拿不准的点，每个待定点是一个附建议答案的具体问题。禁止把文档全文甩给人类要求通读审查。
 
 ```mermaid
 flowchart TD
-    V[vision.md] --> VG{审查} -->|通过| VOK[vision active]
+    V[vision.md] --> VG{审查 + 人类确认} -->|通过| VOK[vision active]
     VG -->|不通过| V
     VOK --> DS[Spec]
-    DS --> DSG{审查} -->|通过| DSOK[Spec active]
+    DS --> DSG{审查 + 人类确认} -->|通过| DSOK[Spec active]
     DSG -->|不通过| DS
     DSOK --> AC[AC 文档]
     DSOK --> ADR[ADR]
-    AC --> ACG{审查}
-    ADR --> ADRG{审查}
+    AC --> ACG{审查 + 人类确认}
+    ADR --> ADRG{审查 + 人类确认}
     ACG -->|通过| ACOK[AC active]
     ADRG -->|通过| ADROK[ADR accepted]
     ACG -->|不通过| AC
@@ -24,7 +28,7 @@ flowchart TD
     ADROK --> VERIFY[验证]
     VERIFY -->|可行| IF[接口定义<br/>适用]
     VERIFY -->|不可行| ADR
-    IF --> IFG{审查} -->|通过| IFOK[接口定义 active]
+    IF --> IFG{审查 + 人类确认} -->|通过| IFOK[接口定义 active]
     IFG -->|不通过| IF
     ACOK --> TST[TEST_INFRA]
     IFOK --> TST
@@ -46,7 +50,7 @@ flowchart TD
 | 业务目标：非空 | 读「业务目标」段，确认有实质内容 |
 | 用户范围：非空 | 读「用户范围」段，确认有实质内容 |
 
-**审查通过后：** promote `proposed → active`，独立 commit，约定前缀 `docs(state):`。进入 Spec。
+**审查通过后：** 提交确认简报，人类确认后 promote `proposed → active`，独立 commit，约定前缀 `docs(state):`。进入 Spec。
 
 ### Spec（必选，所有项目）
 
@@ -69,7 +73,7 @@ flowchart TD
 | [适用] 前端项目 → UI 约束非空 | 读 UI 约束段，确认有页面结构或组件规范 |
 | 非功能指标非空 | 读非功能指标段，确认有实质内容或"无特殊要求" |
 
-**审查通过后：** promote `proposed → active`。进入 AC 文档 + ADR（可并行）。
+**审查通过后：** 提交确认简报，人类确认后 promote `proposed → active`。进入 AC 文档 + ADR（可并行）。
 
 ### AC 文档（必选，所有项目）
 
@@ -87,7 +91,7 @@ flowchart TD
 | 预期结果可观测、可验证，无模糊词汇 | 抽查预期结果列，搜索"合理""流畅""适当""正常"等模糊词 |
 | 业务用词与 Spec 术语表一致 | 抽查 AC 场景描述用词，对照术语表确认无同义漂移 |
 
-**审查通过后：** promote `proposed → active`。
+**审查通过后：** 提交确认简报，人类确认后 promote `proposed → active`。
 
 ### ADR（必选，所有项目）
 
@@ -105,7 +109,7 @@ flowchart TD
 | [适用] 有持久化 → 存储 ADR status=proposed | 读 frontmatter |
 | [适用] 多模块/多服务 → 架构模式 ADR status=proposed | 读 frontmatter |
 
-**审查通过后：** promote `proposed → accepted`。进入验证。
+**审查通过后：** 提交确认简报（候选方案与 trade-off 是重点展开项），人类确认后 promote `proposed → accepted`。进入验证。
 
 **提示：** ADR 修订历史无需手动维护表格。`git log -p -- docs/adr/0001-xxx.md` 即为完整修订记录。
 
@@ -120,7 +124,7 @@ flowchart TD
 - 多 ADR 组合：验证协同工作（如"框架 + ORM + 缓存 三者能否一起跑通"）
 - 约定/标准类 ADR：不需要验证（编码规范、版本策略、命名约定）
 
-**验证方式：** 从 `develop` 拉出 `spike/<描述>` 分支，编写最小验证代码。验证通过后保留分支（不合并），ADR 的「验证」段记录复现步骤和分支名，供后续阶段参考。
+**验证方式：** 从 `develop` 拉出 `spike/<描述>` 分支，编写最小验证代码。验证通过后保留分支（不合并），ADR 的「验证」段记录复现步骤和分支名，供后续阶段参考。验证段必须**自包含**（依赖版本、执行命令、结论），复现不依赖 spike 分支存活——spike 是证据的备份，不是证据本身（生命周期见 SKILL.md「Git 规则」）。
 
 **审查：**
 
@@ -146,7 +150,7 @@ flowchart TD
 | 所有接口有明确的入参/出参/错误码 | 逐接口检查三要素 |
 | 字段命名与 Spec 术语表的代码标识符一致 | 抽查接口字段名，对照术语表「代码标识符」列 |
 
-**审查通过后：** promote `proposed → active`。
+**审查通过后：** 提交确认简报，人类确认后 promote `proposed → active`。
 
 ---
 
@@ -154,7 +158,7 @@ flowchart TD
 
 ## 增量迭代
 
-已有文档已冻结。迭代候选从 `docs/backlog.md` 拉取（DESIGN 不现场发明需求）；选定后将条目状态改为 `planned` 并记录关联迭代。仅审查**新增/修改**的文档：
+已有文档已冻结。迭代候选从 `docs/backlog.md` 拉取（DESIGN 不现场发明需求）。候选选择是本轮第一份确认简报——Agent 给出建议排序和理由，人类选定后将条目状态改为 `planned` 并记录关联迭代。仅审查**新增/修改**的文档：
 
 | 审查内容 | 审查方法 |
 |---------|---------|
@@ -164,6 +168,8 @@ flowchart TD
 | 新增 ADR status=proposed（技术选型类验证段不为空） | 读 frontmatter + 验证段 |
 | 新增 Plan 含 Constraints/Checkpoint | 逐 Plan 检查 |
 | 已有 ADR 未被原地修改 | 检查已有 ADR 的修订记录，确认无直接篡改原始决策 |
+
+**确认合并：** 首次设计逐文档确认；增量迭代将本轮全部新增/修改文档合并为**一份确认简报、一次人类确认**后统一 promote（候选选择简报除外）。重点问题上限仍为 5 个——装不下说明本轮迭代过大，应拆分为多轮。
 
 ## 设计变更
 

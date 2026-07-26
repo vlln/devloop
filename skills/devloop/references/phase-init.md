@@ -6,7 +6,7 @@ INIT 是将项目接入 devloop 系统的阶段。系统 = 文档体系（状态
 
 ```mermaid
 flowchart TD
-    A[开始 INIT] --> B{判断项目类型}
+    A[开始 INIT] --> M[项目形态判定<br/>用户确认 → AGENTS.md] --> B{判断项目类型}
     B -->|新项目| C[安装模板]
     C --> D[git init]
     D --> E[初始 commit]
@@ -22,9 +22,21 @@ flowchart TD
 
 ## 子阶段
 
+### 项目形态判定
+
+判定项目形态，决定部署类门禁的实例化方式。结果经用户确认后写入 AGENTS.md（devloop 段）。**实例化档案一经落盘，后续阶段照档执行，不得临时裁量**（见 SKILL.md「门禁不可跳过，但可实例化」）：
+
+| 形态 | 判定 | 部署类门禁实例化 |
+|------|------|----------------|
+| 服务型 | 部署后持续运行（Web 服务/API/后台任务） | 全量：部署底座、staging/production 冒烟 |
+| 发布型 | 交付制品（CLI/库/包） | "部署"重定义为 publish：staging = dry-run/测试源发布，production = 正式 publish，冒烟 = 安装制品后运行核心命令 |
+| 本地型 | 本地脚本/工具/实验 | 豁免部署类门禁，RELEASE 退化为打 tag + 整理 CHANGELOG |
+
+拿不准时向用户提问（附建议形态和理由）。形态变化（如本地工具演化为服务）时，在增量迭代的 DESIGN 中修订 AGENTS.md 档案，经用户确认。
+
 ### 判断项目类型
 
-首先判断是新项目还是旧项目：
+判断是新项目还是旧项目：
 
 - **新项目：** 空目录，或仅有 README。无代码、无 git 历史。
 - **旧项目：** 已有代码仓库。有 git 历史、现有代码、可能已有文档。
@@ -35,9 +47,10 @@ flowchart TD
 1. 复制 assets/templates/ 下的 AGENTS.md, CONTRIBUTING.md, CHANGELOG.md 到项目根目录
 2. 复制 assets/templates/docs/ 下全部内容到项目 docs/ 目录
 3. 填写 CONTRIBUTING.md 的项目信息：开发环境、代码风格、分支策略、PR 流程（测试命令和测试目录段留空，由 TEST_INFRA 阶段填写）
-4. git init（如尚未初始化），创建 `main` 分支，再创建 `develop` 分支
-5. 在 docs/README.md 中设置当前阶段为 DESIGN
-6. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
+4. 将项目形态判定结果写入 AGENTS.md（devloop 段）
+5. git init（如尚未初始化），创建 `main` 分支，再创建 `develop` 分支
+6. 在 docs/README.md 中设置当前阶段为 DESIGN
+7. 提交（commit message 描述变更内容，格式见 CONTRIBUTING.md）
 ```
 
 ### 旧项目：接入
@@ -74,7 +87,7 @@ flowchart TD
 
 | 目标文件 | 操作 | 说明 |
 |---------|------|------|
-| AGENTS.md | 跳过 | 已存在，在现有文件中追加 devloop 导航段 |
+| AGENTS.md | 合并 | 已存在，在现有文件中追加 devloop 导航段 + 项目形态档案段 |
 | CONTRIBUTING.md | 合并 | 追加 devloop 约定段（commit 格式、文档命名、frontmatter 规则） |
 | CHANGELOG.md | 跳过 | 已存在 |
 | docs/vision.md | 创建 | 从 README 提取 |

@@ -44,7 +44,7 @@ hotfix   ──────────────────────●�
 | 阶段 | 在哪个分支 | 把关锚点（Git 事件） | Agent 验证 |
 |------|-----------|---------------------|-----------|
 | INIT | 创建 `main` + `develop` | — | 目录结构、文件存在、Git 初始化 |
-| DESIGN | `spike/*`（不合并） | — | 文档内容级审查（语义、完整性、一致性） |
+| DESIGN | `spike/*`（不合并） | — | 文档内容级审查（语义、完整性、一致性）；promote 冻结需人类确认（见「不可委托门禁」） |
 | TEST_INFRA | `ci/*` `test/*` `build/*` → `develop` | 全部基建分支合并 | CI 可运行（自动化）+ Mock 返回正确、覆盖率准确、门禁正确拦截（Agent 自证） |
 | DEVELOP | `feat/*` `refactor/*` `perf/*` → `develop` | 全部 feature 分支合并 | MR 门禁/提测门禁（自动化）+ Report 验收结果合理性（Agent 判断） |
 | SYSTEM_TEST | 在 `develop` 上执行全量测试 | develop 全量测试完成 | 测试通过（自动化）+ 失败原因分类、系统测试语义验证、阻塞级缺陷判定（Agent 判断） |
@@ -56,13 +56,17 @@ hotfix   ──────────────────────●�
 | 阶段 | 证明命题 | 门禁 |
 |------|---------|---------|
 | **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化、`main` + `develop` 分支已创建 |
-| **DESIGN** | 契约已冻结，可进入基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（验证段不为空）。审查通过后 promote proposed→active/accepted |
-| **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 全部基建分支已合并到 `develop`、CI 可运行（自动化）、MR 门禁正确拦截（Agent 自证）、质量门禁正确拦截——过程坏味道阈值 + 架构约束规则 `[适用]`（Agent 自证）、Mock 返回正确（Agent 自证）、覆盖率数据准确（Agent 自证）、系统测试框架可跑冒烟 `[适用]` |
+| **DESIGN** | 契约已冻结，可进入基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（验证段不为空）。Agent 审查通过后，经人类确认（不可委托门禁）promote proposed→active/accepted |
+| **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 全部基建分支已合并到 `develop`、CI 可运行（自动化）、MR 门禁正确拦截（Agent 自证）、质量门禁正确拦截——过程坏味道阈值 + 架构约束规则 `[适用]`（Agent 自证）、Mock 返回正确（Agent 自证）、覆盖率数据准确（Agent 自证）、系统测试框架可跑冒烟 `[适用]`、测试基建 ADR 验证段已回填并经人类确认 promote proposed→accepted（不可委托门禁） |
 | **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 feature 分支已合并到 `develop`、MR 门禁 + 提测门禁通过（自动化）、Report 中 AC 验收结果经 Agent 确认合理 |
 | **SYSTEM_TEST** | 系统级验证通过，可进入发布 | `develop` 上全部测试层通过（自动化）、Agent 完成失败原因分类（基建缺陷/设计缺陷/局部 bug）、无阻塞级缺陷（Agent 判定） |
 | **RELEASE** | 本轮迭代已闭环，可开始新迭代 | `release/*` 已合并到 `main` + `develop`、staging 冒烟通过（自动化）、production 冒烟通过（自动化）、Agent 确认发布策略执行和监控正常、版本 tag 已打、CHANGELOG 已整理 |
 
 **门禁是不可跳过的硬性检查。** Agent 在每个阶段结束时必须逐项验证门禁，全部通过方可推进。Gitflow 提供容器的正确性（分支在哪里、合并到哪里、谁从谁拉），Agent 提供内容的正确性（文档语义、Mock 准确性、系统测试断言合理性、失败原因分类、发布决策）。
+
+**门禁不可跳过，但可实例化。** INIT 阶段的项目形态判定（服务型/发布型/本地型，见 [references/phase-init.md](references/phase-init.md)）决定部署类门禁如何实例化或豁免，结果经人类确认后写入 AGENTS.md。实例化档案一经落盘，各阶段照档执行，不得临时裁量。
+
+**Agent 判断必须可审计。** 每个标注"Agent 判断/自证"的门禁项，必须按对应 phase 文档中的审查表/判定表执行，并产出**结论 + 依据 + 证据路径**，写入对应 Report 或确认简报。只有结论没有依据的判断视为未通过。无标准的自我审查等于盖章。
 
 **Agent 无状态。** 任何 Agent 可以随时被终止，下次启动时仅凭文件系统恢复状态。所有关键信息在文档中，不在对话历史中。中断恢复时通过 `git log --oneline --grep="docs(state):\|docs(plan):"` 重建上下文。
 
@@ -79,7 +83,8 @@ hotfix   ──────────────────────●�
 ### 增量迭代（RELEASE → DESIGN）
 
 已有文档已冻结。进入 DESIGN 后：
-- 迭代候选从 `docs/backlog.md` 拉取，选定后将条目状态改为 `planned`
+- 迭代候选从 `docs/backlog.md` 拉取。候选选择是本轮第一份确认简报：Agent 给出建议排序和理由，人类选定后将条目状态改为 `planned`
+- backlog 随时可写入：人类的新需求、Agent 发现的工程债（标注来源）均直接录入；排序属人类决策
 - vision.md 已 active → 跳过，不重写
 - Spec 已 active → 在现有文档上追加，不重写
 - AC 文档已 active → 在现有文档上追加场景，不重写
@@ -105,6 +110,12 @@ hotfix   ──────────────────────●�
 4. 恢复流程：TEST_INFRA 门禁通过后重新推进到 DEVELOP，已完成的业务 Plan 不受影响
 
 ### 设计缺陷（SYSTEM_TEST → DESIGN）
+
+从 SYSTEM_TEST 因契约缺陷退回。进入 DESIGN 后：
+1. 定级：确认为契约缺陷（AC 场景错漏、Spec 业务规则错误、接口定义与真实需求不符），非代码 bug（SYSTEM_TEST 内修复）或基建缺陷（退回 TEST_INFRA）
+2. 修订：受影响文档退回 `proposed` 修改，重新审查 + 人类确认后 promote。确认简报需说明上一轮确认为何未发现该缺陷
+3. 传导：同步更新受影响的 Plan、测试脚本、架构规则文件
+4. 恢复：受影响模块创建最小 `fix/*` Plan 修正实现（走 MR 门禁），完成后直接回 SYSTEM_TEST 从失败层重跑——不重走 TEST_INFRA 和 DEVELOP 全程
 
 ---
 
@@ -208,7 +219,7 @@ INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目
 | Plan | `pending` / `done` | pending→done。执行失败也标记 done，另写新 Plan 继续 |
 | Report | `draft` / `complete` | draft→complete |
 
-**冻结定义：** 设计师完成编写后将 status 从 `draft` 改为 `proposed`（表示"我写完了，待审查"）。审查通过后，将 `proposed` 改为 `active`（或 ADR 的 `accepted`），表示系统正式采纳。冻结后不可原地修改——要改必须退回 DESIGN，修改后重新 promote 为 active。typo 修复、措辞澄清等非破坏性修改除外。Git 记录变更历史。
+**冻结定义：** 设计师完成编写后将 status 从 `draft` 改为 `proposed`（表示"我写完了，待审查"）。Agent 审查通过后，经人类确认（见「不可委托门禁」），将 `proposed` 改为 `active`（或 ADR 的 `accepted`），表示系统正式采纳。冻结后不可原地修改——要改必须退回 DESIGN，修改后重新 promote 为 active。typo 修复、措辞澄清等非破坏性修改除外。Git 记录变更历史。
 
 ### 语义链
 
@@ -241,19 +252,46 @@ AC 文档 AC-0003-N-1（正常场景）
 - 阶段推进伴随独立 commit，约定前缀 `docs(state):`
 - 分支模型遵循 Gitflow：`main` 仅含 release 节点，`develop` 为持续集成分支
 - 分支类型与 commit type 一致，从适当的基础分支拉出（`feat/*` `fix/*` `ci/*` 等从 `develop`；`hotfix/*` 从 `main`；`release/*` 从 `develop`），完成后合并
-- `spike/*` 例外——ADR 验证分支，保留不合并
+- `spike/*` 例外——ADR 验证分支，保留不合并；对应 ADR 标记 `superseded`/`deprecated` 时删除该 spike 分支。spike 是验证证据的备份而非证据本身——ADR 验证段必须自包含（依赖版本、执行命令、结论），复现不依赖分支存活
 - `release/*` 和 `hotfix/*` 同时合并到 `main` 和 `develop`
 - 具体 commit 格式和 merge 策略见 CONTRIBUTING.md
+
+### 微变更通道
+
+同时满足以下**全部**条件的变更为微变更，允许直接走 `chore/*` / `docs/*` / `fix/*` 分支 → MR 门禁 → 合并 `develop`，不启动迭代、不动状态机：
+
+- 不改变任何权威文档的语义（typo 修复、措辞澄清除外，见「冻结定义」）
+- 不改变公开接口和数据模型
+- 不新增功能
+- 变更规模小（单分支、diff 一眼可审）
+
+两条保险：
+
+- **禁止连击绕行**：同一主题的连续微变更说明该主题应当立项——录入 `docs/backlog.md`，升级为正常迭代
+- 是否够格微变更由 Agent 判断，拿不准时向人类提问（一个问题，附建议答案）
 
 ### 不可委托门禁
 
 以下动作成本高且难以撤销，必须获得**人类的显式批准**（对话中的明确确认或等价物），Agent 不得以自证或"上级审查"的名义替代：
 
+- 权威文档冻结：vision/Spec/AC/接口定义 promote `proposed → active`，ADR promote `proposed → accepted`
 - `release/*`、`hotfix/*` 合并到 `main`
 - production 部署
 - 在 `main` 上打版本 tag
 
+请求批准时必须以**确认简报**的形式提出（见「向上汇报原则」），不得将完整文档或执行日志甩给人类要求审查。
+
 项目可在 AGENTS.md 中显式声明豁免（追求全自动发布的场景），但必须在声明处标注风险警告；未声明豁免时此门禁不可跳过。hotfix 紧急场景允许先修复，但合并到 `main` 前仍需人类确认，确认前不得打 tag。
+
+### 向上汇报原则（确认简报）
+
+所有需要人类介入的时刻（不可委托门禁、阶段汇报、异常上报）使用统一的汇报形态——**确认简报**。核心原则：人类面对的是重点问题和决策点，不是冗长报告。
+
+- **简报 = 决策点 + 问题，不是执行日志。** 证据留在文档（Spec/Report/审查记录）中，简报只引用文档路径，不粘贴内容。
+- **异常驱动。** Agent 审查通过的项一行汇总（如"审查表 9 项全过"），只展开三类内容：有风险的点、需要取舍的点、Agent 拿不准的点。
+- **每个待定点是一个具体问题**，附 Agent 的建议答案和理由，人类可以只回"按建议走"。
+- **重点问题 ≤ 5 个。** 超出说明确认点粒度过粗，应拆分为多次确认。
+- **简报不落盘。** 确认结果通过既有 Git 锚点体现（promote commit、合并、tag），简报本身不留档。
 
 ### 测试执行边界（不重复原则）
 
