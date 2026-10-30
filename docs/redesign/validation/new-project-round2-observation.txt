@@ -1,0 +1,38 @@
+# 第二轮实际观察 — --column 本地增量
+
+## 完成与未验证
+
+已实际完成范围分类、授权复用、串行认领、完整 [Spec v2](<docs/spec/0002-column.md>)、最小实现、测试、技术自评、受托验收及独立 [0002 本地消费包](<local-delivery/0002/README.md>)。调用 `python3 finance-total.pyz --column net FILE` 只合计 net，省略仍合计 amount。列名精确匹配，不增加多列/推断/汇率等能力。
+
+- 21 项源码/门禁测试通过，原断言保留：[单测记录](<evidence/0002/unit-tests.log>)。
+- 候选 main 提交 `310ac65`；真实 zipapp 在无源码目录以 Python -I -B 运行，49 项通过（原27+新增22）：[候选证据](<evidence/0002/acceptance.json>)。
+- 已接受的相同字节复制交付；消费目录直接运行默认列得 0.3、自定义 net 得 3.5、空表得 0、非法 net 可读错误退出2；输入均不变：[现场观察](<local-delivery/0002/smoke.json>)。
+- 交付字节完整 49 项复验通过：[交付复验](<evidence/0002/delivered-artifact-acceptance.json>)。自评和委托接受单列 [接受决定](<evidence/0002/acceptance-decision.md>)，不冒充独立审查或人类签名。
+
+未验证：其他 OS/Python、真实财务数据和规模、恶意大文件性能、远端领取、生产使用。环境为 Python 3.9.6 / macOS 27.0.1 arm64。无网络、费用、外部依赖、远端发布或目录外文件访问。不做远程汇率。
+
+## 首轮保留与授权复用
+
+仅从本项目 AGENTS/导航/交付/规格/工作和工程资料恢复，未读取技能快照、开发审计、前 Agent 对话，未调用 skill/子 Agent。先确认 main c806775、干净工作树和无后台任务，用户明确旧 Agent 结束，再创建第二轮记录。首次 bash 退出1来自仓库 user.name/email 未设置，后续读取 local config 证实；未修改任何 Git 配置，提交仅用 git -c 身份。
+
+用户本次明确要求第二轮和同一验收委托，因此复用技术判断、自评、验收与本地接收许可；对象差额仅 --column 和 0002，仍受同一目录、本地、无费用/发布限制。首轮“禁止自动第二轮”不被偷偷移除，而是由本次明确输入满足新轮次条件；第二轮结束即停止。授权复用详见 [本轮交付](<docs/deliveries/0002-column.md#授权复用与差额>)。
+
+22 个首轮受保护文件（消费包全部、原始 evidence、首轮规格/交付/计划/报告、原 dist、原观察）同时对照接管前 SHA 及 c806775 Git 对象逐字节核对，无变化：[基线](<evidence/0002/first-round-baseline.json>)、[保留结果](<evidence/0002/first-round-preservation.json>)。旧 [experiment-observation](<experiment-observation.md>)未覆盖，旧交付和历史 PASS 未重写；第二轮资料另立。当前导航/README/入口/代码适配新版，不把旧包当新版。
+
+受控旧包被新增选列门禁拒绝是预期反证，退出1及原始 stderr 留在 [反证证据](<evidence/0002/gate-negative.json>)，不是首轮失败，也不是忽略真实失败。无失败测试被删改为跳过。create_goal 在 delegated 非顶层环境被拒绝，未绕过，用持久计划与 todo 完成本轮。
+
+## 产物和证据 SHA-256
+
+- 新候选与 [交付 pyz](<local-delivery/0002/finance-total.pyz>)：`ca4de2b691178d6025e28e64fa1db9e8e833f0375d47d092749b9d9429e38357`。
+- [首轮 pyz](<local-delivery/0001/finance-total.pyz>)：`9b3c7b4542c7257ad400bbd826a576945a9a726a6c9271290d80bf35933f9ff9`（未变）。
+- [候选证据](<evidence/0002/acceptance.json>)：`b22ca3ce484833713d0389a00b779cb67c80ce53b9c7910deab2ea8b0989281d`。
+- [交付复验证据](<evidence/0002/delivered-artifact-acceptance.json>)：`3f7f0ceecadb1ff85da804d8cdce2707ada44759dec7f0a9ac378144f921f5f4`。
+- [交付记录](<evidence/0002/delivery.json>)：`24957eba770f1b9a3045a63cf7691d4c9ecb82c38b849d4715b89be20ca4e5b4`。
+- [保留结果](<evidence/0002/first-round-preservation.json>)：`b910117b9d9a7238ce8b0cada60f3e24326f91729f50d7e1189019411f71b3ec`。
+- 全部二轮原始证据摘要见 [证据 SHA256SUMS](<evidence/0002/SHA256SUMS>)（本清单自身摘要 `36569a13c808c73506a560cc103af6bdd9f71ffd168605c92cd65941fd7866ec`）；消费包文件摘要见 [包 SHA256SUMS](<local-delivery/0002/SHA256SUMS>)。
+
+## 停止及恢复点
+
+交付 0002 closed / delivered；计划 done / succeeded；报告 complete；无活跃任务或后台作业。候选 310ac65 与新包 SHA 是二轮运行基线，首轮 c806775 及原包完整保留，最终记录由本地 main HEAD 定位。实现接受之后未改运行代码，只新增交付/证据/关闭记录。若出现问题停止新包、保留脱敏复现，旧包仅用于 amount 旧功能；输入只读无需数据恢复，不执行危险 reset 或清理。
+
+接手应先读 [导航](<docs/README.md>)和 [本轮报告](<docs/plans/0002-column/01-report.md>)，只读检查 Git 与执行者/作业后再采取副作用动作。下一步仅用户使用/反馈，不自动下一轮或远程汇率；本轮到此停止。

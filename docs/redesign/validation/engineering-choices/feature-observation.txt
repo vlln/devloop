@@ -1,0 +1,20 @@
+# decrement 任务观察
+
+## 动手前的只读盘点与选择
+
+- 已分别读取本项目的 `AGENTS.md`、`CONTRIBUTING.md`、`docs/devloop.md`、`TASK.md` 和 `counter.py`，并 glob 盘点本项目文件。导航 `docs/README.md` 及所链接的规格/计划不存在，不把模板链接当成现成承诺，也不为此次小任务补齐模板树。
+- 实际执行只读 Git 盘点：`git status --short --branch`、`git branch --list`、`git log -3 --oneline`、`git worktree list --porcelain`、`git ls-files`、工作区/暂存区 diff 摘要。
+- 基线：`e8296d27b770d87fd010b074132dfdf084d48a75`（fixture baseline）；当前分支 `main`，只有本项目这一个 worktree，工作区和暂存区干净，无未知改动。
+- `TASK.md` 明确无活动写入者或后台任务；由本执行者接管本任务，边界为本项目。此纯函数任务不需服务、端口或共享数据，不启动后台任务。
+- 依据本项目贡献约定：当前在主干，新增独立 API 属于功能改动，选择从该基线创建短期分支 `feat/add-decrement`，不直接在 main 实现；无并行写入，不额外创建 worktree。采用 main + 短期工作分支，不引入 develop/release。
+- 授权仅本项目编辑、验证、建本地分支和提交；不联网、不远端、不改 global 配置、不产生费用。
+- 最小范围：新增 `decrement(value)` 返回 `value - 1`，保留 increment；用标准库 unittest 验证正数、零、负数、小数及 increment 回归。未发现已有测试/构建/lint/typecheck 配置，不为该任务新增工具依赖。
+
+## 实际执行与证据
+
+- 实际执行 `git switch -c feat/add-decrement`，输出确认新分支已创建，后续分支检查为 `feat/add-decrement`；未改变 main。
+- `counter.py` 仅新增 `decrement(value): return value - 1`，原 increment 不变；`test_counter.py` 新增 2 个 unittest 测试方法，共 8 个输入子用例；`CONTRIBUTING.md` 就近记录已选择的分支策略；此文件保留任务观察。没有其它工作改动。
+- 在本项目目录运行 `python3 --version` → Python 3.9.6；运行 `python3 -B -m unittest -v` → `test_decrement`、`test_increment_regression` 均 ok，`Ran 2 tests`、`OK`。`-B` 防止产生字节码缓存。测试覆盖 decrement 的正数、零、负数、小数，及原 increment 同类输入的回归。
+- `git diff --check` 无输出且成功；已阅读实际实现/贡献文档 diff，并自检新测试与观察文件，变更仅上述四个文件，无秘密、无无关内容、未削弱现有断言。
+- 这是新增功能而非修复可复现缺陷，未强制先造失败；不声称有红绿证据。没有现成的构建、lint、类型检查入口，选标准库定向验证，不安装工具。未验证未指定的额外类型契约、其它 Python 版本、外部系统、部署或用户验收，未进行独立评审。
+- 已将上述四个本任务文件作为本地原子变更提交，提交说明 `feat: add decrement with counter validation (TASK)`；使用命令级 `git -c user.name='Local Coding Agent' -c user.email='local-agent@example.invalid'` 身份，未改变全局配置。提交后再次运行相同 unittest 命令，2 个测试通过；Git 状态只有分支标题、无未提交改动，main 仍为原基线。此结果补记随本提交 amend 保存；最终提交哈希以 Git 历史为准。任务完成并停止，无后台任务、不合并、不发布、不联网。

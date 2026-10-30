@@ -2,86 +2,39 @@
 
 # devloop
 
-A contract-driven project development system — Agents follow a 6-phase state machine to autonomously drive projects through multiple iterations, not one-shot.
+An installable professional software lifecycle for agents and people: documented, traceable, parallel and collaborative work, from project inception to acceptance, delivery and repeated improvement.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-spec-6e3af2)](https://agentskills.io/specification)
 
-[中文](README.md)
+[中文](<README.md>)
 
 </div>
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    INIT --> DESIGN : Project Start
-    DESIGN --> TEST_INFRA : Contract Frozen
-    TEST_INFRA --> DEVELOP : Infra Ready
-    DEVELOP --> SYSTEM_TEST : develop Testable
-    SYSTEM_TEST --> RELEASE : develop Green
-    RELEASE --> DESIGN : Next Iteration / Hotfix
-    DEVELOP --> DESIGN : Architecture Rework
-    SYSTEM_TEST --> TEST_INFRA : Infra Defect
-    SYSTEM_TEST --> DESIGN : Design Defect
-```
+## Who it is for
 
-## Features
+Long-running software projects that need continuity across sessions, collaboration, change management and credible acceptance and delivery. devloop does not prescribe every coding step or measure professionalism by document or approval counts.
 
-- **6-Phase State Machine**: INIT → DESIGN → TEST_INFRA → DEVELOP → SYSTEM_TEST → RELEASE → Next Iteration
-- **Contract-Driven**: Spec / AC / ADR / Interface definitions are frozen before coding; each document is reviewed immediately after writing before proceeding downstream
-- **Gitflow Branch Model**: `main` contains only release nodes, `develop` for continuous integration, branch types aligned with commit types
-- **SemVer Versioning**: `X.Y.Z`, during MAJOR=0, MINOR = features, PATCH = fixes, starting from `0.1.0`
-- **Two-Tier Gates**: Automated (CI / tests / coverage) + Agent judgment (document semantics / self-verification / failure classification)
-- **Hard Release Gate**: Merging to `main` / production deploys / version tags require explicit human approval — Agents cannot self-certify (projects may explicitly opt out)
-- **Engineering Backlog**: `docs/backlog.md` manages iteration candidates in a single file; DESIGN pulls from the pool, row order is priority
-- **Test Execution Boundaries**: Each test layer has a single owning checkpoint — never re-run on the same commit
-- **Self-Describing Entry**: Agents recover state from the filesystem alone after interruption, with no dependency on conversation history
-- **Full Traceability**: Plan → Report → Commit semantic chain
+## What it provides
 
-## Skills
+- **A complete lifecycle**: inception → requirements and architecture → engineering readiness → implementation and integration → acceptance → delivery, feedback and further iterations.
+- **Project continuity**: track projects, deliveries and work units separately; design for the next version can coexist with acceptance of the current one.
+- **Change management**: questions do not automatically become implementation commitments; explain the impact of additions and update scope, plans and evidence after a clear direction change.
+- **Flexible, bounded decisions**: reuse valid conversational decisions and conditional permissions, asking only about gaps; endorsing a design does not authorize production operations.
+- **Collaborative documentation**: coherent current specifications with traceable history, appropriate abstraction and explicit integration responsibility for shared documents.
+- **Recoverable work**: preserve ownership, dependencies, workspace, verified results and next actions; interruption does not automatically discard a worktree.
+- **Proactive engineering choices**: activate judgment at work, change, integration and stopping boundaries, with defaults for isolation, risk experiments, regression evidence and self-checks instead of waiting for itemized user reminders.
+- **Delivery evidence**: validate what consumers actually use, distinguishing implementation, tests, acceptance, delivery and operational health.
 
-| Skill | Description |
-|-------|-------------|
-| [`devloop`](skills/devloop) | Contract-driven project development system. Use when an Agent needs to initialize a project, understand what can be done in the current phase, advance state, or create and manage documents. |
-
-## Documentation
-
-- [Design Spec](docs/design.md) — Guiding philosophy, design principles, system boundaries, key design decisions (mechanism details live in skills/devloop/)
-- [SKILL.md](skills/devloop/SKILL.md) — Execution layer entry: state machine routing, system rules, per-phase operation paths
-- [Backlog](docs/backlog.md) — This repository's own engineering backlog
-
-## Quick Start
-
-Paste this into your AI agent (Claude Code, Cursor, OpenAI Assistants, etc.):
-
-```text
-Install the Agent Skills from https://raw.githubusercontent.com/vlln/devloop/main/README.md
-```
+Keep professional lifecycle gates while tailoring methods to risk and project facts. Existing tools and branch strategies take precedence; Gitflow is not mandatory.
 
 ## Installation
 
-Recommended: install these skills with `skit`. It fetches skills from the published repository, records them in a local manifest, and activates them for local agents.
-
 ### skit
-
-Install `skit` with Homebrew:
 
 ```sh
 brew install vlln/tap/skit
-```
-
-For other platforms, see the `skit` installation instructions.
-
-Install one skill:
-
-```sh
 skit install vlln/devloop/skills/devloop
-```
-
-Install all skills in this repository:
-
-```sh
-skit install vlln/devloop --all
 ```
 
 ### npx skills
@@ -92,17 +45,28 @@ npx skills add vlln/devloop
 
 ### Manual
 
-Copy the desired skill directory from `skills/<skill-name>` into your agent's skills directory, then restart the agent if required.
+Copy the [skill directory](<skills/devloop/>) into your agent's skills directory and reload as required by the host. Installation tools are optional; skit is not a runtime dependency.
 
-Common locations:
+Remote installation fetches published repository content, not unpublished local changes. Existing projects are not migrated automatically.
 
-- Codex CLI: `~/.codex/skills`
-- Claude Code: `.claude/skills` in the project, or the configured user skills directory
-- OpenCode: `~/.opencode/skills/<repo-name>`
+## Getting started
 
-## Requirements
+Give the agent your project goal and ask it to adopt devloop and advance the project. For an existing project, it first inspects established rules, ongoing work and evidence, then integrates incrementally instead of overwriting the layout or inventing historical decisions.
 
-- `skit` CLI for install and validation workflows.
+Use it to take over work, assess new requests, coordinate parallel work, maintain specifications or prepare acceptance and delivery. Users do not need to fill out a complete template set in advance.
+
+## Skills
+
+| Skill | Purpose |
+|---|---|
+| [devloop](<skills/devloop/SKILL.md>) | Professional software lifecycle, cross-session continuity, collaboration, changing requirements and repeated delivery |
+
+## Development and validation
+
+- [Design](<docs/design.md>): boundaries and rationale.
+- [Redesign records](<docs/redesign/README.md>): candidate design and implementation history.
+- [Isolated validation](<docs/redesign/validation/README.md>): evidence and limits of local delivery, cross-session changes and boundary experiments.
+- [Backlog](<docs/backlog.md>): follow-up work for this repository.
 
 ## License
 

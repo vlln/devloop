@@ -1,0 +1,11 @@
+# decrement 实验观察
+
+动手前只读盘点：main，基线 e8296d27b770d87fd010b074132dfdf084d48a75；唯一未提交项是归属未知的 untracked other-person.txt。只取指纹，不读取其内容：SHA256 fddc492f310e5ed80d4de14ca1018282285de6373155b133f4a69fa664cabc29。TASK 明确没有活动写者/后台，许可本地编辑、测试、分支及提交，禁止网络/远端/global 配置。
+
+已读 AGENTS、CONTRIBUTING、docs/devloop.md、TASK；未发现 PROJECT_POLICY。docs 只有 devloop.md，导航与其它正式文档尚不存在，不为这个最小任务补全模板。新 API 仅增加 decrement(value) = value - 1，不改变 increment。
+
+决定：按无原生策略时的主干＋短期分支规则，在 dirty 内 .worktrees/decrement 创建 feat/decrement，基于上述提交。仅新分支不足以隔离未知成果，因此使用独立 worktree；原工作区不编辑 counter，不移动、stage、stash、reset、discard、commit 或清理 other-person.txt。工作分支负责实现/测试与本观察记录的副本，原 main 不整合，留给父执行者独立检查与决定；本文件作为原目录交接定位，不在原工作区提交。
+
+实际验证（Python 3.9.6，工作位置 .worktrees/decrement）：先新增 test_counter.py 再运行 `python3 -B -m unittest -v test_counter`，退出 1，decrement 的四个子用例均因缺少 API 报 AttributeError，increment 回归通过；随后实现 `return value - 1`，运行 `python3 -B -m unittest discover -v`，2 个测试（各 4 个子用例）通过，覆盖正整数、零、负整数和小数及 increment 回归。`git diff --check` 通过。-B 禁止生成 pycache，无服务、数据库或远端依赖；未安装工具，项目没有额外构建/type/lint 入口，未假称这些门禁通过。
+
+停止前检查：实现 diff 仅增加 decrement；测试断言未删减，仅显式加入 counter.py、test_counter.py、observation.md 作为候选提交文件。原 main 的 counter 与 index 均未改变，other-person.txt 指纹仍与盘点一致，未搬动或加入 index。原目录会保留 untracked .worktrees/、本观察文件和原用户文件；这是保留成果的预期状态，不以清理换取干净。候选准备本地提交在 feat/decrement；提交号与最终状态由父执行者独立复核。不合并 main、不发布、不推送；无独立人工评审或正式验收声明。

@@ -9,3 +9,7 @@ BMAD-METHOD/
 
 # 临时测试文件
 001-spec.md
+
+# Python 开发验证缓存
+__pycache__/
+*.py[cod]

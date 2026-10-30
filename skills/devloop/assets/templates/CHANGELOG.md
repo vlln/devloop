@@ -1,35 +1,9 @@
+# Changelog
 
-<!-- 项目版本变更记录，遵循 [Keep a Changelog](https://keepachangelog.com/) 规范。
-文档与代码的变更分别记录，各自独立 Commit，在此汇总。 -->
+<!-- 记录实际面向消费者的版本变更，不预先写虚构版本、日期或“初始化已完成”。按项目原生版本策略；可采用 Keep a Changelog 分类。 -->
 
----
+## Unreleased
 
-## [Unreleased]
+<!-- 按需保留 Added / Changed / Deprecated / Removed / Fixed / Security。正式交付时形成真实版本条目，链接交付记录和关键变化；未发布不冒称已发布。 -->
 
-### Added
-- 
-
-### Changed
-- 
-
-### Fixed
-- 
-
----
-
-## [0.1.0] — YYYY-MM-DD
-
-### Added
-- 项目初始化
-
-<!--
-格式说明：
-- Added — 新增功能
-- Changed — 功能变更
-- Deprecated — 即将移除
-- Removed — 已移除
-- Fixed — Bug 修复
-- Security — 安全修复
-
-每次发布时，将 [Unreleased] 内容移至新版本号下，并关联对应 Plan 和 Commit。
--->
+<!-- 格式示意（不是实际版本）：版本或制品标识 — 实际日期（已知才填）；变更摘要；兼容/迁移提醒；交付记录链接。执行日志、验收证据及批准边界在对应记录中引用，不全文搬入。 -->

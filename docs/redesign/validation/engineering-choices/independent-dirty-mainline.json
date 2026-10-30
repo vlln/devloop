@@ -1,0 +1,18 @@
+[
+  {
+    "case": "dirty-isolated",
+    "branch": "feat/decrement",
+    "head": "dc5b1c0ea7a3b8440a8b683fa047102b978f9d97",
+    "test_exit": 0,
+    "test_output": "test_decrement (test_counter.CounterTests) ... ok\ntest_increment_unchanged (test_counter.CounterTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+    "unknown_file_preserved_and_not_committed": true
+  },
+  {
+    "case": "mainline",
+    "branch": "main",
+    "head": "4e46748d58e333efa34eb2ae0a7eadd8e00efa56",
+    "test_exit": 0,
+    "test_output": "test_decrement (test_counter.CounterTests) ... ok\ntest_increment_unchanged (test_counter.CounterTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+    "unknown_file_preserved_and_not_committed": null
+  }
+]

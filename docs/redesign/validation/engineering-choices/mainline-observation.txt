@@ -1,0 +1,11 @@
+# decrement 实验观察
+
+动手前只读盘点：main，基线 fe55161ccfd0becfb37eb9844a14f6dff2353f7e；工作树与 index 干净，只有当前 worktree。已读 AGENTS、CONTRIBUTING、docs/devloop.md、TASK、PROJECT_POLICY。TASK 和原生策略均确认没有活动写者/后台；已有授权限本地编辑、测试、分支、提交，无网络/远端/global 配置。
+
+决定：遵循 PROJECT_POLICY 的单人 trunk-based 策略，此次小型串行改动直接在 mainline 原目录的 main 执行；不为套用默认规则而创建 feature/develop。本执行者负责最小实现、测试及观察记录，父执行者独立检查最终状态/提交。docs 只有 devloop.md，无导航等正式文档，不扩大为模板建设。
+
+范围仅新增 decrement(value) = value - 1 并回归 increment，不改既有接口/依赖，不启动服务。无既有测试/构建/type/lint 入口，选择标准库 unittest，不安装工具，不假称额外门禁通过。
+
+实际验证（Python 3.9.6，mainline 原目录）：先新增 test_counter.py 并运行 `python3 -B -m unittest -v test_counter`，退出 1；decrement 的四个子用例均因缺少 API 报 AttributeError，increment 回归通过。随后增加 `return value - 1`，运行 `python3 -B -m unittest discover -v`，2 个测试（各 4 个子用例）通过，覆盖正整数、零、负整数、小数及 increment 回归。`git diff --check` 通过；-B 禁止产生 pycache。
+
+停止前自检：实现 diff 只增加 decrement，既有 increment 未变；测试断言未删减，无意外文件或秘密；只显式 stage counter.py、test_counter.py、observation.md。按已有许可准备本地 main 提交，由父执行者独立检查最终提交/状态；不创建多余分支、不推送/发布，也不声称已独立评审或正式验收。

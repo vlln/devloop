@@ -1,0 +1,56 @@
+{
+  "result": "PASS",
+  "delivery_kind": "authorized local offline handoff",
+  "delivered_at": "2026-10-30T09:34:33.119320+00:00",
+  "candidate_commit": "076a9b08a92bca5a764d27b5b1d4eb19dbff4228",
+  "source": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/dist/finance-total.pyz",
+  "target": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/local-delivery/0001/finance-total.pyz",
+  "sha256": "9b3c7b4542c7257ad400bbd826a576945a9a726a6c9271290d80bf35933f9ff9",
+  "identical_to_accepted_candidate": true,
+  "consumer_cwd": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/local-delivery/0001",
+  "observations": [
+    {
+      "file": "example.csv",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "finance-total.pyz",
+        "example.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "file": "empty.csv",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "finance-total.pyz",
+        "empty.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "file": "invalid.csv",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "finance-total.pyz",
+        "invalid.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: invalid.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    }
+  ],
+  "remote_receipt_or_production_use": "not performed or claimed"
+}

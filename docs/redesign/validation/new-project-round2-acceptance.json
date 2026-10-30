@@ -1,0 +1,684 @@
+{
+  "result": "PASS",
+  "artifact": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/dist/0002/finance-total.pyz",
+  "sha256": "ca4de2b691178d6025e28e64fa1db9e8e833f0375d47d092749b9d9429e38357",
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "isolated_python_flags": [
+    "-I",
+    "-B"
+  ],
+  "consumer_directory": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4",
+  "checks_passed": 49,
+  "checks": [
+    {
+      "case": "decimal",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/decimal.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "empty",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/empty.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "blank",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/blank.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "header_only",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/header_only.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "zero",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/zero.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "bom",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/bom.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "1.5\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "long",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/long.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "tiny",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/tiny.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "0.000000000000000000000000000000000000000000000000000000000001\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "quoted",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/quoted.csv"
+      ],
+      "exit_code": 0,
+      "stdout": "3.5\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "invalid",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/invalid.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/invalid.csv: line 3: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "empty_amount",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/empty_amount.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/empty_amount.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "nan",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/nan.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/nan.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "inf",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/inf.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/inf.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "exponent",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/exponent.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/exponent.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "underscore",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/underscore.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/underscore.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "currency",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/currency.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/currency.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "grouping",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/grouping.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/grouping.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "missing_header",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/missing_header.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/missing_header.csv: line 1: header must contain exactly one 'amount' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "duplicate_header",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/duplicate_header.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/duplicate_header.csv: line 1: header must contain exactly one 'amount' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "short",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/short.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/short.csv: line 2: expected 2 columns, got 1\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "wide",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/wide.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/wide.csv: line 2: expected 1 columns, got 2\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "bad_csv",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/bad_csv.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/bad_csv.csv: line 2: invalid CSV: unexpected end of data\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "encoding",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/encoding.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/encoding.csv: 'utf-8' codec can't decode byte 0xff in position 7: invalid start byte\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_net",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_net.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "explicit_amount",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/explicit_amount.csv",
+        "--column",
+        "amount"
+      ],
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_equals",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_equals.csv",
+        "--column=net"
+      ],
+      "exit_code": 0,
+      "stdout": "1.25\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_empty",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_empty.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_blank",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_blank.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_header_only",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_header_only.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_missing",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_missing.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_missing.csv: line 1: header must contain exactly one 'net' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_duplicate",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_duplicate.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_duplicate.csv: line 1: header must contain exactly one 'net' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_case_mismatch",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_case_mismatch.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_case_mismatch.csv: line 1: header must contain exactly one 'net' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_space_mismatch",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_space_mismatch.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_space_mismatch.csv: line 1: header must contain exactly one 'net' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_spaces",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_spaces.csv",
+        "--column",
+        " net "
+      ],
+      "exit_code": 0,
+      "stdout": "1.25\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_unicode",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_unicode.csv",
+        "--column",
+        "金额"
+      ],
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_invalid",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_invalid.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_invalid.csv: line 2: invalid amount; expected a finite plain decimal number (column 'net')\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_nan",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_nan.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_nan.csv: line 2: invalid amount; expected a finite plain decimal number (column 'net')\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_short",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_short.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_short.csv: line 2: expected 2 columns, got 1\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_other_duplicates",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_other_duplicates.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "0.5\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_bom",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_bom.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_long",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/selected_long.csv",
+        "--column",
+        "net"
+      ],
+      "exit_code": 0,
+      "stdout": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "default_not_auto_selected",
+      "command": [
+        "/Library/Developer/CommandLineTools/usr/bin/python3",
+        "-I",
+        "-B",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/finance-total.pyz",
+        "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/default_not_auto_selected.csv"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/default_not_auto_selected.csv: line 1: header must contain exactly one 'amount' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "selected_option_before_path",
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": ""
+    },
+    {
+      "case": "missing_column_value",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: finance-total.pyz [-h] [--column NAME] file\nfinance-total.pyz: error: argument --column: expected one argument\n"
+    },
+    {
+      "case": "empty_column_name",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: finance-total.pyz [-h] [--column NAME] file\nfinance-total.pyz: error: --column NAME must not be empty\n"
+    },
+    {
+      "case": "missing_file",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/absent.csv: [Errno 2] No such file or directory: '/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-34qz4kz4/absent.csv'\n"
+    },
+    {
+      "case": "missing_argument",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: finance-total.pyz [-h] [--column NAME] file\nfinance-total.pyz: error: the following arguments are required: file\n"
+    },
+    {
+      "case": "extra_argument",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: finance-total.pyz [-h] [--column NAME] file\nfinance-total.pyz: error: unrecognized arguments: two\n"
+    },
+    {
+      "case": "help",
+      "exit_code": 0,
+      "stdout": "usage: finance-total.pyz [-h] [--column NAME] file\n\nSum a CSV amount column exactly (UTF-8; read-only).\n\npositional arguments:\n  file           path to the CSV file\n\noptional arguments:\n  -h, --help     show this help message and exit\n  --column NAME  exact amount column name (default: amount)\n",
+      "stderr": ""
+    }
+  ],
+  "limitations": [
+    "local synthetic data only",
+    "not a cross-platform or performance certification"
+  ]
+}

@@ -1,0 +1,32 @@
+# 会员折扣与礼品卡候选观察
+
+## 认领、依赖与权限
+
+2026-10-30，全新接手 Agent 仅从本隔离项目常驻资料恢复并认领本次候选建议与文档整合；责任范围为候选分类、累计交付影响、入口同步和本页恢复记录。依赖[原生客户决定](<PROJECT_NOTES.md#L5-L15>)、[已决优惠券增量](<docs/decisions/0001-coupon-scope.md>)、[当前交付](<docs/deliveries/0001-checkout.md>)及已完成[优惠券同步计划](<docs/plans/0002-coupon-scope/01-plan.md>)。不重开历史工作，不替代原生需求权威。
+
+只读接管执行 `pwd`、`git status --short --branch`、`git log -5 --oneline` 并列本地文件、阅读相关常驻文档；实际目录为指定隔离项目，main，HEAD `5220d73`，工作树干净。原执行者已结束且无任务依据本轮用户明确说明；未读取前 Agent 对话、项目外进程或审计。没有未提交成果需要清理。本 Agent 不启动后台任务或子 Agent。
+
+许可仅本目录文档与离线文档检查、可选本地 Git 锚点；不修改源码、测试、工具或原生记录，不执行产品测试，不调用 skill/子 Agent，不读主技能快照/开发审计，不联网、花钱、发布或推送，不改 global。只向指定父 Agent 回报本轮结果，不读取其对话。
+
+## 工作与停止恢复
+
+本次输入是“先别实现，建议怎么安排”的候选咨询，不是同意本轮加入会员折扣/礼品卡的决定；优惠券已决不重问。候选内容和推荐唯一维护于[候选建议](<docs/proposals/0001-member-gift-card.md>)；当前契约与交付关口仍在[结算交付](<docs/deliveries/0001-checkout.md>)。
+
+- 当前工作：候选建议与文档整合已完成；P1/P2 仍 proposed，用户未决定纳入或接受推荐安排。仅此文档工作完成，不关闭产品交付或宣布技术/验收接受。
+- 完成条件：候选与已确认承诺分离；累计影响/推荐及下一决定可恢复；交付与工作进度无虚假推进；旧观察和业务/验证文件未变，离线文档检查留证。
+- 不创建新实现计划或排期，不自动执行会员/礼品卡，不把旧优惠券同步 done 当产品 done。
+
+## 检查与结论
+
+文档候选为 main 上以 `5220d73` 为父基线的本次五文件增量；包含本页的本地提交为恢复锚点，不在自身嵌入循环 hash。方法环境为 Python 3.9.6、Darwin arm64、本地标准库，无安装或外部服务。
+
+| 要求/风险 | 实际方法与对象 | 结果及限制 |
+|---|---|---|
+| 当前文档链接、原生字节和 main 保留 | `PYTHONDONTWRITEBYTECODE=1 python3 tools/validate_devloop.py`，本次文档工作树 | 退出 0：13 documents、116 links，required entries/native SHA-256/main/metadata/template checks PASS；只属结构自检，检查器不强制新候选字段，不证明语义完整、独立评审或产品验收 |
+| 旧观察、旧决定/计划/证据及业务/工具均未改 | `git diff --exit-code 5220d73 -- PROJECT_NOTES.md src tests tools docs/evidence docs/decisions docs/plans CONTRIBUTING.md experiment-observation.md scope-change-observation.md` | 退出 0；旧 observation 未覆盖，历史两项业务证据未重跑、不冒充优惠券或新增候选通过 |
+| 最小修改与语义边界 | `git diff --check`、`git status --short`、`git diff --stat` 及人工复核 tracked diff/新候选 | 退出 0；仅修改入口、导航、交付，新增候选建议和本页。已决优惠券未降级/重问，P1/P2 未加入承诺、实现计划或验收门槛；手动核对不等于独立评审 |
+| 产品及消费者证据 | 未执行产品测试或真实消费路径 | 无新增业务 PASS、技术接受、验收接受、交付或消费者接收声明 |
+
+本轮实际维护两项独立候选及累计影响、现交付进度与推荐；原 SYSTEM_TEST 在途、优惠券未实现/未验证、整体未接受/未交付保持不变。推荐本轮不再加 P1/P2，先收敛当前承诺，后续分别评估会员、礼品卡；该推荐未获用户决定。新会话只需接续候选决定及现有接口/金额域/消费对象差额，不重问优惠券是否加入。
+
+以命令级 `git -c user.name=... -c user.email=...` 提交五项本地文档锚点，不改 global、不推送；提交前复跑检查并核对暂存范围，提交后核对 main/工作树。完成后回报指定父 Agent 并停止等下个新会话；无后台任务 ID、子 Agent 或待清理运行资源，不自动继续澄清或编码。

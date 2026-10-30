@@ -1,351 +1,109 @@
 ---
 name: devloop
-description: 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。
+description: 当需要把软件项目接入专业开发生命周期、跨会话持续推进、并行协作，或管理开发中的需求变化、文档、验收与多轮交付时使用。维护共同事实、承诺、决策、进度和证据，不代替 Agent 的具体工程判断。
+metadata:
+  protocol-version: "2"
 ---
 
-# Project Pact
+# devloop
 
-## 系统全貌
+将项目作为长期工程维护：从立项、设计、工程准备、实现与集成，到验收、交付、运行反馈和多轮改进。既保留专业开发的组织与历史，也允许 Agent 根据项目选择工程方法。
 
-项目开发遵循 6 阶段状态机，以 **Gitflow** 为分支容器。每个阶段有明确的**证明命题**和**门禁**——Agent 通过门禁证明该阶段的命题成立，方可推进。
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    INIT --> DESIGN : 项目启动
-    DESIGN --> TEST_INFRA : 契约冻结
-    TEST_INFRA --> DEVELOP : 基建就绪
-    DEVELOP --> SYSTEM_TEST : develop 可测试
-    SYSTEM_TEST --> RELEASE : develop 全绿
-    DEVELOP --> DESIGN : 架构颠覆
-    SYSTEM_TEST --> TEST_INFRA : 基建缺陷
-    SYSTEM_TEST --> DESIGN : 设计缺陷
-    RELEASE --> DESIGN : 新一轮迭代 / hotfix
-```
+`$_S` 表示本技能的绝对根目录，不是预设环境变量。技能资源从这里定位；项目资料从目标项目根目录定位，二者不要混淆。
 
-### Gitflow 分支全景
+## 先建立项目上下文
 
-```
-main     ─────●──────────●──────────●────→  (tag: v0.1.0, v0.2.0, v0.2.1)
-              ↑          ↑          ↑
-release  ──── v0.1.0 ─── v0.2.0 ─── v0.2.1
-              ↑          ↑          ↑
-develop  ────●──●──●──●──●──●──●──●──●──→  (持续集成)
-              ↑  ↑  ↑  ↑  ↑  ↑
-             ci/ test/ feat/ feat/ fix/
-             
-hotfix   ──────────────────────●────────→  (main → hotfix → main + develop)
-```
+1. 已接入项目：读项目 AGENTS、文档入口、相关交付与活跃工作记录，再读必要规格与工程约定。
+2. 尚未接入：按 `$_S/references/phase-init.md` 扫描和接入；不要先把模板全量覆盖进去。
+3. 新会话接手在途工作：按 `$_S/references/work-and-delivery.md` 恢复；先只读盘点并确认接管责任，后运行可能有副作用的验证。
+4. 确认**这次输入属于哪个交付、当前承诺是什么、哪些决定有效、下一步是什么**，而不只确认一个全局阶段。
 
-`main` 只有 release 节点，`develop` 有完整 TDD 证据链。`spike/*` 保留不合并。
+一次性小任务可以沿用所在项目的轻量工作记录，不必为每个命令新建一轮生命周期。已接入项目的范围、授权、历史和交付证据不能因此省略。
 
-### 阶段 → 分支 → 把关映射
+## 不变式
 
-| 阶段 | 在哪个分支 | 把关锚点（Git 事件） | Agent 验证 |
-|------|-----------|---------------------|-----------|
-| INIT | 创建 `main` + `develop` | — | 目录结构、文件存在、Git 初始化 |
-| DESIGN | `spike/*`（不合并） | — | 文档内容级审查（语义、完整性、一致性）；promote 冻结需人类确认（见「不可委托门禁」） |
-| TEST_INFRA | `ci/*` `test/*` `build/*` → `develop` | 全部基建分支合并 | CI 可运行（自动化）+ Mock 返回正确、覆盖率准确、门禁正确拦截（Agent 自证） |
-| DEVELOP | `feat/*` `refactor/*` `perf/*` → `develop` | 全部 feature 分支合并 | MR 门禁/提测门禁（自动化）+ Report 验收结果合理性（Agent 判断） |
-| SYSTEM_TEST | 在 `develop` 上执行全量测试 | develop 全量测试完成 | 测试通过（自动化）+ 失败原因分类、系统测试语义验证、阻塞级缺陷判定（Agent 判断） |
-| RELEASE | `release/*` → staging → `main` + `develop` | release 合并到 main | CD 部署/冒烟（自动化）+ 发布策略、监控判定、回滚决策（Agent 判断）；合并 main / production 部署 / 打 tag 需人类显式批准（见「不可委托门禁」） |
-| Hotfix | `hotfix/*` → `main` + `develop` | hotfix 合并到 main | 同 RELEASE |
+- 目标和重要取舍来自用户或有权者；角色名、审查通过和 Agent 自写记录不创造授权。
+- 讨论、采纳、排期、执行可在同次对话形成，但不能混为一谈；承诺不能静默改变。
+- 重要信息有权威归属，当前规则可直接理解，重大决定和已发生结果可追溯。
+- 共享基线变更必须传播至受影响工作、消费者和证据；无关成果不整体清零。
+- 实施完成、验证通过、验收接受、实际交付和运行健康是不同声明，各有依据。
+- 进度与恢复点落在项目持久化资料中，不能仅留在聊天、临时 todo 或不可访问后台任务里。
 
-### 阶段证明链
+## 主动选择工程控制，而不是等用户提醒
 
-| 阶段 | 证明命题 | 门禁 |
-|------|---------|---------|
-| **INIT** | 项目骨架就绪，可进入设计 | 目录结构存在、AGENTS.md/CONTRIBUTING.md/CHANGELOG.md 存在、Git 已初始化、`main` + `develop` 分支已创建 |
-| **DESIGN** | 契约已冻结，可进入基建搭建 | vision.md/Spec/AC 文档/接口定义 status=proposed（内容级检查）、核心 ADR 全部 status=proposed（验证段不为空）。全部文档 Agent 审查通过后，阶段末经人类**批量**确认（不可委托门禁，一份简报）统一 promote proposed→active/accepted |
-| **TEST_INFRA** | 一次性基建就绪，可进入业务开发 | 全部基建分支已合并到 `develop`、CI 可运行（自动化）、MR 门禁正确拦截（Agent 自证）、质量门禁正确拦截——过程坏味道阈值 + 架构约束规则 `[适用]`（Agent 自证）、Mock 返回正确（Agent 自证）、覆盖率数据准确（Agent 自证）、系统测试框架可跑冒烟 `[适用]`、测试基建 ADR 验证段已回填并经人类确认 promote proposed→accepted（不可委托门禁） |
-| **DEVELOP** | 各模块独立功能正确，可进入系统测试 | 全部 feature 分支已合并到 `develop`、MR 门禁 + 提测门禁通过（自动化）、Report 中 AC 验收结果经 Agent 确认合理 |
-| **SYSTEM_TEST** | 系统级验证通过，可进入发布 | `develop` 上全部测试层通过（自动化）、Agent 完成失败原因分类（基建缺陷/设计缺陷/局部 bug）、无阻塞级缺陷（Agent 判定） |
-| **RELEASE** | 本轮迭代已闭环，可开始新迭代 | `release/*` 已合并到 `main` + `develop`、staging 冒烟通过（自动化）、production 冒烟通过（自动化）、Agent 确认发布策略执行和监控正常、版本 tag 已打、CHANGELOG 已整理 |
+动手前判断当前分支、基线、未提交改动归属和活动执行者是否适合本次工作。优先沿用项目约定；无策略时默认主干＋短期工作分支：独立功能/重构/有风险修复先隔离，已在合适分支就继续，并行可写用独立工作区。小型低风险修正按项目许可简化，不一律套 Gitflow，也不擅自搬动或提交他人成果。
 
-**门禁是不可跳过的硬性检查。** Agent 在每个阶段结束时必须逐项验证门禁，全部通过方可推进。Gitflow 提供容器的正确性（分支在哪里、合并到哪里、谁从谁拉），Agent 提供内容的正确性（文档语义、Mock 准确性、系统测试断言合理性、失败原因分类、发布决策）。
+按 `$_S/references/work-and-delivery.md` 的“工程选择”在关键时机主动考虑：范围增长是否拆切片、关键未知是否先实验、接口/数据变化是否需要兼容迁移、缺陷是否先留失败复现、重复约束是否自动检查、提交/集成前是否自检 diff 和证据、停止前是否保存检查点、交付版本与恢复策略是否合适。模型会做这些，不代表可以跳过选择。
 
-**门禁不可跳过，但可实例化。** INIT 阶段的项目形态判定（服务型/发布型/本地型，见 [references/phase-init.md](references/phase-init.md)）决定部署类门禁如何实例化或豁免，结果经人类确认后写入 AGENTS.md。实例化档案一经落盘，各阶段照档执行，不得临时裁量。
+首次确定的项目策略写入工程约定，本任务的工作位置和重要例外写工作记录。在既有授权内自行判断，不逐项请求批准或展示全套清单；重要取舍、例外和权限缺口才显式说明。范围或协作条件改变时重评，不每次编辑从零选择。
 
-**Agent 判断必须可审计。** 每个标注"Agent 判断/自证"的门禁项，必须按对应 phase 文档中的审查表/判定表执行，并产出**结论 + 依据 + 证据路径**，写入对应 Report 或确认简报。只有结论没有依据的判断视为未通过。无标准的自我审查等于盖章。
+## 每次新输入都维护项目连续性
 
-**Agent 无状态。** 任何 Agent 可以随时被终止，下次启动时仅凭文件系统恢复状态。所有关键信息在文档中，不在对话历史中。中断恢复时通过 `git log --oneline --grep="docs(state):\|docs(plan):"` 重建上下文。
+先辨别是提问、澄清、候选、缺陷，还是本轮变更与明确执行指令。只问可行性，不自动启动实现。
 
----
+范围内低影响事项直接处理。实质改变当前承诺时，说明对范围、依赖、已完成成果、验证与交付的影响，给一个推荐处置。已有明确选择就执行，不反复请示同一决定；同步原承诺的保留/替换/延期/取消、相关基线、工作和失效证据。
 
-## 迭代模式
+用户连续插单时，主动汇总净范围、被挤出的工作与当前交付还能否闭环，建议重排。用户可以改向；生命周期不是用来拒绝用户，而是让转向有序、可追溯。
 
-同一状态机骨架，三种迭代模式。Agent 进入 DESIGN 时根据已有文档状态自动判断：
+详细流程：`$_S/references/decisions-and-change.md`。
 
-### 首次设计（INIT → DESIGN）
+## 决定、授权与评审
 
-所有文档全新创建。走完所有子阶段，不加跳过。
+- 对话中的明确决定可直接记录采用；按来源、对象、边界、条件与变化复用已有授权，不要求固定批准词或阶段末重演审批。
+- 需求确认、技术评审、执行授权分别判断；认可方案不能外推生产部署、费用或数据删除许可。
+- 重要动作授权不清时只暂停相关动作，澄清缺口；明确条件授权无需机械重复批准。平台与安全限制仍然适用。
+- 评审目标是“对当前用途足以推进”。阻塞意见需依据、证据/可信风险推理、影响和关闭条件；偏好与未来扩展不自动阻塞。
+- 复审围绕原问题及修订影响；新重大证据仍可阻塞，预算耗尽不自动放行。合理取舍可接受，不无限互审。
 
-### 增量迭代（RELEASE → DESIGN）
+请求人的决定时提供重点影响、推荐选择和一个具体问题；证据留项目记录，批准结论与边界也要留痕，不复制整段聊天。
 
-已有文档已冻结。进入 DESIGN 后：
-- 迭代候选从 `docs/backlog.md` 拉取。候选选择是本轮第一份确认简报：Agent 给出建议排序和理由，人类选定后将条目状态改为 `planned`
-- backlog 随时可写入：人类的新需求、Agent 发现的工程债（标注来源）均直接录入；排序属人类决策
-- vision.md 已 active → 跳过，不重写
-- Spec 已 active → 在现有文档上追加，不重写
-- AC 文档已 active → 在现有文档上追加场景，不重写
-- 已有 ADR 已 accepted → 不修改，仅新增 ADR
-- 已有 Plan 已 done → 新建 Plan，不重建
-- 测试基建已就绪 → 进入 TEST_INFRA 先做增量检查，复用既有基建，仅对本轮增量需求搭建，不重复搭建（见 [references/phase-test-infra.md](references/phase-test-infra.md)「增量检查」）
+## 生命周期：跟踪交付，不锁死全项目
 
-### 设计变更（DEVELOP → DESIGN，架构颠覆退回）
+**项目**维护长期目的与约束；**交付**维护本轮承诺、基线、里程碑与接收条件；**工作单元**维护责任、依赖、执行与交接。迭代不强制等于发布版本。
 
-从 DEVELOP 因架构颠覆退回。进入 DESIGN 后走「设计变更」子阶段：
-1. 定级：确认为架构颠覆（非轻微约束）
-2. ADR 修订：旧 ADR 追加修订记录，或标记 superseded + 新建 ADR
-3. 传导下游：同步更新受影响的 Spec、AC 文档、通知受影响 Plan、更新 Plan
-4. 恢复编码：以新 ADR 为依据重新推进到 DEVELOP
+| 阶段 | 推进条件，而非固定操作手册 | 详细路径（相对 `$_S`） |
+|---|---|---|
+| INIT | 目标、成功条件、责任和项目入口就绪；接入不伪造历史 | [立项与接入](<references/phase-init.md>) |
+| DESIGN | 承诺可验收，共享边界足以协作，重要取舍和未知有处置 | [需求与架构](<references/phase-design.md>) |
+| TEST_INFRA | 对即将执行的范围，必要工程能力可用且关键门禁能识别错误 | [工程准备](<references/phase-test-infra.md>) |
+| DEVELOP | 当前承诺的实现已集成，受影响验证有依据，偏差已处置 | [实现与集成](<references/phase-develop.md>) |
+| SYSTEM_TEST | 对明确候选与基线做整体验收，未满足项和残余风险有决定 | [验证与验收](<references/phase-system-test.md>) |
+| RELEASE | 在授权内交给实际消费者，接收、观察、恢复与后续责任明确 | [交付与改进](<references/phase-release.md>) |
 
-**注意：** 轻微约束（依赖能用但方式与预期不一致）在 DEVELOP 内解决，不退回 DESIGN。
+阶段资源路径均以 `$_S/references/` 为根，不从目标项目目录猜测。
 
-### 基建修复（SYSTEM_TEST → TEST_INFRA，基建缺陷退回）
+默认按依赖推进，允许满足局部前提的工作重叠。下一版本设计与当前版本验收可以并行；局部重设计/基建修复不使无关工作倒退。不能通过更改阶段标签省略交付关口。
 
-从 SYSTEM_TEST 因基建缺陷退回。进入 TEST_INFRA 后走增量修复：
-1. 定级：确认为基建缺陷（门禁未拦截、覆盖率错乱、Mock 不对、系统测试框架不稳定），非业务 bug 或设计缺陷
-2. 定位：定位到具体基建组件，修复对应的 Plan 或配置
-3. 自证：修复后重新走 TEST_INFRA 门禁（特别是"正确拦截"项）
-4. 恢复流程：TEST_INFRA 门禁通过后重新推进到 DEVELOP，已完成的业务 Plan 不受影响
+开发中尽早连接真实关键路径，允许系统、性能、安全和集成验证前置；正式验收仍面向实际候选。紧急修复可以缩小范围与记录粒度，不跳过必要验证和授权，也不夹带无关功能。
 
-### 设计缺陷（SYSTEM_TEST → DESIGN）
+## 文档与合作
 
-从 SYSTEM_TEST 因契约缺陷退回。进入 DESIGN 后：
-1. 定级：确认为契约缺陷（AC 场景错漏、Spec 业务规则错误、接口定义与真实需求不符），非代码 bug（SYSTEM_TEST 内修复）或基建缺陷（退回 TEST_INFRA）
-2. 修订：受影响文档退回 `proposed` 修改，重新审查 + 人类确认后 promote。确认简报需说明上一轮确认为何未发现该缺陷
-3. 传导：同步更新受影响的 Plan、测试脚本、架构规则文件
-4. 恢复：受影响模块创建最小 `fix/*` Plan 修正实现（走 MR 门禁），完成后直接回 SYSTEM_TEST 从失败层重跑——不重走 TEST_INFRA 和 DEVELOP 全程
+写作/修改前读 `$_S/references/documentation.md`，建立记录或状态时读 `$_S/references/records.md`。
 
----
+- 当前 Spec/AC/接口与计划可受控修订，整理成连贯现行版本；不靠末尾不断追加修正。Git、决定和结果记录保存历史。
+- 需求写可观察行为，架构写稳定责任和约束；私有变量、helper 调用、调试流水不污染高层规格。公开字段、配置键和 CLI 参数属于契约，应精确。
+- 区分要求、决定、事实、假设、提议；未知不伪装为不适用，代码现状不自动成为已确认需求。
+- 可按模块、垂直切片或风险工作拆分；并行可写工作隔离，明确认领、依赖基线和整合责任。共享规范需语义整合，Git 无冲突不代表一致。
+- 在重要决定、范围/阻塞变化、里程碑、交接和停止时更新进度；保存有效成果，不因崩溃自动丢弃工作树。
 
-### 热修复（RELEASE → DESIGN，生产阻断性故障）
+## 证据、验收和交付
 
-生产阻断性故障走热修复快速通道，从 `main` 拉 `hotfix/*` 分支：
+按 `$_S/references/work-and-delivery.md` 维护工作、风险、恢复与交付。
 
-1. 定级：确认为阻断性故障（线上不可用/核心功能损坏），非轻微缺陷
-2. 轻量 DESIGN：跳过 full Spec/AC，仅修订受影响 ADR（如有设计变更）
-3. TEST_INFRA：增量修复，已完成基建不受影响
-4. DEVELOP：创建最小修复 Plan，走 TDD → MR 门禁
-5. SYSTEM_TEST：全量回归测试（SYSTEM_TEST 所属各层，见「测试执行边界」）
-6. 合并 `hotfix/*` 到 `main` + `develop`（合并前需人类显式批准，见「不可委托门禁」）
-7. RELEASE：在 `main` 上打补丁 tag（如 v0.1.1），归档
+证据绑定要求/风险、候选对象、修订、方法、环境与结果。改动后按影响复用或重验，不按测试层固定禁止回归。分支上的 PASS 不能拼成未运行过的集成候选 PASS。
 
-**注意：** 非阻断性缺陷走正常增量迭代（RELEASE → DESIGN），不走热修复。
+验收检查消费者实际使用的包、二进制、部署服务、Web 产物或其他交付物；源码树测试绿不代替。交付对象须与接受对象一致或已有明确差额验证。涉及不可逆迁移时先确定安全恢复/前向修复路径，不无条件回滚旧代码。
 
----
+关闭交付时处置剩余范围、问题与支持责任，经验回流候选；不是自动承诺下一轮所有需求。项目结束或转向也要明确成果和未完成目标。
 
-## 执行容器
+## 按需路由与自检
 
-`docs/plans/` 下的每个文件夹是一个执行容器，对应一个 Git 分支。任何需要执行的任务（搭建基建、业务开发、部署）都通过创建执行容器来组织。一个执行容器内可包含多个最小执行单元（Plan + Report 成对）。
+| 情境 | 读取 `$_S` 下资源 |
+|---|---|
+| 新输入、授权、评审、变更 | `references/decisions-and-change.md` |
+| 写文档、共同编辑、整理历史 | `references/documentation.md` |
+| 工作认领、进度、风险、恢复、验收交付 | `references/work-and-delivery.md` |
+| 文档字段、ID、权威归属和模板 | `references/records.md`、`assets/templates/` |
+| 升级旧版 devloop 或已有项目 | `references/migration.md`、`references/phase-init.md` |
 
-- 文件夹内包含 README.md（子任务状态表）、Plan 文件（描述执行计划）和 Report 文件（执行结果留档）
-- 一个执行容器 = 一个 Git 分支，从适当的基础分支拉出，完成后合并或保留（`spike/*` 不合并）
-- 分支类型与 commit type 一致（`feat/` `fix/` `ci/` `test/` `refactor/` `perf/` `build/` `chore/` `docs/`），系统特有类型 `spike/`（ADR 验证，保留不合并）
-- 分支命名格式：`<type>/<编号>-<描述>`，编号与执行容器一致。示例：`feat/0001-order-api`、`ci/0001-pipeline`
-- 多个执行容器并行执行时，必须使用 `git worktree`，保证隔离且共享同一个 repo
-- 各阶段创建自己的执行容器，不替下游阶段创建
-
----
-
-## 安装系统
-
-INIT 阶段将项目接入 devloop 系统。分新项目（安装）和旧项目（接入）两种场景，详见 [references/phase-init.md](references/phase-init.md)。
-
----
-
-## 导航系统
-
-系统文档是自描述的。按以下顺序读取：
-
-```
-1. AGENTS.md           → 项目入口地图：文档类型、目录结构、系统边界、阶段行为
-2. docs/README.md      → 当前系统状态 + 行为边界（首先读取！）
-3. docs/backlog.md     → 工程需求池：迭代候选（进入 DESIGN 前读取）
-4. CONTRIBUTING.md     → 编码/测试/PR 规范（项目自定义）
-5. 各级 README.md      → 子目录索引和状态
-6. 具体文档             → Vision / AC / Spec / ADR / Plan / Report
-```
-
----
-
-## 系统规则
-
-### 文档命名
-
-| 文档 | 格式 | 示例 |
-|------|------|------|
-| Vision | `vision.md` | `vision.md` |
-| Spec | `000x-xxxx.md` | `0001-vagent.md` |
-| Interface | `000x-xxxx.md` | `0001-order-api.md` |
-| AC | `000x-xxxx.md` | `0001-order-ac.md` |
-| ADR | `000x-xxxx.md` | `0001-db-choice.md` |
-| Backlog | `docs/backlog.md`（单文件，条目编号 `BL-000x`） | `docs/backlog.md` |
-| 执行容器 | `000x-简短描述` | `0001-订单模块` |
-| Plan 文件 | `0x-plan-xxx.md` | `01-plan-order-api.md` |
-| Report | `0x-report-xxx.md` | `01-report-order-api.md` |
-
-### Frontmatter
-
-以下文档类型使用 YAML frontmatter（`---` 包裹），位于文件最顶部：
-
-| 文档类型 | 必填字段 |
-|----------|----------|
-| Vision | `title`, `description`, `type: vision`, `status`, `created` |
-| Spec | `title`, `description`, `type: spec`, `status`, `version`, `created` |
-| Interface | `title`, `description`, `type: interface`, `status`, `created` |
-| AC | `title`, `description`, `type: ac`, `status`, `created` |
-| ADR | `title`, `description`, `type: adr`, `status`, `created` |
-| Plan | `title`, `description`, `type: plan`, `status`, `created` |
-| Report | `title`, `description`, `type: report`, `status`, `created` |
-
-`created` 使用 ISO 8601 格式 (`YYYY-MM-DDTHH:MM:SSZ`)。`version` 仅 Spec 使用，整数递增。
-
-`description` 字段用于 Agent 扫描时判断文档是否相关——Agent 通过 description 快速定位目标文档，无需通读全文。
-
-以下文件**不使用** frontmatter：
-- AGENTS.md、CONTRIBUTING.md、CHANGELOG.md、docs/backlog.md
-- 所有 README.md
-
-### status 有效值
-
-| 文档类型 | 状态值 | 流转 |
-|----------|--------|------|
-| Vision | `draft` / `proposed` / `active` | draft→proposed→active |
-| Spec | `draft` / `proposed` / `active` | draft→proposed→active（同时只有一个 active） |
-| AC | `draft` / `proposed` / `active` | draft→proposed→active（同时只有一个 active） |
-| Interface | `draft` / `proposed` / `active` | draft→proposed→active（同时只有一个 active） |
-| ADR | `draft` / `proposed` / `accepted` / `superseded` / `deprecated` | draft→proposed→accepted→superseded/deprecated |
-| Plan | `pending` / `done` | pending→done。执行失败也标记 done，另写新 Plan 继续 |
-| Report | `draft` / `complete` | draft→complete |
-
-**冻结定义：** 设计师完成编写后将 status 从 `draft` 改为 `proposed`（表示"我写完了，待审查"）。Agent 审查通过后，经人类确认（见「不可委托门禁」），将 `proposed` 改为 `active`（或 ADR 的 `accepted`），表示系统正式采纳。冻结后不可原地修改——要改必须退回 DESIGN，修改后重新 promote 为 active。typo 修复、措辞澄清等非破坏性修改除外。Git 记录变更历史。
-
-### 语义链
-
-关联通过文档正文中的文本引用和命名约定表达，不依赖 frontmatter 的 related 字段。示例：
-
-```
-AC 文档 AC-0003-N-1（正常场景）
-  → Plan 01-plan-order-api.md 步骤 2: "实现 AC-0003 订单创建，覆盖所有场景"
-    → Commit: "feat(order): 实现 AC-0003 订单创建"
-      → Report 01-report-order-api.md: "AC-0003-N-1 [PASS], AC-0003-B-1 [PASS], AC-0003-E-1 [PASS], AC-0003-F-1 [PASS], commit abc123"
-```
-
-### 联动规则
-
-修改权威文档时的联动动作：
-
-**修改 Spec：**
-1. 更新 `docs/spec/README.md` 中的版本状态
-2. 检查 `docs/adr/README.md` 中所有引用该 Spec 的 ADR，更新状态
-3. 若 AC 变更，同步更新 AC 文档
-4. 独立 Commit
-
-**新增/修改 ADR：**
-1. 更新 `docs/adr/README.md`
-2. 若替代旧 ADR，旧 ADR 状态改为 `superseded`，新 ADR 正文中引用旧 ADR 路径
-
-### Git 规则
-
-- 文档变更和代码变更永远分开 commit
-- 阶段推进伴随独立 commit，约定前缀 `docs(state):`
-- 分支模型遵循 Gitflow：`main` 仅含 release 节点，`develop` 为持续集成分支
-- 分支类型与 commit type 一致，从适当的基础分支拉出（`feat/*` `fix/*` `ci/*` 等从 `develop`；`hotfix/*` 从 `main`；`release/*` 从 `develop`），完成后合并
-- `spike/*` 例外——ADR 验证分支，保留不合并；对应 ADR 标记 `superseded`/`deprecated` 时删除该 spike 分支。spike 是验证证据的备份而非证据本身——ADR 验证段必须自包含（依赖版本、执行命令、结论），复现不依赖分支存活
-- `release/*` 和 `hotfix/*` 同时合并到 `main` 和 `develop`
-- 具体 commit 格式和 merge 策略见 CONTRIBUTING.md
-
-### 微变更通道
-
-同时满足以下**全部**条件的变更为微变更，允许直接走 `chore/*` / `docs/*` / `fix/*` 分支 → MR 门禁 → 合并 `develop`，不启动迭代、不动状态机：
-
-- 不改变任何权威文档的语义（typo 修复、措辞澄清除外，见「冻结定义」）
-- 不改变公开接口和数据模型
-- 不新增功能
-- 变更规模小（单分支、diff 一眼可审）
-
-两条保险：
-
-- **禁止连击绕行**：同一主题的连续微变更说明该主题应当立项——录入 `docs/backlog.md`，升级为正常迭代
-- 是否够格微变更由 Agent 判断，拿不准时向人类提问（一个问题，附建议答案）
-
-### 不可委托门禁
-
-以下动作成本高且难以撤销，必须获得**人类的显式批准**（对话中的明确确认或等价物），Agent 不得以自证或"上级审查"的名义替代：
-
-- 权威文档冻结：vision/Spec/AC/接口定义 promote `proposed → active`，ADR promote `proposed → accepted`
-- `release/*`、`hotfix/*` 合并到 `main`
-- production 部署
-- 在 `main` 上打版本 tag
-
-请求批准时必须以**确认简报**的形式提出（见「向上汇报原则」），不得将完整文档或执行日志甩给人类要求审查。
-
-项目可在 AGENTS.md 中显式声明豁免（追求全自动发布的场景），但必须在声明处标注风险警告；未声明豁免时此门禁不可跳过。hotfix 紧急场景允许先修复，但合并到 `main` 前仍需人类确认，确认前不得打 tag。
-
-### 向上汇报原则（确认简报）
-
-所有需要人类介入的时刻（不可委托门禁、阶段汇报、异常上报）使用统一的汇报形态——**确认简报**。核心原则：人类面对的是重点问题和决策点，不是冗长报告。
-
-- **简报 = 决策点 + 问题，不是执行日志。** 证据留在文档（Spec/Report/审查记录）中，简报只引用文档路径，不粘贴内容。
-- **异常驱动。** Agent 审查通过的项一行汇总（如"审查表 9 项全过"），只展开三类内容：有风险的点、需要取舍的点、Agent 拿不准的点。
-- **每个待定点是一个具体问题**，附 Agent 的建议答案和理由，人类可以只回"按建议走"。
-- **确认按批。** 同一阶段内的多个确认合并为一份简报在阶段末提出（如 DESIGN 全部文档统一确认、TEST_INFRA 基建 ADR 批量 promote），不逐文档、逐事项打断人类。
-- **重点问题 ≤ 5 个。** 超出说明确认点粒度过粗，应拆分为多次确认。
-- **简报不落盘。** 确认结果通过既有 Git 锚点体现（promote commit、合并、tag），简报本身不留档。
-
-### 测试执行边界（不重复原则）
-
-每层测试只有一个归属执行点。同一层测试在同一提交上不得在其归属门禁之外重复运行——重复运行不产生新信息，只产生耗时。
-
-| 测试层 | 唯一执行点 | 其他阶段 |
-|--------|-----------|---------|
-| 单元测试 + 开发集成自测 | DEVELOP（MR 门禁，每分支） | SYSTEM_TEST 不重复执行 |
-| 契约测试 `[适用]` | DEVELOP（MR 门禁） | SYSTEM_TEST 不重复执行 |
-| 集成 / 系统 / 视觉回归 / 专项 | SYSTEM_TEST（`develop` 全量一次） | DEVELOP 不执行 |
-| 冒烟测试 | RELEASE（staging 与 production 各一次） | — |
-| 付费依赖沙箱验证 `[适用]` | SYSTEM_TEST 手动一次 | 不纳入 CI 高频回归 |
-
-失败修复后的重跑从失败层开始，不回溯已通过的层。hotfix 的"全量回归测试"指 SYSTEM_TEST 所属各层。
-
-### 模板注释约定
-
-模板文件（`assets/templates/` 下）中混有两种内容：模板骨架（实例化时保留）和说明性内容（实例化时移除）。通过注释类型区分：
-
-| 注释类型 | 语法 | 用途 | 实例化时 |
-|----------|------|------|---------|
-| Markdown 注释 | `<!-- -->` | 包裹说明性内容（节标注、填写指引、边界说明） | 移除 |
-| YAML 注释 | `#` | 仅 frontmatter 内，解释 status 字段的有效值和流转规则 | 保留或移除 |
-
-未被注释包裹的内容（标题、表格结构、frontmatter 键名）是模板骨架，实例化时保留。
-
-### 模板生命周期
-
-项目中的模板文件（`0001-template.md`）是临时参考，不是永久文档。规则：
-
-- 创建该类型第一个正式文档后，删除对应的模板文件
-- 删除动作是正式文档创建后的原子清理，不单独执行
-- 示例：DESIGN 阶段创建第一个 Spec `0001-order.md` 后，删除 `0001-template.md`
-
-### 文档编写原则
-
-- 不重复上层文档：Vision 已定义的内容不重述，引用即可
-- 跨文档引用使用相对路径 Markdown 链接，禁止使用反引号包裹的纯文本路径
-- 接口定义优先使用可生成代码的契约格式（如 OpenAPI、TypeScript 接口声明）
-- 模块提供的能力 = 可验证的功能列表（不是"负责用户功能"，而是"提供用户注册、登录、信息查询接口"）
-
----
-
-## 按阶段选择路径
-
-确认当前阶段后，按阶段选择操作流程：
-
-| 当前阶段 | 去读 |
-|----------|------|
-| INIT | [references/phase-init.md](references/phase-init.md) |
-| DESIGN | [references/phase-design.md](references/phase-design.md) |
-| TEST_INFRA | [references/phase-test-infra.md](references/phase-test-infra.md) |
-| DEVELOP | [references/phase-develop.md](references/phase-develop.md) |
-| SYSTEM_TEST | [references/phase-system-test.md](references/phase-system-test.md) |
-| RELEASE | [references/phase-release.md](references/phase-release.md) |
+结束或交接前核对：当前承诺与实际工作一致；重要决定/授权边界可恢复；受影响基线/证据有处置；下一 Agent 能接手；完成声明有真实依据。安装时必须把这些最小行为放入项目常驻规则，不能只让加载本技能的协调者知道。

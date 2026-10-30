@@ -1,0 +1,204 @@
+{
+  "result": "PASS",
+  "artifact": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/dist/finance-total.pyz",
+  "sha256": "9b3c7b4542c7257ad400bbd826a576945a9a726a6c9271290d80bf35933f9ff9",
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "isolated_python_flags": [
+    "-I",
+    "-B"
+  ],
+  "consumer_directory": "/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z",
+  "checks_passed": 27,
+  "checks": [
+    {
+      "case": "decimal",
+      "exit_code": 0,
+      "stdout": "0.3\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "empty",
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "blank",
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "header_only",
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "zero",
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "bom",
+      "exit_code": 0,
+      "stdout": "1.5\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "long",
+      "exit_code": 0,
+      "stdout": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "tiny",
+      "exit_code": 0,
+      "stdout": "0.000000000000000000000000000000000000000000000000000000000001\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "quoted",
+      "exit_code": 0,
+      "stdout": "3.5\n",
+      "stderr": "",
+      "input_unchanged": true
+    },
+    {
+      "case": "invalid",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/invalid.csv: line 3: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "empty_amount",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/empty_amount.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "nan",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/nan.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "inf",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/inf.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "exponent",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/exponent.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "underscore",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/underscore.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "currency",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/currency.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "grouping",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/grouping.csv: line 2: invalid amount; expected a finite plain decimal number\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "missing_header",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/missing_header.csv: line 1: header must contain exactly one 'amount' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "duplicate_header",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/duplicate_header.csv: line 1: header must contain exactly one 'amount' column\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "short",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/short.csv: line 2: expected 2 columns, got 1\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "wide",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/wide.csv: line 2: expected 1 columns, got 2\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "bad_csv",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/bad_csv.csv: line 2: invalid CSV: unexpected end of data\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "encoding",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/encoding.csv: 'utf-8' codec can't decode byte 0xff in position 7: invalid start byte\n",
+      "input_unchanged": true
+    },
+    {
+      "case": "missing_file",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "error: /Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/absent.csv: [Errno 2] No such file or directory: '/Users/vlln/Project/skill_project/.devloop-validation/2026-10-30/new-project/.validation/consumer-2uagry_z/absent.csv'\n"
+    },
+    {
+      "case": "missing_argument",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: finance-total.pyz [-h] file\nfinance-total.pyz: error: the following arguments are required: file\n"
+    },
+    {
+      "case": "extra_argument",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: finance-total.pyz [-h] file\nfinance-total.pyz: error: unrecognized arguments: two\n"
+    },
+    {
+      "case": "help",
+      "exit_code": 0,
+      "stdout": "usage: finance-total.pyz [-h] file\n\nSum a CSV amount column exactly (UTF-8; read-only).\n\npositional arguments:\n  file        path to the CSV file\n\noptional arguments:\n  -h, --help  show this help message and exit\n",
+      "stderr": ""
+    }
+  ],
+  "limitations": [
+    "local synthetic data only",
+    "not a cross-platform or performance certification"
+  ]
+}

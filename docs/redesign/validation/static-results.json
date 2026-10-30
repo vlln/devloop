@@ -1,0 +1,12 @@
+{
+  "command": "python3 -m unittest discover -s tests -v",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_entry_and_routes (test_skill_structure.SkillStructure) ... ok\ntest_no_developer_context_dependency (test_skill_structure.SkillStructure) ... ok\ntest_product_local_links (test_skill_structure.SkillStructure) ... ok\ntest_removed_absolute_rules_do_not_return (test_skill_structure.SkillStructure) ... ok\ntest_resident_rules_and_delivery_navigation (test_skill_structure.SkillStructure) ... ok\ntest_template_frontmatter_defaults (test_skill_structure.SkillStructure) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.014s\n\nOK\n",
+  "yaml_frontmatters_parsed": 9,
+  "yaml_parser": "6.0.3",
+  "skit_direct_validation": "failed: installed validator treats angle-bracket Markdown link destinations literally; 66 false path errors",
+  "skit_normalized_validation": "passed --strict: only angle brackets around link destinations removed in isolated equivalent copy; 0 errors, 0 warnings",
+  "directory_install": "actual isolated skit --dir install, no manifest or agent activation; final install completed without warnings",
+  "meaning": "structure/content/install checks only; no authorization or acceptance semantics inferred"
+}

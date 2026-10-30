@@ -1,0 +1,118 @@
+{
+  "result": "PASS",
+  "baseline_commit": "c806775a928c9e689801a94c310679e1ea288eba",
+  "checks_passed": 22,
+  "method": "current bytes match pre-iteration manifest and git object at baseline",
+  "checks": [
+    {
+      "path": "dist/finance-total.pyz",
+      "sha256": "9b3c7b4542c7257ad400bbd826a576945a9a726a6c9271290d80bf35933f9ff9",
+      "unchanged": true
+    },
+    {
+      "path": "docs/deliveries/0001-zipapp.md",
+      "sha256": "ae710af80b4907f8553dc799d5639a6ba144ff302c6f6c724cf5e218cd5717cd",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/0001-zipapp/01-plan.md",
+      "sha256": "4b3478efedb2be261620e9252f1dcdef28fdd950486f8e6356822f6e54aad724",
+      "unchanged": true
+    },
+    {
+      "path": "docs/plans/0001-zipapp/01-report.md",
+      "sha256": "8aada819f7168ec82e352b67f32b5fdc24070b4e41815b126adf1c5c1d6dbb63",
+      "unchanged": true
+    },
+    {
+      "path": "docs/spec/0001-csv-total.md",
+      "sha256": "cee9f933bd7cf5e89962b2f61f2205c12639c9d20ad05ae09fcc9bb0d18bc2fd",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/acceptance-decision.md",
+      "sha256": "ef5fbfe3a03a07019d4b028172874f43d73520625b0e1186475db6df91d08f55",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/acceptance.json",
+      "sha256": "83cb1475eb4c9a34017be2722ef7739c87f261d33b975198f160ff279a0b8815",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/build.log",
+      "sha256": "5f6f4199386c50ba069c23bb727517860008c3247634b32cc0275da79cf5c0bd",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/delivered-artifact-acceptance.json",
+      "sha256": "4bad27a51097c4308eff0741e3a89e73e6a8fd41e9dc14d9319ef76d723282ba",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/delivery.json",
+      "sha256": "e53d4fb464454a3ffd776862d39f7ac1cead24e8b3dcc7e83c249d486f5da6ea",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/environment.json",
+      "sha256": "fb30b28d6eed9c8c639e0d0484cc21d5695cbfede7d5908af5a08f15fbb3b21f",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/gate-negative.log",
+      "sha256": "a2a25771f07637bab28bc23af4a17327da286580b6d46b0457b3d0389393a0e8",
+      "unchanged": true
+    },
+    {
+      "path": "evidence/unit-tests.log",
+      "sha256": "27d7e94c605bf14f44c32819e0277812ef6a55d9b34b309aaa8d97df89569991",
+      "unchanged": true
+    },
+    {
+      "path": "experiment-observation.md",
+      "sha256": "6003bde1a0e02d02d4ad6e54549b8fd241c36d8b99ecbe3516e3f25a93d51faf",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/README.md",
+      "sha256": "a973c0d0b18d9bd5165e0fc151fde9a9e7942c2f9cb228db12849cada7ddb1fb",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/SHA256SUMS",
+      "sha256": "38a13e0afee842f2be8a170188fa361303a2589b2b97dde833af54f78e9ba8a1",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/USAGE.md",
+      "sha256": "8441c2996458e55cf3d6019390889667372cbd6da3c06e64410f30bd09bb44df",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/empty.csv",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/example.csv",
+      "sha256": "db8ffbc496414f0465e0f0df0bd000282540babd2e98580f0368a6d1ceea6a26",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/finance-total.pyz",
+      "sha256": "9b3c7b4542c7257ad400bbd826a576945a9a726a6c9271290d80bf35933f9ff9",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/invalid.csv",
+      "sha256": "99d8a6dbbb4694e7e117d935063b6743d4a6720e31a09643e75d7f5b45cff350",
+      "unchanged": true
+    },
+    {
+      "path": "local-delivery/0001/smoke.json",
+      "sha256": "e53d4fb464454a3ffd776862d39f7ac1cead24e8b3dcc7e83c249d486f5da6ea",
+      "unchanged": true
+    }
+  ]
+}

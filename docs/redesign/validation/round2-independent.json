@@ -1,0 +1,23 @@
+{
+  "artifact_sha256": "ca4de2b691178d6025e28e64fa1db9e8e833f0375d47d092749b9d9429e38357",
+  "cases": [
+    {
+      "args": [],
+      "exit": 0,
+      "stdout": "0.3\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "--column",
+        "net"
+      ],
+      "exit": 0,
+      "stdout": "3.5\n",
+      "stderr": ""
+    }
+  ],
+  "input_unchanged": true,
+  "first_round_sha_unchanged": true,
+  "scope": "independent consumer copy, no source imports"
+}

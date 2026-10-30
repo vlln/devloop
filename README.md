@@ -2,86 +2,39 @@
 
 # devloop
 
-契约驱动的项目开发系统 — Agent 加载后按 6 阶段状态机自主推进项目，非一次性，多轮迭代。
+为 Agent 与人提供可安装的专业软件开发生命周期：有文档、有历史、可并行、可合作，从立项、验收到交付与多轮改进。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-spec-6e3af2)](https://agentskills.io/specification)
 
-[English](README.en.md)
+[English](<README.en.md>)
 
 </div>
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    INIT --> DESIGN : 项目启动
-    DESIGN --> TEST_INFRA : 契约冻结
-    TEST_INFRA --> DEVELOP : 基建就绪
-    DEVELOP --> SYSTEM_TEST : develop 可测试
-    SYSTEM_TEST --> RELEASE : develop 全绿
-    RELEASE --> DESIGN : 新一轮迭代 / hotfix
-    DEVELOP --> DESIGN : 架构颠覆
-    SYSTEM_TEST --> TEST_INFRA : 基建缺陷
-    SYSTEM_TEST --> DESIGN : 设计缺陷
-```
+## 适合什么项目
 
-## 特性
+需要跨会话持续推进、多人或多 Agent 合作、管理变化与验收交付的长期软件项目。devloop 不替模型选择每个编码步骤，也不以文档和审批数量衡量专业性。
 
-- **6 阶段状态机**：INIT → DESIGN → TEST_INFRA → DEVELOP → SYSTEM_TEST → RELEASE → 下一轮迭代
-- **契约驱动**：Spec / AC / ADR / 接口定义在编码前冻结，每个文档写完即审，审过才进下游
-- **Gitflow 分支模型**：`main` 仅含 release 节点，`develop` 持续集成，分支类型与 commit type 一致
-- **SemVer 版本策略**：`X.Y.Z`，MAJOR=0 期间 MINOR 升功能、PATCH 修 bug，首次从 `0.1.0` 起步
-- **双层门禁**：自动化（CI / 测试 / 覆盖率）+ Agent 判断（文档语义 / 自证 / 失败分类）
-- **发布硬门禁**：合并 `main` / production 部署 / 打 tag 必须人类显式批准，Agent 不可自证替代（项目可显式豁免）
-- **工程需求池（Backlog）**：`docs/backlog.md` 单文件管理迭代候选，DESIGN 从池中拉取，行序即优先级
-- **测试执行边界**：每层测试有唯一归属执行点，同一提交上不重复运行
-- **自描述入口**：Agent 中断后仅凭文件系统恢复状态，不依赖对话历史
-- **全链路可追溯**：Plan → Report → Commit 语义链
+## 提供什么
 
-## Skills
+- **完整生命周期**：立项 → 需求与架构 → 工程准备 → 实现与集成 → 验收 → 交付、反馈与下一轮。
+- **项目连续性**：项目、一次交付、工作单元分别跟踪；下一版本设计与当前版本验收可以并行。
+- **需求变化管理**：新想法不自动变实现任务；插单要说明影响，明确改向后同步范围、计划与证据。
+- **灵活而有边界的决定**：复用有效对话确认与条件授权，只问缺口；方案认可不等于生产操作许可。
+- **可合作的文档**：当前规格连贯、重大历史可追溯；高层需求不被局部实现细节污染，共享文档有整合责任。
+- **可接管的工作**：责任、依赖、工作位置、已验证成果与下一步持续保留，中断不默认丢弃工作树。
+- **主动工程选择**：在动手、变更、集成和停止等节点提示判断，提供分支隔离、风险实验、回归与自检等默认策略，而不是等待用户逐项提醒。
+- **真实交付依据**：验证实际消费者使用的产物，区分实现、测试、验收、交付与运行健康。
 
-| Skill | 描述 |
-|-------|------|
-| [`devloop`](skills/devloop) | 契约驱动的项目开发系统。当 Agent 需要初始化项目、理解当前阶段能做什么、推进状态、创建和管理文档时使用。 |
-
-## 文档
-
-- [元设计文档](docs/design.md) — 思想纲领、设计原则、系统边界、关键设计决策（机制细节见 skills/devloop/）
-- [SKILL.md](skills/devloop/SKILL.md) — 执行层入口：状态机路由、系统规则、按阶段操作路径
-- [Backlog](docs/backlog.md) — 本仓库自身的工程需求池
-
-## 快速开始
-
-将以下内容粘贴到 AI Agent（Claude Code、Cursor、OpenAI Assistants 等）中：
-
-```text
-Install the Agent Skills from https://raw.githubusercontent.com/vlln/devloop/main/README.md
-```
+保留专业开发的阶段关口，按风险与项目事实裁剪工程方法；沿用既有工具和分支策略，不强制所有项目改用 Gitflow。
 
 ## 安装
 
-推荐使用 `skit` 安装。它从发布仓库获取 skills，记录到本地清单，并为本地 Agent 激活。
-
 ### skit
-
-通过 Homebrew 安装 `skit`：
 
 ```sh
 brew install vlln/tap/skit
-```
-
-其他平台见 `skit` 安装文档。
-
-安装单个 skill：
-
-```sh
 skit install vlln/devloop/skills/devloop
-```
-
-安装本仓库所有 skills：
-
-```sh
-skit install vlln/devloop --all
 ```
 
 ### npx skills
@@ -90,19 +43,30 @@ skit install vlln/devloop --all
 npx skills add vlln/devloop
 ```
 
-### 手动安装
+### 手动
 
-将 `skills/<skill-name>` 目录复制到 Agent 的 skills 目录，重启 Agent 即可。
+将[技能目录](<skills/devloop/>)复制到 Agent 的 skills 目录，按工具要求重启或重新加载。安装工具可选，技能本身不要求 skit 运行时。
 
-常见路径：
+远程安装获取的是已发布仓库内容，不代表本地未发布改动已同步；旧项目不会自动迁移。
 
-- Codex CLI: `~/.codex/skills`
-- Claude Code: 项目中的 `.claude/skills`，或已配置的用户 skills 目录
-- OpenCode: `~/.opencode/skills/<repo-name>`
+## 开始使用
 
-## 依赖
+向 Agent 提供项目目标并要求“用 devloop 接入和推进这个项目”。已有项目会先扫描现有规范、在途工作和证据，增量接入，而不是覆盖布局或伪造历史决定。
 
-- `skit` CLI，用于安装和校验 workflow。
+也可以用于接手项目、评估本轮新需求、协调并行工作、整理规格或准备验收交付。无需先让用户手工填写整套模板。
+
+## Skills
+
+| Skill | 用途 |
+|---|---|
+| [devloop](<skills/devloop/SKILL.md>) | 专业开发生命周期、跨会话推进、并行协作、需求变化与多轮交付 |
+
+## 开发与验证资料
+
+- [设计说明](<docs/design.md>)：设计边界和机制理由。
+- [重设计记录](<docs/redesign/README.md>)：候选设计及其到实现的过程。
+- [隔离验证](<docs/redesign/validation/README.md>)：本地交付、跨会话变更和边界实验的证据与限制。
+- [Backlog](<docs/backlog.md>)：本仓库的后续工作。
 
 ## 许可证
 

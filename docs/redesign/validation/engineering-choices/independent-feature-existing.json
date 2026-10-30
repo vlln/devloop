@@ -1,0 +1,20 @@
+[
+  {
+    "case": "feature",
+    "branch": "feat/add-decrement",
+    "head": "f3668f20c6ff7b5db8ecb7af44b95fedd08e168d",
+    "main_unchanged": true,
+    "clean": true,
+    "test_exit": 0,
+    "test_output": "test_decrement (test_counter.CounterTests) ... ok\ntest_increment_regression (test_counter.CounterTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+  },
+  {
+    "case": "existing",
+    "branch": "feat/current-decrement",
+    "head": "29cef3ae43cc70ff76a576734f466e0d9906fdf8",
+    "main_unchanged": true,
+    "clean": true,
+    "test_exit": 0,
+    "test_output": "test_decrement (test_counter.CounterTests) ... ok\ntest_increment_regression (test_counter.CounterTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+  }
+]

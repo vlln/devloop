@@ -1,0 +1,8 @@
+{
+  "protocol": "2",
+  "python": "3.9.6",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "final_manifest_sha256": "b41e3d937e55cf0d2e3a659823bd7129025c29674672c533814c361b34314c6f",
+  "model_context": "gpt-6.1-sol (session-reported); child agents use the configured default; no cross-model comparison",
+  "experiments": "isolated local agent executions; no production/network publication/paid operations"
+}

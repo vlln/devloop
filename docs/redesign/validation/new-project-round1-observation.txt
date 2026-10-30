@@ -1,0 +1,47 @@
+# 隔离实验观察：新项目首轮交付
+
+## 结论
+
+**实际完成首轮安装、文档、代码、验证、受托验收及本地 zipapp 交付；到此停止，没有自动第二轮。** 本文是执行观察，不是对技能开发设计的审计。所有写入仅在本隔离项目内，未访问其他项目、开发设计/审计、网络、付费资源或外部子 Agent。
+
+## 安装与授权复用
+
+- 先使用 read 读取用户指定只读快照 SKILL.md；按需读取阶段参考、documentation/records/decisions-and-change/work-and-delivery 及选用模板。未调用技能工具加载已安装旧版 devloop，未修改技能快照。
+- 初始 pwd 与列表确认目录为空；按新项目 INIT 接入。[AGENTS](<AGENTS.md>)及 [常驻简规](<docs/devloop.md>)使不加载技能的后续执行者仍具备新输入分流、授权边界、文档职责、恢复、证据和交接义务。
+- 没有模板全量复制。小项目将 Spec/AC/CLI 合并 [规格 v1](<docs/spec/0001-csv-total.md>)，决定就近放 [交付](<docs/deliveries/0001-zipapp.md>)，Plan/Report 成对且有结果；没有空 ADR、空占位索引或额外框架。
+- 用户已允许本地安装/实现/技术自评/验收/交付，按来源、对象、环境、边界、条件、变化复用；没有阶段末重复请示。普通 CLI 格式选择明确标注为委托内技术判断，不冒充用户逐项口述。自评没有声称独立审查，Agent 文档没有创造网络发布/费用等新许可。
+- 本地 main 原生策略，未创建 develop；`git init -b main`，提交身份仅用单次 `git -c`，未改全局配置。安装锚点 `14e4ef0`，候选修订 `076a9b0`，最终关闭版本以项目 main HEAD 为准。
+
+## 实际完成
+
+- [标准库 CLI](<app/finance_total.py>)：读取 UTF-8/BOM CSV 唯一 amount 列、精确十进制相加、空表 0、非法金额可读错误且退出 2；不输出部分合计、不修改输入。
+- [构建入口](<tools/build.py>)生成只有两个运行文件的 [候选 zipapp](<dist/finance-total.pyz>)，无第三方安装；[测试](<tests/test_total.py>)与 [实际制品验收工具](<tools/acceptance.py>)可重复执行，命令见 [CONTRIBUTING](<CONTRIBUTING.md>)。
+- [实际本地交付目录](<local-delivery/0001/README.md>)包含 [pyz](<local-delivery/0001/finance-total.pyz>)、独立可读使用说明、合成正常/空表/非法样例及摘要，消费者无需源码树。
+- 实际交付字节 SHA-256：`9b3c7b4542c7257ad400bbd826a576945a9a726a6c9271290d80bf35933f9ff9`，与接受对象一致。
+
+## 已验证（非仅计划）
+
+| 验证 | 对象/方法与结果 | 证据 |
+|---|---|---|
+| 工程/业务正向与故障断言 | Python 3.9.6，15 项 unittest PASS；包含长金额、低 Decimal 环境精度、250 项整数精确参考、故障/只读 | [unit-tests](<evidence/unit-tests.log>) |
+| 关键门禁反向自证 | 故意固定返回 0 的坏 zipapp 被实际验收 decimal 断言拒绝，子进程退出 1，测试确认非零 | [gate-negative](<evidence/gate-negative.log>) |
+| 实际候选消费 | 独立目录仅 pyz/合成 CSV，Python -I -B，27 项 PASS | [acceptance](<evidence/acceptance.json>) |
+| 技术自评和接受 | 同一候选，按用户委托分别记录技术判断与验收接受，无未处置阻塞 | [acceptance-decision](<evidence/acceptance-decision.md>) |
+| 本地交付与运行观察 | 复制相同接受字节；交付目录正常输出 0.3、空表 0、非法退出 2；输入未改 | [delivery](<evidence/delivery.json>) |
+| 交付字节复验 | 对实际交付 pyz 再完整 27 项 PASS，不依赖源码树 | [delivered-artifact-acceptance](<evidence/delivered-artifact-acceptance.json>) |
+
+实际环境：macOS 27.0.1 arm64 / Python 3.9.6，详见 [环境证据](<evidence/environment.json>)。每次 bash 均检查退出：首次 pwd/ls 工具结果无显式 marker 但正常返回；之后命令加 EXIT trap 显示 `[exit code: 0]`。唯一预期失败是坏样例验收子进程，由测试断言捕获并保留原始日志，不隐藏/删除失败断言。没有后台任务。
+
+## 未验证及限制
+
+- 未验证其他 OS/Python 版本矩阵、真实财务 CSV、超大/恶意输入性能；Python 3.9+ 是目标，只有 3.9.6 为本轮实测。
+- 本地独立目录为用户授权的实际消费/接收方式，不声称远端财务人员已领取、生产部署或持续运营健康。
+- 无独立审查：用户明确允许本 Agent 技术自评和验收，未把角色切换冒充独立视角。
+- 金额普通记数且不接受指数、千分位/币种标记；不强制两位小数。这些属于首轮委托内格式选择，已进入现行契约和随包说明。
+- 编码/I/O 错误给路径与原因、不保证行号；内容错误给行号。候选前已经明确整理，未将不满足的断言改写为 PASS。
+
+## 停止点与下一步
+
+[交付](<docs/deliveries/0001-zipapp.md>) closed / delivered，[Plan](<docs/plans/0001-zipapp/01-plan.md>) done / succeeded，[Report](<docs/plans/0001-zipapp/01-report.md>) complete；无活跃工作/后台任务/阻塞。最终文件与证据提交 main，合成临时目录保留在忽略的 .validation，未做清理删除。
+
+下一步：用户可以离线使用本地包或反馈问题。发现问题先停止使用 pyz、保留脱敏复现，由项目拥有者决定是否授权新轮次；输入未改无需数据回滚。本执行 Agent 不自动启动第二轮。给父 Agent 的摘要包含真实产物、证据、版本和未验证边界，而不要求父 Agent 重复实现或再次审批同一选择。
