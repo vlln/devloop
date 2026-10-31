@@ -1,0 +1,242 @@
+[
+  {
+    "source_id": "X01",
+    "claim": "coupon两入口加法导致超过小计时仍为正",
+    "target": "billing.py",
+    "kind": "raw duplicate, not trusted"
+  },
+  {
+    "source_id": "X02",
+    "claim": "label负数必须钳制为0",
+    "target": "labels.py",
+    "kind": "raw hypothesis"
+  },
+  {
+    "source_id": "X03",
+    "claim": "label应该转义HTML防XSS",
+    "target": "labels.py",
+    "kind": "raw hypothesis"
+  },
+  {
+    "source_id": "X04",
+    "claim": "给两个函数增加完整类型注解",
+    "target": "billing.py",
+    "kind": "style"
+  },
+  {
+    "source_id": "X05",
+    "claim": "实现会员折扣后再合并",
+    "target": "billing.py",
+    "kind": "future expansion"
+  },
+  {
+    "source_id": "X06",
+    "claim": "全仓所有计算应迁成策略模式",
+    "target": "billing.py",
+    "kind": "architecture preference"
+  },
+  {
+    "source_id": "X07",
+    "claim": "空数组coupon不为0时地板坏，另列一个bug",
+    "target": "billing.py",
+    "kind": "potential same root cause"
+  },
+  {
+    "source_id": "X08",
+    "claim": "现有函数短名字不够说明含义",
+    "target": "labels.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "X09",
+    "claim": "未验证非法coupon类型会崩溃",
+    "target": "billing.py",
+    "kind": "raw hypothesis"
+  },
+  {
+    "source_id": "X10",
+    "claim": "reviewer上次已关闭的render_label负号意见再次提出，未提供新证据",
+    "target": "labels.py",
+    "kind": "closed finding repeated"
+  },
+  {
+    "source_id": "N00",
+    "claim": "命名/格式偏好建议1，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N01",
+    "claim": "命名/格式偏好建议2，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N02",
+    "claim": "命名/格式偏好建议3，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N03",
+    "claim": "命名/格式偏好建议4，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N04",
+    "claim": "命名/格式偏好建议5，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N05",
+    "claim": "命名/格式偏好建议6，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N06",
+    "claim": "命名/格式偏好建议7，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N07",
+    "claim": "命名/格式偏好建议8，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N08",
+    "claim": "命名/格式偏好建议9，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N09",
+    "claim": "命名/格式偏好建议10，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N10",
+    "claim": "命名/格式偏好建议11，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N11",
+    "claim": "命名/格式偏好建议12，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N12",
+    "claim": "命名/格式偏好建议13，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N13",
+    "claim": "命名/格式偏好建议14，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N14",
+    "claim": "命名/格式偏好建议15，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N15",
+    "claim": "命名/格式偏好建议16，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N16",
+    "claim": "命名/格式偏好建议17，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N17",
+    "claim": "命名/格式偏好建议18，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N18",
+    "claim": "命名/格式偏好建议19，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N19",
+    "claim": "命名/格式偏好建议20，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N20",
+    "claim": "命名/格式偏好建议21，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N21",
+    "claim": "命名/格式偏好建议22，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N22",
+    "claim": "命名/格式偏好建议23，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N23",
+    "claim": "命名/格式偏好建议24，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N24",
+    "claim": "命名/格式偏好建议25，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N25",
+    "claim": "命名/格式偏好建议26，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N26",
+    "claim": "命名/格式偏好建议27，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N27",
+    "claim": "命名/格式偏好建议28，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N28",
+    "claim": "命名/格式偏好建议29，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  },
+  {
+    "source_id": "N29",
+    "claim": "命名/格式偏好建议30，无行为后果或项目硬约束",
+    "target": "billing.py",
+    "kind": "nit"
+  }
+]

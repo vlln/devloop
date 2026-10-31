@@ -28,6 +28,7 @@
 
 | 入口 | 内容 |
 |---|---|
+| [REVIEW契约](<../REVIEW.md>) / [审核与风险](<review.md>) | 项目失败模式、敏感政策、多Agent核验/收敛与人工路由 |
 | [Vision](<vision.md>) | 目标、用户、成功条件、非目标和长期边界 |
 | [交付记录](<deliveries/README.md>) | 一次交付的承诺、范围、条件与结果 |
 | [Spec](<spec/README.md>) | 现行需求与业务规则 |

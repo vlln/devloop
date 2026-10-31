@@ -1,0 +1,30 @@
+Python: 3.9.6 (default, May 22 2026, 11:13:45)
+[Clang 21.0.0 (clang-2100.1.1.101)]
+billing.py SHA-256: 9bb9be7c18cec7f0146ef7db8734b0773f9871af7e4b3005a2e95cdfa2039afa
+labels.py SHA-256: 67d1e844dd826af33b7543da87d140d9b47a7c1513d05d24e5b2b385a22d2964
+REVIEW.md SHA-256: c3edfd8637876ab33c397d6ca10bc060a1a5cb8288481ade60ac05186b73587e
+REQUIREMENTS.md SHA-256: ef69aa3e1e68f4c276202fad2539009a7dbb3c58eb14d153d74a481ab665005c
+test_coupon.py SHA-256: 33f865b7152746ff9595c7c6683d34a3362e40e5e89148ea31bbcfc131e3614e
+Command: python3 -B -m unittest -v test_coupon.CouponTests.test_positive_coupon_is_subtracted
+test_positive_coupon_is_subtracted (test_coupon.CouponTests) ...
+======================================================================
+FAIL: test_positive_coupon_is_subtracted (test_coupon.CouponTests) (entry='checkout_total')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/vlln/Project/skill_project/.devloop-validation/review-2026-10-31/repair/test_coupon.py", line 16, in test_positive_coupon_is_subtracted
+    self.assertEqual(entry([11, 4], 3), 12)
+AssertionError: 18 != 12
+
+======================================================================
+FAIL: test_positive_coupon_is_subtracted (test_coupon.CouponTests) (entry='preview_total')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/vlln/Project/skill_project/.devloop-validation/review-2026-10-31/repair/test_coupon.py", line 16, in test_positive_coupon_is_subtracted
+    self.assertEqual(entry([11, 4], 3), 12)
+AssertionError: 18 != 12
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=2)
+[exit code: 1]

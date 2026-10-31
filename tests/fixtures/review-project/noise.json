@@ -1,0 +1,12 @@
+[
+  {"source_id":"X01","claim":"coupon两入口加法导致超过小计时仍为正", "target":"billing.py", "kind":"raw duplicate, not trusted"},
+  {"source_id":"X02","claim":"label负数必须钳制为0", "target":"labels.py", "kind":"raw hypothesis"},
+  {"source_id":"X03","claim":"label应该转义HTML防XSS", "target":"labels.py", "kind":"raw hypothesis"},
+  {"source_id":"X04","claim":"给两个函数增加完整类型注解", "target":"billing.py", "kind":"style"},
+  {"source_id":"X05","claim":"实现会员折扣后再合并", "target":"billing.py", "kind":"future expansion"},
+  {"source_id":"X06","claim":"全仓所有计算应迁成策略模式", "target":"billing.py", "kind":"architecture preference"},
+  {"source_id":"X07","claim":"空数组coupon不为0时地板坏，另列一个bug", "target":"billing.py", "kind":"potential same root cause"},
+  {"source_id":"X08","claim":"现有函数短名字不够说明含义", "target":"labels.py", "kind":"nit"},
+  {"source_id":"X09","claim":"未验证非法coupon类型会崩溃", "target":"billing.py", "kind":"raw hypothesis"},
+  {"source_id":"X10","claim":"reviewer上次已关闭的render_label负号意见再次提出，未提供新证据", "target":"labels.py", "kind":"closed finding repeated"}
+]

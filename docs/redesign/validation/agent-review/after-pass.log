@@ -1,0 +1,20 @@
+Python: 3.9.6 (default, May 22 2026, 11:13:45)
+[Clang 21.0.0 (clang-2100.1.1.101)]
+billing.py SHA-256: b2b511a4125cb0590f11a581bcaf63e0389f1656b8e37a6c8dbf93d4a2fee801
+labels.py SHA-256: 67d1e844dd826af33b7543da87d140d9b47a7c1513d05d24e5b2b385a22d2964
+REVIEW.md SHA-256: c3edfd8637876ab33c397d6ca10bc060a1a5cb8288481ade60ac05186b73587e
+REQUIREMENTS.md SHA-256: ef69aa3e1e68f4c276202fad2539009a7dbb3c58eb14d153d74a481ab665005c
+test_coupon.py SHA-256: 33f865b7152746ff9595c7c6683d34a3362e40e5e89148ea31bbcfc131e3614e
+Unchanged label, contracts and test hashes: PASS
+Command: python3 -B -m unittest -v test_coupon
+test_coupon_boundaries_and_large_integers (test_coupon.CouponTests) ... ok
+test_default_zero_and_calling_conventions (test_coupon.CouponTests) ... ok
+test_formula_parity_and_input_preservation (test_coupon.CouponTests) ... ok
+test_positive_coupon_is_subtracted (test_coupon.CouponTests) ... ok
+test_direct_str_and_intentional_negative_sign (test_coupon.LabelControlTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+[exit code: 0]

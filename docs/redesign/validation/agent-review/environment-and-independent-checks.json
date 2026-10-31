@@ -1,0 +1,24 @@
+{
+  "baseline_commit": "fe20b27",
+  "branch": "feat/risk-based-agent-review",
+  "product_files": 36,
+  "product_manifest_sha256": "5bd5f44fbcd64fd065d9e5022b04a7ba26a972fd836742cc71eb265d100817eb",
+  "python": "3.9.6",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "model_context": "gpt-6.1-sol session context; children use configured default, not a cross-model comparison",
+  "direct_checks": {
+    "original_candidate_unchanged": true,
+    "two_byte_plus_to_minus_delta": [
+      149,
+      230
+    ],
+    "clean_label_byte_preserved": true,
+    "repair_unittest_exit": 0,
+    "repair_unittest_output": "test_coupon_boundaries_and_large_integers (test_coupon.CouponTests) ... ok\ntest_default_zero_and_calling_conventions (test_coupon.CouponTests) ... ok\ntest_formula_parity_and_input_preservation (test_coupon.CouponTests) ... ok\ntest_positive_coupon_is_subtracted (test_coupon.CouponTests) ... ok\ntest_direct_str_and_intentional_negative_sign (test_coupon.LabelControlTests) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK\n"
+  },
+  "limits": [
+    "Some execution agents loaded the registered older same-name skill due to session instructions; they report applying the fixed local protocol, so this is not a perfectly hermetic instruction comparison.",
+    "40-item noise batch and P1-P5 conditions are constructed inputs, not production observations.",
+    "No real merge, human platform approval, production, payment, exploit or migration performed."
+  ]
+}

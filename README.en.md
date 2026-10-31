@@ -20,7 +20,8 @@ Long-running software projects that need continuity across sessions, collaborati
 - **A complete lifecycle**: inception → requirements and architecture → engineering readiness → implementation and integration → acceptance → delivery, feedback and further iterations.
 - **Project continuity**: track projects, deliveries and work units separately; design for the next version can coexist with acceptance of the current one.
 - **Change management**: questions do not automatically become implementation commitments; explain the impact of additions and update scope, plans and evidence after a clear direction change.
-- **Flexible, bounded decisions**: reuse valid conversational decisions and conditional permissions, asking only about gaps; endorsing a design does not authorize production operations.
+- **Multi-agent review and verification**: complementary independent reviews, filtered and deduplicated findings, incremental re-review and a third-round strategy escalation. Zero findings is valid; nits must not keep expanding the goal.
+- **Risk-based approval**: machines absorb review noise; low-risk work proceeds within existing permission, while material risks and sensitive areas go to people as concise decisions. Reuse valid conditional permission, but never apply an old candidate's green checks to new code.
 - **Collaborative documentation**: coherent current specifications with traceable history, appropriate abstraction and explicit integration responsibility for shared documents.
 - **Recoverable work**: preserve ownership, dependencies, workspace, verified results and next actions; interruption does not automatically discard a worktree.
 - **Proactive engineering choices**: activate judgment at work, change, integration and stopping boundaries, with defaults for isolation, risk experiments, regression evidence and self-checks instead of waiting for itemized user reminders.

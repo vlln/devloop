@@ -14,4 +14,6 @@ python3 -m unittest discover -s tests -v
 
 [场景夹具](<fixtures/README.md>)提供固定输入。实测时将技能完整复制到隔离工作区，分别执行新项目接入、既有项目接入、连续变更与新会话恢复；不修改真实用户项目，不触发真实生产、费用或数据删除。
 
+[审核场景](<fixtures/review-cases.md>)另检验独立发现→核验过滤→协调与风险升级→修复增量复审，包含干净/有意行为负例、重复/nit、三轮升级与长报告压力；结果见[审核实施](<../docs/redesign/agent-review.md>)。
+
 每次运行记录输入、实际文件/回复、Agent、技能快照和验证结果。新模型接手只给安装后的项目资料，不传递之前执行者的聊天；这样才能区分会话记忆和持久化效果。结果在[实现记录](<../docs/redesign/implementation.md>)及[证据索引](<../docs/redesign/validation/README.md>)登记，不能用测试名称或条文存在宣称行为通过。

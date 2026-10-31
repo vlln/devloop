@@ -35,6 +35,10 @@
 
 [工程选择补充](<../engineering-choices.md>)另存新快照与四夹具结果：[快照](<engineering-choices/manifest.json>)、[干净/已有分支核验](<engineering-choices/independent-feature-existing.json>)、[脏目录/主干例外核验](<engineering-choices/independent-dirty-mainline.json>)。原始观察分别为[新工作](<engineering-choices/feature-observation.txt>)、[已有分支](<engineering-choices/existing-observation.txt>)、[脏目录](<engineering-choices/dirty-observation.txt>)、[主干策略](<engineering-choices/mainline-observation.txt>)。它们不覆盖或改写首轮快照与结果。
 
+## 多 Agent 审核与风险验证
+
+[本轮流水线](<agent-review/README.md>)保存两个独立发现、独立核验过滤、风险升级与协调、作者定向修复及非作者增量复审。原始候选、干净负例与40条噪声可定位，三轮/新风险/人类简报压力输入的答复与真实代码执行分开解释，不覆盖旧快照。
+
 ## 解释边界
 
 实验输入含明确授权与范围约束，部分场景直接指出不得重复确认或不得实现；因此结果证明的是该条件下执行行为，不证明只有本技能才能做到，也不能从中推导对无约束自然输入的独立因果收益。本轮没有无技能基线 A/B、弱文档模型或长期大型多团队实战；这些属于后续评估。

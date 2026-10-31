@@ -1,0 +1,39 @@
+# COR-001 受控本地修复观察
+
+## 结果与边界
+
+作者已在当前 repair 副本完成一个已核验根因的两个实例修复：[checkout_total:4–5](<billing.py#L4-L5>)、[preview_total:8–9](<billing.py#L8-L9>) 各只将 `+ coupon` 改为 `- coupon`，保留 `max(0, ...)`、函数签名、默认参数与其它原内容。未引入共享 helper、输入校验或其它策略。
+
+这是作者本地修复和回归证据，不是非作者增量核验、功能接收决定或集成许可。原 COR-001 身份不变；是否正式关闭交协调者安排非作者对本次实际候选做增量核验。没有重开问题发现或扩大原结论。
+
+只读取 [核验报告](<../verification/result.md>)、当前 [审查契约](<REVIEW.md>)、[需求](<REQUIREMENTS.md>) 和当前两份受控源码；写入和测试均限当前 repair 目录。没有读取 raw nit、原 project 源码、技能或其它审计输入；没有调用 skill、子 Agent、网络、安装依赖、真实费用、集成、发布或提交。未修改原 project 固定候选。
+
+## 实际先红后绿
+
+测试文件 [test_coupon.py](<test_coupon.py>) 在修改源码前一次性写好，修复后测试文件 SHA-256 未变。
+
+1. **修前最小失败**：`python3 -B -m unittest -v test_coupon.CouponTests.test_positive_coupon_is_subtracted`。对两个入口分别执行 `[11, 4]`、coupon=3，均实际得到 18，期望 12。运行 1 个测试方法，两个 subTest 失败，实际退出码 **1**。完整原始输出和修前哈希见 [before-failure.log](<before-failure.log>)。该非零退出是预期复现，已经检查为 `AssertionError: 18 != 12`，不是导入或环境故障。
+2. **定向修复**：仅上述两个加法操作符替换为减法，无其它源码修改。
+3. **修后回归**：`python3 -B -m unittest -v test_coupon`。实际 **5 个测试方法全部通过，退出码 0**；包含同一个最小失败测试。完整输出、修后哈希和未变控制检查见 [after-pass.log](<after-pass.log>)。环境为本地 Python 3.9.6，使用 `-B` 禁止生成 bytecode；只使用标准库。
+
+回归覆盖：两个入口普通正 coupon；coupon 等于和超过小计；空列表和零小计；大整数；省略 coupon、显式位置/关键字 coupon=0 和正 coupon 关键字调用；按公式独立检查两入口后检查 parity；输入列表未修改。label 负例覆盖负数、零、None、浮点值、原样标记字符串、列表、字典、自定义 `__str__`，并显式断言 `'-7'` 和 `'<b>&</b>'` 保留。
+
+这些是定向有限样例，不是穷举或全仓/端到端验收。未增加非法类型或负数优惠券处理、HTML escape、会员、礼品卡、浮点货币、typing、重命名、策略重构、未来扩展或噪声 backlog。
+
+## 候选摘要与哈希绑定
+
+以下均为 SHA-256。修前当前副本的两个源码摘要与外部报告记录一致；修后只改变修复副本的优惠券源码摘要。原固定候选摘要继续保留，不能用修前失败候选的证据冒充修后通过。
+
+| 对象 | 修前 | 修后 |
+|---|---|---|
+| [billing.py](<billing.py>) | `9bb9be7c18cec7f0146ef7db8734b0773f9871af7e4b3005a2e95cdfa2039afa` | `b2b511a4125cb0590f11a581bcaf63e0389f1656b8e37a6c8dbf93d4a2fee801` |
+| [labels.py](<labels.py>) | `67d1e844dd826af33b7543da87d140d9b47a7c1513d05d24e5b2b385a22d2964` | 相同，实测哈希未变 |
+| [test_coupon.py](<test_coupon.py>) | `33f865b7152746ff9595c7c6683d34a3362e40e5e89148ea31bbcfc131e3614e` | 相同，实测哈希未变 |
+| [REVIEW.md](<REVIEW.md>) | `c3edfd8637876ab33c397d6ca10bc060a1a5cb8288481ade60ac05186b73587e` | 相同，实测哈希未变 |
+| [REQUIREMENTS.md](<REQUIREMENTS.md>) | `ef69aa3e1e68f4c276202fad2539009a7dbb3c58eb14d153d74a481ab665005c` | 相同，实测哈希未变 |
+
+原 project 固定候选没有被读取、写入或重新执行哈希；其固定摘要沿用 [核验报告:24–33](<../verification/result.md#L24-L33>) 的记录，不将本次当前 repair 副本哈希检查称为原 project 的独立重新核验。
+
+## 停止点
+
+两个已确认入口的本地定向修复与回归完成，保留可重跑测试、实际失败/通过输出和候选摘要，到此停止。原报告的 medium 风险初判不因本地测试通过而自动降低；非作者增量核验、独立风险升级检查、有权人决定以及任何后续集成均未由本作者执行或授予。

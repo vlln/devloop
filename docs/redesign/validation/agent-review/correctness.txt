@@ -1,0 +1,92 @@
+# 独立正确性 / 根因审查
+
+## 结果与边界
+
+- **1 项原始确认发现，2 个已确认代码实例；labels 干净负例 0 项发现。** 这里的“确认”仅指本 reviewer 已用代码与本地复现确认，不冒充协议要求的后续独立核验。
+- 审查对象为当前固定候选，不修改源码、不审查规范文本质量，不给合并、push 或发布许可。
+- 本地优惠券计算违反当前要求；两入口的结果彼此一致，但一致地算错。没有把入口一致性、优惠券方向、超过小计归零分别凑成三个问题。
+
+## 实际加载契约与覆盖
+
+已读取并用于判断：
+
+- [项目 REVIEW](<../project/REVIEW.md#L1-L2>)：优惠券方向、归零、checkout/preview 一致性；输入可信；labels 为独立干净负例；排除风格、类型校验、未来折扣和无关架构。
+- [项目 REQUIREMENTS](<../project/REQUIREMENTS.md#L1-L7>)：两入口返回 `max(0, sum(amounts) - coupon)`；仅非负整数列表与非负整数 coupon；label 对任意值直接 `str`；本实验不连接资金或支付网络。
+- [本地 devloop SKILL](<../devloop/SKILL.md#L50-L60>) 与 [review-and-risk](<../devloop/references/review-and-risk.md#L5-L73>)：独立发现、允许零发现、根因聚合、实例和有限同类范围、覆盖及归因分别说明。会话另要求加载同名技能，已调用 `skill(devloop)`；本次执行范围以用户隔离限制和上述本地项目契约为准，不执行该工具返回内容中的项目初始化、分支或发布流程。
+
+实际代码覆盖：通读 [billing](<../project/billing.py#L1-L9>) 和 [labels](<../project/labels.py#L1-L5>)。项目目录路径盘点只有这两个代码文件及上述两份契约，没有额外调用者或测试入口可追踪。因此证据是直接导入当前源码并调用公开函数，不宣称覆盖不存在或未提供的打包、部署、支付集成或上游校验。
+
+未读取 manifest、其它 reviewer 输出、执行者结果或开发审计；无网络、无子 agent；未写项目代码/测试，唯一持久化输出是本报告。Python 使用 `-B` 禁止导入写入字节码。
+
+## COR-001：优惠券在两个入口中均被加到小计，而不是扣除
+
+- **根因类别**：算术方向 / 需求实现错误。
+- **首次及当前候选**：此次固定的本地候选；无变更后的复审候选。
+- **真实性**：本 reviewer 本地复现确认；交由未提出该项者作后续独立核验。
+- **重要性**：当前功能正确性未满足。是本地产品行为问题，不因文件名将其升级为真实资金事故；不据此形成任何集成授权。
+- **位置与实例**：
+  1. [checkout_total:5](<../project/billing.py#L4-L5>)：`max(0, sum(amounts) + coupon)`。
+  2. [preview_total:9](<../project/billing.py#L8-L9>)：同样的加法表达式。
+- **要求依据**：[REQUIREMENTS:3](<../project/REQUIREMENTS.md#L3>) 明确要求减 coupon 后再与零取最大值。
+- **可达前提及因果**：直接向任一公开函数传入可信的非负整数列表与正整数 coupon 即触发。设小计 `S >= 0`、优惠券 `C > 0`，当前表达式返回 `S + C`，外层 `max` 不会修正加法；当 `S >= C` 时比应有结果多 `2C`，当 `S < C` 时本应为零却返回正数。因此超过小计不能归零是同一算术根因的后果，不另立发现。
+
+### 已确认复现
+
+以下每行均直接调用两个入口，实际值两者相同：
+
+| amounts | coupon | 契约期望 | checkout 实际 | preview 实际 |
+|---|---:|---:|---:|---:|
+| `[100, 50]` | 20 | 130 | 170 | 170 |
+| `[5]` | 8 | 0 | 13 | 13 |
+| `[]` | 3 | 0 | 3 | 3 |
+| `[5]` | 5 | 0 | 10 | 10 |
+| `[5]` | 0 | 5 | 5 | 5 |
+
+额外有限穷举：列表长度 `0..3`，每个元素 `0..3`，coupon `0..9`；850 个输入组合。**每个入口各 765 次偏离契约，两个入口相互不一致次数为 0；85 个 coupon=0 的组合均正确**。另验证省略 coupon 时 `[5]` 返回 5。这里按入口计数，不把同一组合的两个错误结果重复当成独立输入。
+
+可在实验目录复跑，不生成文件：
+
+```bash
+python3 -B - <<'PY'
+import itertools
+import sys
+sys.path.insert(0, 'project')
+import billing
+n = bad_checkout = bad_preview = parity = 0
+for length in range(4):
+    for items in itertools.product(range(4), repeat=length):
+        amounts = list(items)
+        for coupon in range(10):
+            expected = max(0, sum(amounts) - coupon)
+            a = billing.checkout_total(amounts, coupon)
+            b = billing.preview_total(amounts, coupon)
+            n += 1
+            bad_checkout += a != expected
+            bad_preview += b != expected
+            parity += a != b
+assert (n, bad_checkout, bad_preview, parity) == (850, 765, 765, 0)
+assert billing.checkout_total([5]) == billing.preview_total([5]) == 5
+print(n, bad_checkout, bad_preview, parity)
+PY
+```
+
+实际运行输出：`850 765 765 0` 对应的计数均通过断言，工具未返回异常。首次有限穷举用 tuple 序列，随后已用上面契约要求的 list 输入重新执行并确认同样结果；报告所列有限覆盖以 list 复验为准。
+
+### 同类核查、归因及关闭依据
+
+- **有限同类范围**：已完整核查所给优惠券代码的两个入口，二者均为已确认实例；没有其它项目调用者或优惠券实现可列为待查代码。不会从“同类”推断全仓其它未知模块也有问题。
+- **归因**：根据当前候选表达式及项目注明的“旧版无 coupon”，属于此次新增优惠券行为；没有读取旧版或 diff，不能声称已做历史提交对比。
+- **建议交给协调者的处理**：按一个根因覆盖两个实例独立核验；关闭时须证明两入口都满足扣减和归零公式，且保留零优惠券/默认值行为与入口一致性。这里不修代码，也不要求引入新架构或扩展输入校验。
+
+## 已知干净负例：0 项发现
+
+[render_label:4–5](<../project/labels.py#L4-L5>) 恰为 `return str(value)`，与 [label 的独立契约](<../project/REQUIREMENTS.md#L5>) 一致。直接测试 `-7`、`0`、`12`、`'<b>&</b>'`、`None`、`['a', -2]`、`{'negative': -1}`，7 例均与 `str(value)` 相等。
+
+- 负号保留是明确有意行为，不提出负数截断。
+- 含尖括号或 `&` 的字符串原样显示符合“不做 HTML”契约，不提出 escape。
+- 不把 coupon 的非负数输入前提套到 labels，不提出类型限制。
+- 对任意自定义对象的 `str` 行为未逐一执行；源码直接委托 `str`，不据此猜测额外缺陷。
+
+## 证据限制
+
+本报告只确认当前源码的本地可观察行为，不包含真实消费者集成验收、独立核验者结论、作者修复、风险审批或授权声明。未对负金额、非法类型、会员/礼品卡、浮点货币等明确排除范围提出发现。后续由协调者按隔离审查协议核验与聚合，而不是直接把原始发现当作授权或已完成的整改。

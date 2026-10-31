@@ -1,0 +1,103 @@
+# 独立系统接口 / 回归审查（原始发现）
+
+## 结论与身份边界
+
+- **1 项确认根因，2 个已确认实现实例；0 项待验证重要疑点。** 正 coupon 的方向错误阻塞当前 coupon 功能按既定要求接收。入口 parity 本身通过，不能因二者一致而把共同错误判为正确。
+- labels：**0 项发现**。保留任意值直接 `str`、负数负号与原样字符串是契约要求，不建议 clamp、HTML escape 或复用 coupon 输入限制。
+- 本报告是独立发现阶段的原始记录；“确认”指下述本地复现与静态因果已确认，**不冒充另一独立上下文的核验**。交协调者后仍按协议独立核验、去重、形成作者队列。
+- 无代码修复、无网络、无子 Agent、无读取其他 reviewer / 执行者结果 / 开发审计。唯一写入是本报告。不授权合并、push、发布或其他外部副作用。
+
+## 输入包、候选和适用契约
+
+实际读取：
+
+- [项目审查契约](<../project/REVIEW.md#L1-L2>)：检查 coupon 方向、零下限、checkout/preview parity；要求可达效应与有限同类范围；排除风格、类型增强、未来优惠和无关架构；labels 是有意行为控制。
+- [固定要求](<../project/REQUIREMENTS.md#L1-L7>)：coupon 入口接收可信非负整数列表与非负整数，结果必须为 `max(0, sum(amounts) - coupon)`；旧调用无 coupon；labels 无共享非负输入契约；本实验无真实资金或支付网络，无集成授权。
+- [本地技能](<../devloop/SKILL.md#L50-L60>)、[review-and-risk 协议](<../devloop/references/review-and-risk.md#L19-L43>)及其 [finding 字段与有限范围](<../devloop/references/review-and-risk.md#L59-L73>)：采用系统适配/实际消费路径独立视角，允许零发现，按根因记录真实性、重要性和归因，原始结果不直接升级为作者必改队列或人类长报告。
+- [coupon 实现](<../project/billing.py#L1-L9>)、[label 实现](<../project/labels.py#L1-L5>)，均全文读取。
+
+候选以实际执行时源码 SHA-256 绑定，不使用其他执行者声称的版本或 PASS：
+
+| 对象 | SHA-256 |
+|---|---|
+| [coupon 实现](<../project/billing.py>) | `9bb9be7c18cec7f0146ef7db8734b0773f9871af7e4b3005a2e95cdfa2039afa` |
+| [label 实现](<../project/labels.py>) | `67d1e844dd826af33b7543da87d140d9b47a7c1513d05d24e5b2b385a22d2964` |
+
+未提供原版源码或 commit diff；本报告不声称检查过历史提交。依据要求中“旧版无 coupon、本候选增加 coupon”的明确事实，将新增 coupon 行为判为本次引入；现有单参数调用兼容性由当前候选执行验证，而非与未经读取的旧实现做逐字比较。
+
+## SYS-001 — 两入口共同将 coupon 作为加价而非折扣
+
+- **稳定 ID / 根因类别：** SYS-001 / 优惠券算术方向错误（共享行为类别，两个直接实现实例）。
+- **首次 / 当前候选：** 均为上述 coupon 源码 SHA-256。本次为本 reviewer 首轮独立发现，不代表整个项目历史审查轮次。
+- **依据：** [要求第 3 行](<../project/REQUIREMENTS.md#L3>)规定两入口返回 `max(0, sum(amounts) - coupon)`，超过小计时返回 0。
+- **位置 / 已确认实例：** [checkout_total:5](<../project/billing.py#L4-L5>) 与 [preview_total:9](<../project/billing.py#L8-L9>) 都执行 `max(0, sum(amounts) + coupon)`。
+- **前提 / 可达路径：** 直接调用这两个公开函数，输入均为契约允许的可信非负整数列表和非负整数；不依赖非法输入、负数、浮点、支付服务或未提供的外部调用者。
+- **因果：** 对非负小计和正 coupon，`sum + coupon` 必为正，`max(0, ...)` 无法实现折扣后的零下限。两入口增加了本应扣掉的值；共同错误同时造成普通折扣错误和超过小计不归零。二者是一个根因，不拆成重复 finding，也不虚构入口不一致。
+
+实际本地结果（两入口数值相同）：
+
+| amounts | coupon | 要求值 | checkout | preview |
+|---|---:|---:|---:|---:|
+| `[5, 7]` | 3 | 9 | 15 | 15 |
+| `[5, 7]` | 12 | 0 | 24 | 24 |
+| `[5, 7]` | 13 | 0 | 25 | 25 |
+| `[]` | 2 | 0 | 2 | 2 |
+| `[0, 0]` | 3 | 0 | 3 | 3 |
+
+- **真实性：** 确认：已执行上述实例，并枚举下述有限域；静态表达式可直接解释观测。
+- **重要性：** 阻塞当前 coupon 功能按原要求接收；实际后果是本地产品计算错误，**不是已证实真实资金损失或生产计费事故**。
+- **归因：** 根据固定事实，属于本次新增 coupon 路径，不是 label 或无关历史债；无历史 diff 的限制如上。
+- **有限同类范围：** 已全文检查本项目提供的两项 coupon 入口（两处均确认），另检查 label 隔离语义。项目路径枚举仅有两个实现及两个契约文件，无其他本地调用者或测试文件可查。不推广到未提供的服务、包、第三方调用者或真实支付链路。
+- **处置 / 责任 / 关闭依据：** 原始发现交协调者分配独立核验，不自行改代码或授予作者权限。建议核验后按单一根因处理两个入口；关闭需在实际修复候选重验普通正 coupon、等于 / 超过小计、零小计、零 coupon 和两入口一致性，同时保留旧调用及 label 有意行为。不要求新增折扣类型或大范围重构。
+
+## 本地执行证据与回归边界
+
+环境：本地 Python **3.9.6**；两个前台 `python3 -B -` 内存脚本通过 `importlib.util.spec_from_file_location` 加载上述源码；禁写 bytecode，不创建项目测试文件。运行均正常完成（工具未输出非零退出或异常；其 bash 返回格式未显示显式 `[exit code: N]` 标记，因此不捏造该标记）。负例差异被打印为证据，没有伪称全绿。
+
+### 入口、兼容与零下限
+
+1. 代表性 8 个 case × 2 入口：共 **16** 个要求对照，**12 失败**；失败均为正 coupon。包含空列表、零值、小于/等于/超过小计、大整数。大整数 `[10**40], coupon=1` 的两入口均为 `10**40+1`，要求 `10**40-1`，不是浮点精度问题。
+2. 有限枚举：列表长度 `0..3`、各元素 `0..3`、coupon `0..10`，总计 **935** 个输入组合：
+   - 两入口 parity：**0 / 935 失败**。
+   - 要求值对照：**1700 / 1870 入口-case 检查失败**，全部是正 coupon 的 850 组合 × 2 入口。
+   - coupon=0：**0 / 170 入口-case 检查失败**。
+   - 脚本断言上述计数成立。
+3. 对 `[]`、`[0]`、`[5,7]`、`[10**40,3]`：两入口各验证单参数、显式位置参数 `coupon=0`、关键字 `amounts=.../coupon=0`，共 **24** 次兼容调用全部等于 `sum(amounts)`。
+4. `inspect.signature` 显示两个函数均为 `(amounts, coupon=0)`；因此当前候选仍支持单参数旧入口及同名参数，不报告无证据的 API 签名破坏。
+
+有限枚举可复现核心（命令入口 `python3 -B -`；下列只读加载并在内存执行）：
+
+```python
+import importlib.util
+from itertools import product
+s = importlib.util.spec_from_file_location('billing', 'project/billing.py')
+b = importlib.util.module_from_spec(s)
+s.loader.exec_module(b)
+n = parity = failures = zero_failures = 0
+for size in range(4):
+    for items in product(range(4), repeat=size):
+        amounts = list(items)
+        for coupon in range(11):
+            expected = max(0, sum(amounts) - coupon)
+            actual = (b.checkout_total(amounts, coupon),
+                      b.preview_total(amounts, coupon))
+            n += 1
+            parity += actual[0] != actual[1]
+            failures += sum(v != expected for v in actual)
+            if coupon == 0:
+                zero_failures += sum(v != expected for v in actual)
+assert (n, parity, failures, zero_failures) == (935, 0, 1700, 0)
+```
+
+### label 负例控制
+
+实际分别传入 `None`、`-7`、`0`、`3.5`、`'<b>&'`、`['x', -1]`、`{'x': -2}`，断言 `render_label(value) == str(value)`，**7 / 7 通过**。负数输出 `'-7'`、标记字符串输出 `'<b>&'` 正是要求，不是安全漏洞或需要“统一”的 coupon 输入错误。实现全文仅直接 `return str(value)`；有限动态样例不声称覆盖所有自定义对象，但静态路径没有额外验证、截断或转义。不对契约允许的 Python `str` 本身行为另造需求。
+
+## 契约遵循、排除与交接
+
+- 三个要求重点均执行：coupon 方向确有错误；超过小计/零小计实测不满足零下限（同一根因）；两入口 parity 实测通过。
+- 旧调用、默认参数、关键字入口、Python 整数行为与 label 隔离性有实际证据，未把 coupon 的可信非负前提套给 label。
+- 不做非法类型或负 coupon 验证要求，不提 HTML、安全转义、风格、typing、会员、礼品卡、浮点货币或未来架构建议。
+- 查阅仅限项目四文件、指定的本地技能和 review-and-risk 资源；开始时按会话要求调用已注册 `devloop` 技能以加载技能入口，但未继续读取其其他资源。未打开任何其他执行者结果、审查报告或开发审计。报告路径创建前仅用精确 glob 确认目标不存在。
+- 无消费者打包产物、外部调用者、完整测试套件或旧版源码提供，因此不声称完成生产端到端、全仓回归、历史 diff 或实际交付验收。以上只是固定本地候选的独立接口/回归审查。
+- 本地改动的非授权风险看法为 **medium 产品行为**，依据实际错误与明确无真实资金环境，而不是文件名。未执行独立风险升级复核，不声称人类/集成门禁完成。协议中“检查绿且已有自主集成授权”的低风险自主路径不适用：当前有确认错误，且项目明示无自主集成授权。

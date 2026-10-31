@@ -72,8 +72,10 @@ class SkillStructure(unittest.TestCase):
         for concept in ('授权', '变更', '接管', '评审'):
             self.assertIn(concept, agents + resident)
         self.assertIn('devloop.md', agents)
-        self.assertIn('独立审查', resident)
-        self.assertIn('无法取得', resident)
+        review_resident = (TEMPLATES / 'docs/review.md').read_text()
+        self.assertIn('review.md', resident)
+        self.assertIn('独立', review_resident)
+        self.assertIn('资源不可用', review_resident)
         self.assertIn('deliveries', (TEMPLATES / 'docs' / 'README.md').read_text())
 
     def test_engineering_choices_have_resident_activation(self):
@@ -90,6 +92,24 @@ class SkillStructure(unittest.TestCase):
         self.assertIn('不逐项', resident)
         self.assertNotIn('可从 Gitflow', contributing)
         self.assertIn('默认先捕获最小失败用例', contributing)
+
+    def test_review_and_risk_have_runtime_and_resident_routes(self):
+        entry = (SKILL / 'SKILL.md').read_text()
+        protocol = (SKILL / 'references/review-and-risk.md').read_text()
+        agents = (TEMPLATES / 'AGENTS.md').read_text()
+        resident = (TEMPLATES / 'docs/review.md').read_text()
+        self.assertIn('$_S/references/review-and-risk.md', entry)
+        self.assertTrue((TEMPLATES / 'REVIEW.md').is_file())
+        for text in (protocol, resident):
+            for concept in ('第三轮', '独立核验', '归因', 'low', 'medium', 'high'):
+                self.assertIn(concept, text)
+        self.assertIn('REVIEW.md', agents)
+        self.assertIn('docs/review.md', agents)
+        for concept in ('三轮', '核验', '风险'):
+            self.assertIn(concept, agents)
+        report = (TEMPLATES / 'docs/plans/0001-template/01-report-example.md').read_text()
+        for concept in ('finding', '基线', '关闭', '升级'):
+            self.assertIn(concept, report)
 
     def test_removed_absolute_rules_do_not_return(self):
         forbidden = (
